@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compras & Fornecedores | AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Ordem correta dos estilos -->
+    <link rel="stylesheet" href="/frontend/css/admin/admin.css">
+    <link rel="stylesheet" href="/frontend/css/admin/compras.css">
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">
+                <h2>AUTHENTIC</h2>
+                <span>ADMIN</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-label">GERAL</span>
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+                <a href="produtos.html" class="nav-item">
+                    <span class="nav-icon">▣</span>
+                    Produtos
+                </a>
+                <a href="estoque.html" class="nav-item">
+                    <span class="nav-icon">≡</span>
+                    Estoque
+                </a>
+                <a href="compras.html" class="nav-item active">
+                    <span class="nav-icon">▤</span>
+                    Compras
+                </a>
+                <a href="pedidos.html" class="nav-item">
+                    <span class="nav-icon">□</span>
+                    Pedidos
+                </a>
+                <a href="clientes.html" class="nav-item">
+                    <span class="nav-icon">♟</span>
+                    Clientes
+                </a>
+
+                <span class="nav-label">FINANCEIRO</span>
+                <a href="financeiro.html" class="nav-item">
+                    <span class="nav-icon">R$</span>
+                    Financeiro
+                </a>
+                <a href="cupons.html" class="nav-item">
+                    <span class="nav-icon">%</span>
+                    Cupons
+                </a>
+                <a href="despesas.html" class="nav-item">
+                    <span class="nav-icon">−</span>
+                    Despesas
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <span class="nav-icon">◫</span>
+                    Relatórios
+                </a>
+
+                <span class="nav-label">SISTEMA</span>
+                <a href="configuracoes.html" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    Configurações
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="../index.html" class="back-link">
+                ← Voltar para a loja
+            </a>
+
+            <div class="admin-profile">
+                <div class="profile-avatar">A</div>
+                <div class="profile-meta">
+                    <strong>Administrador</strong>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CORTINA MENU MOBILE -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <!-- Botão Hambúrguer Mobile -->
+                <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div>
+                    <span class="header-pretitle">Gestão de compras</span>
+                    <h1 class="header-title">Entrada de Mercadorias</h1>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <span class="current-date">Hoje, 6 de setembro</span>
+            </div>
+        </header>
+
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Total Comprado</span>
+                    <span class="metric-badge">R$</span>
+                </div>
+                <strong class="metric-value" id="cardTotalCompras">R$ 0,00</strong>
+                <span class="metric-desc">Custo em estoque</span>
+            </div>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Fornecedores</span>
+                    <span class="metric-badge">🏭</span>
+                </div>
+                <strong class="metric-value" id="cardTotalFornecedores">0</strong>
+                <span class="metric-desc">Parceiros cadastrados</span>
+            </div>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Entradas do Mês</span>
+                    <span class="metric-badge">📦</span>
+                </div>
+                <strong class="metric-value" id="cardTotalNotas">0</strong>
+                <span class="metric-desc">Remessas recebidas</span>
+            </div>
+        </section>
+
+        <section class="orders-card">
+            <div class="orders-header">
+                <div>
+                    <h2>Notas e Lotes de Compra</h2>
+                    <p>Ao registrar uma entrada, o estoque das variações é alimentado automaticamente.</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="secondary-button" id="btnNovoFornecedor">+ Fornecedor</button>
+                    <button class="primary-button" id="btnNovaCompra">+ Nova Entrada</button>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>LOTE / NOTA</th>
+                            <th>FORNECEDOR</th>
+                            <th>DATA ENTRADA</th>
+                            <th>VALOR TOTAL CUSTO</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaCompras">
+                        <tr>
+                            <td colspan="5" class="table-loading">Carregando compras...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL NOVA COMPRA -->
+    <div class="modal-overlay" id="modalCompra">
+        <div class="modal" style="max-width: 650px;">
+            <div class="modal-header">
+                <div>
+                    <p>Entrada de Mercadoria</p>
+                    <h2>Registrar Compra</h2>
+                </div>
+                <button class="modal-close" id="fecharModalCompra">&times;</button>
+            </div>
+            <form id="formCompra">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fornecedor</label>
+                        <select id="compraFornecedor" required>
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nº Nota / Identificador</label>
+                        <input type="text" id="compraNota" placeholder="Ex.: NF-10492" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Produto</label>
+                    <select id="compraProduto" required>
+                        <option value="">Selecione o produto...</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tamanho</label>
+                        <input type="text" id="compraTamanho" placeholder="P, M, G, GG..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cor</label>
+                        <input type="text" id="compraCor" placeholder="Preto, Branco, Off-White..." required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quantidade Comprada</label>
+                        <input type="number" id="compraQtd" min="1" value="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Custo Unitário (R$)</label>
+                        <input type="number" id="compraCustoUnitario" step="0.01" min="0.01" placeholder="Ex.: 35.00"
+                            required>
+                    </div>
+                </div>
+
+                <div class="markup-preview" id="markupBox"
+                    style="display:none; padding: 12px; background: #faf9f7; border: 1px solid #eee; margin-bottom: 15px; border-radius: 6px; font-size: 12px;">
+                    <strong>Markup Estimado:</strong> <span id="markupTxt">—</span>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancelarCompra">Cancelar</button>
+                    <button type="submit" class="primary-button">Lançar e Somar no Estoque</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL NOVO FORNECEDOR -->
+    <div class="modal-overlay" id="modalFornecedor">
+        <div class="modal" style="max-width: 480px;">
+            <div class="modal-header">
+                <div>
+                    <p>Parceiro / Confecção</p>
+                    <h2>Novo Fornecedor</h2>
+                </div>
+                <button class="modal-close" id="fecharModalFornecedor">&times;</button>
+            </div>
+            <form id="formFornecedor">
+                <div class="form-group">
+                    <label>Nome da Empresa / Confecção</label>
+                    <input type="text" id="fornecedorNome" placeholder="Ex.: Têxtil Brasil Confecções" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>CNPJ / CPF</label>
+                        <input type="text" id="fornecedorDoc" placeholder="00.000.000/0001-00">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp / Telefone</label>
+                        <input type="text" id="fornecedorTel" placeholder="(24) 99999-9999" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Chave Pix</label>
+                    <input type="text" id="fornecedorPix" placeholder="E-mail, CNPJ ou Telefone">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancelarFornecedor">Cancelar</button>
+                    <button type="submit" class="primary-button">Salvar Fornecedor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="/frontend/js/admin/menu-mobile.js"></script>
+    <script src="/frontend/js/admin/compras.js"></script>
+</body>
+
+</html>

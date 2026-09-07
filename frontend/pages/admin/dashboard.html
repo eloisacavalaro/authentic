@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | AUTHENTIC</title>
+
+    <link rel="stylesheet" href="/frontend/css/admin/admin.css">
+    <link rel="stylesheet" href="/frontend/css/admin/dashboard.css">
+    <link rel="stylesheet" href="../../css/admin/admin.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+
+    <!-- SIDEBAR CORRIGIDA E HARMONIZADA -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">
+                <h2>AUTHENTIC</h2>
+                <span>ADMIN</span>
+            </div>
+    
+            <nav class="sidebar-nav">
+                <span class="nav-label">GERAL</span>
+                <a href="dashboard.html" class="nav-item active">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+                <a href="produtos.html" class="nav-item">
+                    <span class="nav-icon">▣</span>
+                    Produtos
+                </a>
+                <a href="estoque.html" class="nav-item">
+                    <span class="nav-icon">≡</span>
+                    Estoque
+                </a>
+                <a href="compras.html" class="nav-item">
+                    <span class="nav-icon">▤</span>
+                    Compras
+                </a>
+                <a href="pedidos.html" class="nav-item">
+                    <span class="nav-icon">□</span>
+                    Pedidos
+                </a>
+                <a href="clientes.html" class="nav-item">
+                    <span class="nav-icon">♟</span>
+                    Clientes
+                </a>
+    
+                <span class="nav-label">FINANCEIRO</span>
+                <a href="financeiro.html" class="nav-item">
+                    <span class="nav-icon">R$</span>
+                    Financeiro
+                </a>
+                <a href="cupons.html" class="nav-item">
+                    <span class="nav-icon">%</span>
+                    Cupons
+                </a>
+                <a href="despesas.html" class="nav-item">
+                    <span class="nav-icon">−</span>
+                    Despesas
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <span class="nav-icon">◫</span>
+                    Relatórios
+                </a>
+    
+                <span class="nav-label">SISTEMA</span>
+                <a href="configuracoes.html" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    Configurações
+                </a>
+            </nav>
+        </div>
+    
+        <div class="sidebar-bottom">
+            <a href="../index.html" class="back-link">
+                ← Voltar para a loja
+            </a>
+    
+            <div class="admin-profile">
+                <div class="profile-avatar">A</div>
+                <div class="profile-meta">
+                    <strong>Administrador</strong>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+        <!-- CONTEÚDO -->
+
+        <main class="main-content">
+
+            <header class="topbar">
+            
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <!-- Botão Hambúrguer Mobile -->
+                    <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+            
+                    <div>
+                        <p class="breadcrumb">Painel administrativo</p>
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            
+                <div class="topbar-actions">
+            
+                    <button class="notification">
+                        ♢
+                        <span></span>
+                    </button>
+            
+                    <div class="topbar-date">
+                        Hoje, 6 de setembro
+                    </div>
+            
+                </div>
+            
+            </header>
+            
+            <!-- Cortina de fundo escuro para o menu gaveta -->
+            <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+
+            <!-- RESUMO -->
+
+            <section class="dashboard-section">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Visão geral</h2>
+                        <p>Acompanhe o desempenho da sua loja.</p>
+                    </div>
+
+                    <label class="period-control" for="filtroPeriodoDashboard">
+                        <span class="sr-only">Filtrar período do dashboard</span>
+                        <select id="filtroPeriodoDashboard" class="period-button">
+                            <option value="hoje">Hoje</option>
+                            <option value="7">Últimos 7 dias</option>
+                            <option value="30" selected>Últimos 30 dias</option>
+                            <option value="mes">Este mês</option>
+                            <option value="ano">Este ano</option>
+                            <option value="todos">Todo o período</option>
+                        </select>
+                    </label>
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <article class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Faturamento</span>
+                            <div class="stat-icon">R$</div>
+                        </div>
+
+                        <strong id="dashboardFaturamento">R$ 0,00</strong>
+
+                        <p class="stat-positive"><span class="dashboard-period-label">Últimos 30 dias</span></p>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Vendas</span>
+                            <div class="stat-icon">↗</div>
+                        </div>
+
+                        <strong id="dashboardVendas">0</strong>
+
+                        <p>
+                            <span>Pagamentos confirmados</span>
+                        </p>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Despesas</span>
+                            <div class="stat-icon">−</div>
+                        </div>
+
+                        <strong id="dashboardDespesas">R$ 0,00</strong>
+
+                        <p>
+                            <span>No período selecionado</span>
+                        </p>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Lucro</span>
+                            <div class="stat-icon">R$</div>
+                        </div>
+
+                        <strong id="dashboardLucro">R$ 0,00</strong>
+
+                        <p>
+                            <span>Receitas menos despesas</span>
+                        </p>
+
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top"><span>Produtos vendidos</span><div class="stat-icon">□</div></div>
+                        <strong id="dashboardProdutosVendidos">0</strong>
+                        <p><span>Unidades no período</span></p>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top"><span>Ticket médio</span><div class="stat-icon">R$</div></div>
+                        <strong id="dashboardTicketMedio">R$ 0,00</strong>
+                        <p><span>Média por venda paga</span></p>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top"><span>Estoque atual</span><div class="stat-icon">≡</div></div>
+                        <strong id="dashboardEstoque">0 itens</strong>
+                        <p><span>Total disponível agora</span></p>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top"><span>Clientes</span><div class="stat-icon">♙</div></div>
+                        <strong id="dashboardClientes">0</strong>
+                        <p><span>Clientes ativos agora</span></p>
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- GRÁFICO + ESTOQUE -->
+
+            <section class="dashboard-columns">
+
+                <div class="dashboard-card sales-chart">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Vendas</h3>
+                            <p>Acompanhe o faturamento da loja.</p>
+                        </div>
+
+                        <span class="card-period">
+                            30 dias
+                        </span>
+
+                    </div>
+
+                    <div class="chart-area">
+
+                        <div class="chart-value" id="dashboardChartTotal">
+                            R$ 0,00
+                        </div>
+
+                        <div class="chart-placeholder">
+
+                            <div class="chart-bars" id="dashboardChart" aria-label="Gráfico de faturamento do período"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Estoque baixo</h3>
+                            <p>Produtos que precisam de atenção.</p>
+                        </div>
+
+                        <a href="#">Ver todos</a>
+
+                    </div>
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            ✓
+                        </div>
+
+                        <strong>Tudo certo por aqui</strong>
+
+                        <p>
+                            Nenhum produto com estoque baixo.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PEDIDOS RECENTES -->
+
+            <section class="dashboard-card orders-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Pedidos recentes</h3>
+                        <p>Últimas vendas realizadas na loja.</p>
+                    </div>
+
+                    <a href="#">Ver todos</a>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Pedido</th>
+                                <th>Cliente</th>
+                                <th>Data</th>
+                                <th>Pagamento</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr class="empty-row">
+
+                                <td colspan="6">
+
+                                    <div class="table-empty">
+
+                                        <div>□</div>
+
+                                        <strong>Nenhum pedido realizado</strong>
+
+                                        <p>
+                                            Os pedidos dos clientes aparecerão aqui.
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="/frontend/js/admin/sidebar.js"></script>
+    <script src="/frontend/js/admin/dashboard.js"></script>
+</body>
+
+</html>

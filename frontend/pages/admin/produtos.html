@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Produtos | AUTHENTIC</title>
+
+    <link rel="stylesheet" href="/frontend/css/admin/admin.css">
+    <link rel="stylesheet" href="/frontend/css/admin/produtos.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="sidebar-brand">
+                    <h2>AUTHENTIC</h2>
+                    <span>ADMIN</span>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <span class="nav-label">GERAL</span>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="nav-icon">⌂</span>
+                        Dashboard
+                    </a>
+                    <a href="produtos.html" class="nav-item active">
+                        <span class="nav-icon">▣</span>
+                        Produtos
+                    </a>
+                    <a href="estoque.html" class="nav-item">
+                        <span class="nav-icon">≡</span>
+                        Estoque
+                    </a>
+                    <a href="compras.html" class="nav-item">
+                        <span class="nav-icon">▤</span>
+                        Compras
+                    </a>
+                    <a href="pedidos.html" class="nav-item">
+                        <span class="nav-icon">□</span>
+                        Pedidos
+                    </a>
+                    <a href="clientes.html" class="nav-item">
+                        <span class="nav-icon">♟</span>
+                        Clientes
+                    </a>
+
+                    <span class="nav-label">FINANCEIRO</span>
+                    <a href="financeiro.html" class="nav-item">
+                        <span class="nav-icon">R$</span>
+                        Financeiro
+                    </a>
+                    <a href="cupons.html" class="nav-item">
+                        <span class="nav-icon">%</span>
+                        Cupons
+                    </a>
+                    <a href="despesas.html" class="nav-item">
+                        <span class="nav-icon">−</span>
+                        Despesas
+                    </a>
+                    <a href="relatorios.html" class="nav-item">
+                        <span class="nav-icon">◫</span>
+                        Relatórios
+                    </a>
+
+                    <span class="nav-label">SISTEMA</span>
+                    <a href="configuracoes.html" class="nav-item">
+                        <span class="nav-icon">⚙</span>
+                        Configurações
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="../index.html" class="back-link">
+                    ← Voltar para a loja
+                </a>
+
+                <div class="admin-profile">
+                    <div class="profile-avatar">A</div>
+                    <div class="profile-meta">
+                        <strong>Administrador</strong>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- FUNDO ESCURO DO MENU MOBILE -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- CONTEÚDO -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div>
+                    <p class="breadcrumb">Gerenciamento</p>
+                    <h1>Produtos</h1>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="notification">
+                        ♢
+                        <span></span>
+                    </button>
+
+                    <div class="topbar-date">
+                        Hoje, 6 de setembro
+                    </div>
+                </div>
+            </header>
+
+            <!-- PRODUTOS -->
+            <section class="products-section">
+
+                <div class="products-heading">
+                    <div>
+                        <h2>Catálogo</h2>
+                        <p>Gerencie os produtos disponíveis na sua loja.</p>
+                    </div>
+
+                    <a href="novo-produto.html" class="new-product-button">
+                        <span>+</span>
+                        Novo produto
+                    </a>
+                </div>
+
+                <!-- FILTROS -->
+                <div class="products-filters">
+                    <div class="search-box">
+                        <span>⌕</span>
+                        <input type="text" id="buscaProduto" placeholder="Buscar produto...">
+                    </div>
+
+                    <select id="filtroCategoria">
+                        <option value="">Todas as categorias</option>
+                        <option value="camisas">Camisas</option>
+                        <option value="calcas">Calças</option>
+                        <option value="ternos">Ternos</option>
+                        <option value="jaquetas">Jaquetas</option>
+                        <option value="acessorios">Acessórios</option>
+                    </select>
+
+                    <select id="filtroStatus">
+                        <option value="">Todos os status</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                </div>
+
+                <!-- TABELA -->
+                <div class="products-card">
+                    <div class="products-card-header">
+                        <div>
+                            <strong>Todos os produtos</strong>
+                            <span>0 produtos</span>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Categoria</th>
+                                    <th>Preço</th>
+                                    <th>Estoque</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="products-empty">
+                                            <div class="products-empty-icon">□</div>
+                                            <strong>Nenhum produto cadastrado</strong>
+                                            <p>Comece adicionando o primeiro produto da sua loja.</p>
+                                            <a href="novo-produto.html" class="empty-button">
+                                                + Adicionar produto
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="/frontend/js/admin/sidebar.js"></script>
+    <script src="/frontend/js/admin/produtos.js"></script>
+
+</body>
+
+</html>

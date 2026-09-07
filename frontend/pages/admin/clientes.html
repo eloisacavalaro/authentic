@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes | AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../../css/admin/clientes.css">
+    <link rel="stylesheet" href="../../css/admin/admin.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">
+                <h2>AUTHENTIC</h2>
+                <span>ADMIN</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-label">GERAL</span>
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+                <a href="produtos.html" class="nav-item">
+                    <span class="nav-icon">▣</span>
+                    Produtos
+                </a>
+                <a href="estoque.html" class="nav-item">
+                    <span class="nav-icon">≡</span>
+                    Estoque
+                </a>
+                <a href="compras.html" class="nav-item">
+                    <span class="nav-icon">▤</span>
+                    Compras
+                </a>
+                <a href="pedidos.html" class="nav-item">
+                    <span class="nav-icon">□</span>
+                    Pedidos
+                </a>
+                <a href="clientes.html" class="nav-item active">
+                    <span class="nav-icon">♟</span>
+                    Clientes
+                </a>
+
+                <span class="nav-label">FINANCEIRO</span>
+                <a href="financeiro.html" class="nav-item">
+                    <span class="nav-icon">R$</span>
+                    Financeiro
+                </a>
+                <a href="cupons.html" class="nav-item">
+                    <span class="nav-icon">%</span>
+                    Cupons
+                </a>
+                <a href="despesas.html" class="nav-item">
+                    <span class="nav-icon">−</span>
+                    Despesas
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <span class="nav-icon">◫</span>
+                    Relatórios
+                </a>
+
+                <span class="nav-label">SISTEMA</span>
+                <a href="configuracoes.html" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    Configurações
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="../index.html" class="back-link">
+                ← Voltar para a loja
+            </a>
+
+            <div class="admin-profile">
+                <div class="profile-avatar">A</div>
+                <div class="profile-meta">
+                    <strong>Administrador</strong>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- FUNDO ESCURO DO MENU MOBILE -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+
+    <!-- CABEÇALHO SUPERIOR -->
+    <header class="top-header">
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <!-- 1. O BOTÃO HAMBÚRGUER -->
+            <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+    
+            <div>
+                <span class="header-pretitle">Geral</span>
+                <h1 class="header-title">Dashboard</h1>
+            </div>
+        </div>
+    
+        <div class="header-right">
+            <span class="current-date">Hoje, 6 de setembro</span>
+        </div>
+    </header>
+    
+    <!-- 2. A CORTINA ESCURA DE FUNDO -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- CARDS DE MÉTRICAS -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Base de Clientes</span>
+                    <span class="metric-badge">♟</span>
+                </div>
+                <strong class="metric-value" id="cardTotalClientes">0</strong>
+                <span class="metric-desc">Cadastros ativos</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Compradores Ativos</span>
+                    <span class="metric-badge">🛍</span>
+                </div>
+                <strong class="metric-value" id="cardCompradoresAtivos">0</strong>
+                <span class="metric-desc">Com pedidos realizados</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Ticket Médio Geral</span>
+                    <span class="metric-badge">R$</span>
+                </div>
+                <strong class="metric-value" id="cardTicketMedio">R$ 0,00</strong>
+                <span class="metric-desc">Média gasta por cliente</span>
+            </div>
+        </section>
+
+        <!-- CARD DA TABELA -->
+        <section class="clients-card">
+
+            <div class="clients-header">
+                <div>
+                    <h2>Lista de clientes</h2>
+                    <p>Histórico de consumo e informações cadastrais registradas.</p>
+                </div>
+            </div>
+
+            <div class="clients-toolbar">
+                <div class="clients-count">
+                    <span id="totalClientesContador">0</span> clientes encontrados
+                </div>
+
+                <div class="clients-search">
+                    <input type="text" id="buscarCliente" placeholder="Buscar por nome, e-mail ou telefone...">
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CLIENTE</th>
+                            <th>TELEFONE</th>
+                            <th>CADASTRO EM</th>
+                            <th>TOTAL PEDIDOS</th>
+                            <th>VALOR TOTAL GASTO</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaClientes">
+                        <tr>
+                            <td colspan="6" class="table-loading">Carregando clientes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <p>Nenhum cliente cadastrado ou localizado com este filtro.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- SCRIPT DE CONTROLE DO MENU MOBILE -->
+    
+
+    <script src="/frontend/js/admin/sidebar.js"></script>
+    <script src="../../js/admin/clientes.js"></script>
+    <script src="../../js/admin/clientes-inline.js"></script>
+</body>
+
+</html>

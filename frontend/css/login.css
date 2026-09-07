@@ -1,0 +1,191 @@
+/* =========================================================
+   LOGIN & CADASTRO — AUTHENTIC
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "DM Sans", sans-serif;
+    background: #f7f6f3;
+    color: #171717;
+}
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.logo {
+    color: #171717;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 40px;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 440px;
+    background: #fff;
+    padding: 45px 35px;
+    border: 1px solid #e3e1dc;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.auth-header h1 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(32px, 3.5vw, 38px);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.auth-header p:last-child {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* MENSAGENS DE FEEDBACK */
+.form-feedback {
+    display: none;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    border-radius: 2px;
+}
+
+.form-feedback.erro {
+    background: #fdf2f2;
+    color: #991b1b;
+    border: 1px solid #f87171;
+}
+
+.form-feedback.sucesso {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+/* FORMULÁRIO */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 1px solid #d8d6d1;
+    background: #fafaf9;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #171717;
+    background: #fff;
+}
+
+.auth-button {
+    width: 100%;
+    height: 52px;
+    border: none;
+    background: #171717;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.auth-button:hover {
+    opacity: 0.88;
+}
+
+.auth-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 25px 0;
+    color: #aaa;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    height: 1px;
+    background: #e2dfda;
+    flex: 1;
+}
+
+.register-link {
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+}
+
+.register-link a {
+    color: #171717;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.back-home {
+    margin-top: 25px;
+    color: #777;
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.back-home:hover {
+    color: #171717;
+}
+
+@media (max-width: 480px) {
+    .auth-box {
+        padding: 35px 22px;
+    }
+}

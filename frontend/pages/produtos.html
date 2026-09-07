@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos — AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/produtos.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"
+                style="background:none; border:none; font-size:20px; cursor:pointer; color:#111;">☰</button>
+            <a href="index.html" class="logo">AUTHENTIC</a>
+        </div>
+
+        <nav class="nav">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Novidades</a>
+            <a href="produtos.html">Roupas</a>
+            <a href="produtos.html?categoria=Camisetas">Camisetas</a>
+            <a href="produtos.html?categoria=Calças">Calças</a>
+            <a href="produtos.html?categoria=Acessórios">Acessórios</a>
+            <a href="produtos.html">Sale</a>
+        </nav>
+
+        <div class="header-actions">
+            <a href="produtos.html?buscar=" class="cart" aria-label="Buscar">⌕</a>
+            <a href="login.html" class="cart" aria-label="Minha conta">♙</a>
+            <a href="carrinho.html" class="cart" aria-label="Carrinho">
+                ♧
+                <span class="cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="catalog-header">
+            <p class="eyebrow">AUTHENTIC COLLECTION</p>
+            <h1>Produtos</h1>
+            <p>Descubra nossa seleção de peças essenciais, contemporâneas e autênticas.</p>
+        </section>
+
+        <section class="catalog">
+            <aside class="filters">
+                <h3>Filtrar</h3>
+
+                <div class="filter-group" id="filter-categorias">
+                    <h4>Categoria</h4>
+                    <label><input type="checkbox" name="categoria" value="camiseta"> Camisetas</label>
+                    <label><input type="checkbox" name="categoria" value="calca"> Calças</label>
+                    <label><input type="checkbox" name="categoria" value="jaqueta"> Jaquetas</label>
+                    <label><input type="checkbox" name="categoria" value="moletom"> Moletons</label>
+                    <label><input type="checkbox" name="categoria" value="acessorio"> Acessórios</label>
+                </div>
+
+                <div class="filter-group" id="filter-precos">
+                    <h4>Preço</h4>
+                    <label><input type="checkbox" name="preco" value="ate-150"> Até R$ 150</label>
+                    <label><input type="checkbox" name="preco" value="150-300"> R$ 150 — R$ 300</label>
+                    <label><input type="checkbox" name="preco" value="acima-300"> Acima de R$ 300</label>
+                </div>
+            </aside>
+
+            <section class="products-area">
+                <div class="catalog-top">
+                    <span id="productCount">Carregando produtos...</span>
+
+                    <div class="catalog-search">
+                        <input type="text" id="searchInput" placeholder="Buscar produtos...">
+                        <span>⌕</span>
+                    </div>
+
+                    <select id="sortSelect">
+                        <option value="recentes">Mais recentes</option>
+                        <option value="menor-preco">Menor preço</option>
+                        <option value="maior-preco">Maior preço</option>
+                    </select>
+                </div>
+
+                <div class="products-grid" id="productsGrid"></div>
+            </section>
+        </section>
+    </main>
+
+    <script src="../js/carrinho.js"></script>
+
+    
+    <script src="../js/produtos-inline.js"></script>
+</body>
+
+</html>

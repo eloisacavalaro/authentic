@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despesas | AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Ordem padrão dos estilos -->
+    <link rel="stylesheet" href="../../css/admin/admin.css">
+    <link rel="stylesheet" href="../../css/admin/despesas.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">
+                <h2>AUTHENTIC</h2>
+                <span>ADMIN</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-label">GERAL</span>
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+                <a href="produtos.html" class="nav-item">
+                    <span class="nav-icon">▣</span>
+                    Produtos
+                </a>
+                <a href="estoque.html" class="nav-item">
+                    <span class="nav-icon">≡</span>
+                    Estoque
+                </a>
+                <a href="compras.html" class="nav-item">
+                    <span class="nav-icon">▤</span>
+                    Compras
+                </a>
+                <a href="pedidos.html" class="nav-item">
+                    <span class="nav-icon">□</span>
+                    Pedidos
+                </a>
+                <a href="clientes.html" class="nav-item">
+                    <span class="nav-icon">♟</span>
+                    Clientes
+                </a>
+
+                <span class="nav-label">FINANCEIRO</span>
+                <a href="financeiro.html" class="nav-item">
+                    <span class="nav-icon">R$</span>
+                    Financeiro
+                </a>
+                <a href="cupons.html" class="nav-item">
+                    <span class="nav-icon">%</span>
+                    Cupons
+                </a>
+                <a href="despesas.html" class="nav-item active">
+                    <span class="nav-icon">−</span>
+                    Despesas
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <span class="nav-icon">◫</span>
+                    Relatórios
+                </a>
+
+                <span class="nav-label">SISTEMA</span>
+                <a href="configuracoes.html" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    Configurações
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="../index.html" class="back-link">
+                ← Voltar para a loja
+            </a>
+
+            <div class="admin-profile">
+                <div class="profile-avatar">A</div>
+                <div class="profile-meta">
+                    <strong>Administrador</strong>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CORTINA MENU MOBILE -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div>
+                    <span class="header-pretitle">Painel administrativo</span>
+                    <h1 class="header-title">Despesas</h1>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <span class="icon-action">⚲</span>
+                <span class="current-date" id="dataAtual">Hoje, 6 de setembro</span>
+            </div>
+        </header>
+
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Total de despesas</span>
+                    <span class="metric-badge">R$</span>
+                </div>
+                <strong class="metric-value" id="cardTotalDespesas">R$ 0,00</strong>
+                <span class="metric-desc">Despesas acumuladas</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Este mês</span>
+                    <span class="metric-badge">◫</span>
+                </div>
+                <strong class="metric-value" id="despesasMes">R$ 0,00</strong>
+                <span class="metric-desc">Gastos no mês atual</span>
+            </div>
+        </section>
+
+        <section class="orders-card">
+            <div class="orders-header">
+                <div>
+                    <h2>Controle de despesas</h2>
+                    <p>Registre e acompanhe os gastos operacionais da loja.</p>
+                </div>
+
+                <button class="primary-button" id="btnNovaDespesa">
+                    + Nova despesa
+                </button>
+            </div>
+
+            <div class="orders-toolbar">
+                <div class="orders-count">
+                    <span id="totalDespesasContador">0</span> registros encontrados
+                </div>
+
+                <div class="orders-search">
+                    <input type="text" id="buscarDespesa" placeholder="Buscar por descrição ou categoria...">
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>DESCRIÇÃO</th>
+                            <th>CATEGORIA</th>
+                            <th>DATA</th>
+                            <th>VALOR</th>
+                            <th>AÇÕES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaDespesas">
+                        <tr>
+                            <td colspan="5" class="table-loading">Carregando despesas...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <div class="empty-icon">−</div>
+                <h3>Nenhuma despesa cadastrada</h3>
+                <p>As despesas da loja aparecerão aqui.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL NOVA DESPESA -->
+    <div class="modal-overlay" id="modalDespesa">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <p>Controle financeiro</p>
+                    <h2>Nova despesa</h2>
+                </div>
+                <button class="modal-close" id="fecharModal">&times;</button>
+            </div>
+
+            <form id="formDespesa">
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" id="descricao" placeholder="Ex.: Conta de energia" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="categoria">Categoria</label>
+                        <select id="categoria" required>
+                            <option value="">Selecione</option>
+                            <option value="Aluguel">Aluguel</option>
+                            <option value="Energia">Energia</option>
+                            <option value="Internet">Internet</option>
+                            <option value="Mercadorias">Mercadorias</option>
+                            <option value="Embalagens">Embalagens</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valor">Valor</label>
+                        <input type="number" id="valor" step="0.01" min="0.01" placeholder="0,00" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dataDespesa">Data</label>
+                    <input type="date" id="dataDespesa" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="observacoes">Observações</label>
+                    <textarea id="observacoes" rows="3" placeholder="Observações adicionais (opcional)..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancelarDespesa">Cancelar</button>
+                    <button type="submit" class="primary-button">Salvar despesa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="../../js/admin/menu-mobile.js"></script>
+    <script src="../../js/admin/despesas.js"></script>
+</body>
+
+</html>

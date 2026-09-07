@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Conta — AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/conta.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body class="auth-pending">
+
+    <main class="account-page">
+
+        <!-- HEADER DA CONTA -->
+        <header class="account-header">
+            <a href="index.html" class="logo">AUTHENTIC</a>
+            <a href="index.html" class="back-store">← Voltar para a loja</a>
+        </header>
+
+        <!-- INTRO -->
+        <div class="account-intro">
+            <p class="eyebrow">AUTHENTIC MEMBERS</p>
+            <h1>Minha conta</h1>
+            <p>Gerencie seus dados, acompanhe entregas e configure sua experiência.</p>
+        </div>
+
+        <!-- LAYOUT COM SIDEBAR -->
+        <div class="account-layout">
+
+            <!-- SIDEBAR DO CLIENTE -->
+            <aside class="account-sidebar">
+                <div class="user-greeting">
+                    <span class="user-avatar" id="avatarLetra">A</span>
+                    <div class="user-text">
+                        <strong id="sidebarNome">Carregando...</strong>
+                        <span id="sidebarEmail">...</span>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button type="button" class="tab-btn active" data-target="tab-pedidos">
+                        <span class="tab-icon">□</span>
+                        <span>Meus Pedidos</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-target="tab-dados">
+                        <span class="tab-icon">♙</span>
+                        <span>Dados Pessoais</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-target="tab-enderecos">
+                        <span class="tab-icon">📍</span>
+                        <span>Endereços</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-target="tab-seguranca">
+                        <span class="tab-icon">🔒</span>
+                        <span>Segurança</span>
+                    </button>
+                    <button type="button" class="tab-btn logout-tab" id="btnSairSidebar">
+                        <span class="tab-icon">→</span>
+                        <span>Sair da Conta</span>
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- CONTEÚDO PRINCIPAL (TABS) -->
+            <div class="account-main">
+
+                <!-- ABA 1: MEUS PEDIDOS -->
+                <section id="tab-pedidos" class="tab-pane active">
+                    <div class="pane-header">
+                        <h2>Meus pedidos</h2>
+                        <p>Histórico e status de entrega das suas compras.</p>
+                    </div>
+                    <div id="ordersContainer">
+                        <div class="orders-loading">Carregando pedidos...</div>
+                    </div>
+                </section>
+
+                <!-- ABA 2: DADOS PESSOAIS -->
+                <section id="tab-dados" class="tab-pane">
+                    <div class="pane-header">
+                        <h2>Dados pessoais</h2>
+                        <p>Suas informações cadastradas na AUTHENTIC.</p>
+                    </div>
+                    <div class="account-info-box">
+                        <div class="info-row">
+                            <span class="info-label">Nome Completo</span>
+                            <strong id="nomeCliente">—</strong>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">E-mail Cadastrado</span>
+                            <strong id="emailCliente">—</strong>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Telefone</span>
+                            <strong id="telefoneCliente">—</strong>
+                        </div>
+                    </div>
+                    <form id="form-dados" class="security-form">
+                        <div class="form-group"><label for="editarNome">Nome</label><input id="editarNome" minlength="2" maxlength="100" required></div>
+                        <div class="form-group"><label for="editarTelefone">Telefone</label><input id="editarTelefone" maxlength="20"></div>
+                        <button type="submit" class="btn-primary">SALVAR DADOS</button>
+                    </form>
+                </section>
+
+                <!-- ABA 3: ENDEREÇOS -->
+                <section id="tab-enderecos" class="tab-pane">
+                    <div class="pane-header">
+                        <h2>Endereços salvos</h2>
+                        <p>Locais de entrega utilizados nas compras.</p>
+                    </div>
+                    <div id="addressContainer">
+                        <p class="empty-notice">Os endereços são preenchidos e salvos automaticamente a cada pedido
+                            finalizado.</p>
+                    </div>
+                </section>
+
+                <!-- ABA 4: SEGURANÇA -->
+                <section id="tab-seguranca" class="tab-pane">
+                    <div class="pane-header">
+                        <h2>Segurança da conta</h2>
+                        <p>Altere sua senha de acesso.</p>
+                    </div>
+                    <form id="form-alterar-senha" class="security-form">
+                        <div class="form-group">
+                            <label for="senhaAtual">Senha Atual</label>
+                            <input type="password" id="senhaAtual" placeholder="••••••••" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="novaSenha">Nova Senha (mínimo 8 caracteres)</label>
+                            <input type="password" id="novaSenha" placeholder="••••••••" minlength="8" required>
+                        </div>
+                        <button type="submit" class="btn-primary">ATUALIZAR SENHA</button>
+                    </form>
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="../js/conta.js"></script>
+</body>
+
+</html>

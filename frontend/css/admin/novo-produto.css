@@ -1,0 +1,533 @@
+
+/* =========================================
+   NOVO PRODUTO
+========================================= */
+
+.new-product-section {
+    padding: 35px 0 60px;
+    max-width: 900px;
+}
+
+
+/* =========================================
+   CARDS
+========================================= */
+
+.form-card {
+    margin-bottom: 15px;
+
+    background: white;
+
+    border: 1px solid var(--gray-200);
+    border-radius: 7px;
+
+    overflow: hidden;
+}
+
+.form-card-header {
+    padding: 21px 24px;
+
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.form-card-header h2 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-card-header p {
+    margin-top: 5px;
+
+    color: var(--gray-500);
+    font-size: 10px;
+}
+
+.form-content {
+    padding: 24px;
+}
+
+
+/* =========================================
+   CAMPOS
+========================================= */
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--gray-700);
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border: 1px solid var(--gray-300);
+    border-radius: 5px;
+
+    background: white;
+
+    color: var(--black);
+
+    font-family: inherit;
+    font-size: 11px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #888;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #aaa;
+}
+
+
+/* =========================================
+   PREÇO
+========================================= */
+
+.price-input {
+    position: relative;
+}
+
+.price-input span {
+    position: absolute;
+
+    left: 12px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--gray-500);
+
+    font-size: 10px;
+}
+
+.price-input input {
+    padding-left: 34px;
+}
+
+
+/* =========================================
+   UPLOAD DE IMAGEM
+========================================= */
+
+.image-upload {
+    min-height: 220px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px dashed #cfcfcf;
+    border-radius: 6px;
+
+    background: #fafafa;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.image-upload:hover {
+    background: var(--gray-100);
+    border-color: #999;
+}
+
+.image-upload input {
+    display: none;
+}
+
+.upload-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 13px;
+
+    border-radius: 50%;
+
+    background: white;
+    border: 1px solid var(--gray-200);
+
+    font-size: 18px;
+}
+
+.image-upload strong {
+    font-size: 11px;
+}
+
+.image-upload span {
+    margin-top: 6px;
+
+    color: var(--gray-500);
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   OPÇÕES
+========================================= */
+
+.options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.option-checkbox {
+    position: relative;
+}
+
+.option-checkbox input {
+    position: absolute;
+
+    opacity: 0;
+}
+
+.option-checkbox span {
+    min-width: 48px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 13px;
+
+    border: 1px solid var(--gray-300);
+    border-radius: 5px;
+
+    background: white;
+
+    color: var(--gray-700);
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.option-checkbox span:hover {
+    border-color: #999;
+}
+
+.option-checkbox input:checked+span {
+    background: var(--black);
+    border-color: var(--black);
+    color: white;
+}
+
+
+/* =========================================
+   INFORMAÇÃO DE ESTOQUE
+========================================= */
+
+.stock-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    margin-top: 8px;
+    padding: 15px;
+
+    border-radius: 6px;
+
+    background: var(--gray-100);
+}
+
+.stock-info-icon {
+    width: 25px;
+    height: 25px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: white;
+
+    color: var(--gray-700);
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.stock-info strong {
+    display: block;
+
+    font-size: 10px;
+}
+
+.stock-info p {
+    margin-top: 4px;
+
+    color: var(--gray-500);
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    padding: 14px;
+
+    margin-bottom: 8px;
+
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.status-option:last-child {
+    margin-bottom: 0;
+}
+
+.status-option:hover {
+    background: #fafafa;
+}
+
+.status-option input {
+    width: 16px;
+    height: 16px;
+
+    margin-top: 1px;
+
+    flex-shrink: 0;
+}
+
+.status-option strong {
+    display: block;
+
+    font-size: 10px;
+}
+
+.status-option span {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--gray-500);
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   AÇÕES
+========================================= */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.cancel-button,
+.save-button {
+    padding: 11px 18px;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.cancel-button {
+    border: 1px solid var(--gray-300);
+
+    background: white;
+
+    color: var(--gray-700);
+}
+
+.cancel-button:hover {
+    background: var(--gray-100);
+}
+
+.save-button {
+    border: 1px solid var(--black);
+
+    background: var(--black);
+
+    color: white;
+}
+
+.save-button:hover {
+    background: #292929;
+}
+
+/* =========================================
+   VARIÁVEIS DE COR (caso não estejam no admin.css)
+========================================= */
+:root {
+    --black: #111111;
+    --gray-100: #f5f4f0;
+    --gray-200: #eeeae4;
+    --gray-300: #ded9d0;
+    --gray-500: #8a857e;
+    --gray-700: #444444;
+}
+
+/* =========================================
+   BOTÃO NOVO PRODUTO (RESTAURADO PRETO)
+========================================= */
+.new-product-button {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 5px;
+    background-color: #111111 !important;
+    /* Força o preto elegante */
+    color: #ffffff !important;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.new-product-button:hover {
+    background-color: #2b2b2b !important;
+}
+
+/* =========================================
+   IMAGEM DO PRODUTO NA TABELA
+========================================= */
+.product-table-name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-table-image {
+    width: 42px;
+    height: 48px;
+    border-radius: 4px;
+    background: #f5f4f0;
+    border: 1px solid #eeeae4;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #999;
+    flex-shrink: 0;
+}
+
+.product-table-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* TÍTULO PRINCIPAL E SEÇÕES COM SERIFA */
+.topbar h1,
+.products-heading h2,
+.form-card-header h2 {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.02em;
+}
+
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 600px) {
+
+    .new-product-section {
+        padding-top: 25px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-content {
+        padding: 18px;
+    }
+
+    .form-card-header {
+        padding: 18px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .cancel-button,
+    .save-button {
+        width: 100%;
+        text-align: center;
+    }
+
+}
+

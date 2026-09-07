@@ -1,0 +1,456 @@
+/* =========================================================
+   MINHA CONTA COM SIDEBAR — AUTHENTIC
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f8f7f4;
+    color: #111;
+    font-family: "DM Sans", sans-serif;
+    overflow-x: hidden;
+}
+
+.account-page {
+    min-height: 100vh;
+    padding: 40px 6% 80px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.account-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.logo {
+    color: #111;
+    text-decoration: none;
+    font-family: "Playfair Display", serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+.back-store {
+    color: #666;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
+}
+
+.back-store:hover {
+    color: #111;
+}
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+.account-intro {
+    margin-bottom: 35px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.account-intro h1 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(34px, 4.5vw, 46px);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.account-intro p {
+    color: #666;
+    font-size: 13px;
+}
+
+/* =========================================================
+   GRID / LAYOUT COM SIDEBAR
+========================================================= */
+
+.account-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 35px;
+    align-items: start;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.account-sidebar {
+    background: #fff;
+    border: 1px solid #e5e2dc;
+    position: sticky;
+    top: 30px;
+}
+
+.user-greeting {
+    padding: 22px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.user-text {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.user-text strong {
+    font-size: 13px;
+    color: #111;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.user-text span {
+    font-size: 11px;
+    color: #888;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-nav .tab-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 22px;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #666;
+    text-align: left;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.sidebar-nav .tab-btn:hover {
+    background: #faf8f5;
+    color: #111;
+}
+
+.sidebar-nav .tab-btn.active {
+    background: #faf8f5;
+    color: #111;
+    border-left-color: #111;
+}
+
+.tab-icon {
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+}
+
+.sidebar-nav .logout-tab {
+    border-top: 1px solid #eeeae4;
+    color: #991b1b;
+}
+
+.sidebar-nav .logout-tab:hover {
+    background: #fdf2f2;
+}
+
+/* =========================================================
+   ÁREA PRINCIPAL (TABS)
+========================================================= */
+
+.account-main {
+    background: #fff;
+    border: 1px solid #e5e2dc;
+    min-height: 480px;
+}
+
+.tab-pane {
+    display: none;
+    padding: 35px 40px;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.pane-header {
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.pane-header h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.pane-header p {
+    font-size: 12px;
+    color: #777;
+}
+
+/* DADOS PESSOAIS */
+
+.account-info-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-row {
+    padding: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eeeae4;
+    font-size: 13px;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #888;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.info-row strong {
+    color: #111;
+}
+
+/* PEDIDOS */
+
+.orders-loading {
+    padding: 40px 0;
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+}
+
+.order-item {
+    padding: 22px 0;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.order-number {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.order-date {
+    display: block;
+    color: #888;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.order-status {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    background: #f0eee9;
+    text-transform: uppercase;
+}
+
+.order-products-summary {
+    list-style: none;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    color: #555;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #eee;
+    font-size: 13px;
+}
+
+/* FORMULÁRIO DE SEGURANÇA */
+
+.security-form {
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input {
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid #d8d6d1;
+    background: #fafaf9;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #111;
+    background: #fff;
+}
+
+.btn-primary {
+    height: 48px;
+    background: #111;
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 5px;
+}
+
+.btn-primary:hover {
+    opacity: 0.85;
+}
+
+.empty-notice {
+    font-size: 13px;
+    color: #777;
+    line-height: 1.6;
+    padding: 20px 0;
+}
+
+/* =========================================================
+   RESPONSIVIDADE (MOBILE & TABLET)
+========================================================= */
+
+@media (max-width: 850px) {
+    .account-page {
+        padding: 25px 5% 50px;
+    }
+
+    .account-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .account-sidebar {
+        position: static;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-top: 1px solid #eeeae4;
+    }
+
+    .sidebar-nav .tab-btn {
+        width: auto;
+        white-space: nowrap;
+        padding: 14px 16px;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        font-size: 10px;
+    }
+
+    .sidebar-nav .tab-btn.active {
+        border-left-color: transparent;
+        border-bottom-color: #111;
+    }
+
+    .sidebar-nav .logout-tab {
+        border-top: none;
+        border-left: 1px solid #eeeae4;
+    }
+
+    .tab-pane {
+        padding: 25px 20px;
+    }
+
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+body.auth-pending .account-page { visibility: hidden; }

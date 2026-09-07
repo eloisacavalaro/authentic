@@ -1,0 +1,351 @@
+/* =========================================================
+   PEDIDOS — AUTHENTIC ADMIN
+========================================================= */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 34px 44px;
+    overflow-y: auto;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+}
+
+.header-pretitle {
+    color: #888;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.header-title {
+    font-family: "Playfair Display", serif !important;
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 8px;
+}
+
+.icon-action {
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.current-date {
+    color: #777;
+    font-size: 11px;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    padding: 18px 20px;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.metric-header span:first-child {
+    color: #777;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.metric-badge {
+    background-color: #f7f6f3;
+    border: 1px solid #eae7e1;
+    color: #777;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.metric-value {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 4px;
+    font-family: "DM Sans", sans-serif;
+}
+
+.metric-desc {
+    color: #999;
+    font-size: 11px;
+}
+
+.orders-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.orders-header {
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.orders-header h2 {
+    font-family: "Playfair Display", serif !important;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.orders-header p {
+    color: #888;
+    font-size: 12px;
+}
+
+.order-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid #e5e2db;
+    background: #fff;
+    color: #666;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filter-btn:hover {
+    border-color: #111;
+    color: #111;
+}
+
+.filter-btn.active {
+    background: #111;
+    border-color: #111;
+    color: #fff;
+}
+
+.orders-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #fbfbf9;
+    border-top: 1px solid #f0eee9;
+    border-bottom: 1px solid #f0eee9;
+}
+
+.orders-count {
+    color: #777;
+    font-size: 12px;
+}
+
+.orders-count span {
+    color: #111;
+    font-weight: 700;
+}
+
+.orders-search input {
+    width: 270px;
+    height: 34px;
+    padding: 0 12px;
+    background: #fff;
+    border: 1px solid #ded9d0;
+    border-radius: 6px;
+    font-size: 11px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.orders-search input:focus {
+    border-color: #111;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead th {
+    padding: 13px 24px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #8c8880;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #f0eee9;
+    background: #faf9f7;
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 15px 24px;
+    font-size: 12px;
+    color: #333;
+    border-bottom: 1px solid #f5f4ef;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background-color: #faf9f6;
+}
+
+.order-number {
+    font-weight: 700;
+    color: #111;
+}
+
+.client-name {
+    display: block;
+    color: #111;
+    font-weight: 600;
+}
+
+.client-email {
+    display: block;
+    font-size: 10px;
+    color: #999;
+    margin-top: 2px;
+}
+
+.order-value {
+    font-weight: 700;
+    color: #111;
+}
+
+.status-select {
+    appearance: none;
+    -webkit-appearance: none;
+    min-width: 145px;
+    height: 30px;
+    padding: 0 28px 0 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    outline: none;
+    background-image:
+        linear-gradient(45deg, transparent 50%, currentColor 50%),
+        linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position:
+        calc(100% - 13px) 12px,
+        calc(100% - 9px) 12px;
+    background-size: 4px 4px, 4px 4px;
+    background-repeat: no-repeat;
+    transition: all 0.15s ease;
+}
+
+.status-select:hover {
+    filter: brightness(0.97);
+}
+
+.status-select:focus {
+    border-color: #111;
+}
+
+.status-select:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.status-select.status-aguardando_pagamento,
+.status-select.status-pendente {
+    background-color: #fdf6ec;
+    color: #ad7427;
+}
+
+.status-select.status-processando {
+    background-color: #f3eff9;
+    color: #6b4aa6;
+}
+
+.status-select.status-enviado {
+    background-color: #eef7f2;
+    color: #3e7b5f;
+}
+
+.status-select.status-concluido {
+    background-color: #eef5eb;
+    color: #3f7737;
+}
+
+.status-select.status-cancelado {
+    background-color: #fceeec;
+    color: #aa3d39;
+}
+
+.view-order {
+    border: none;
+    background: transparent;
+    color: #111;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.view-order:hover {
+    opacity: 0.45;
+}
+
+.table-loading {
+    text-align: center;
+    padding: 45px 0 !important;
+    color: #888;
+}
+
+.empty-state {
+    display: none;
+    padding: 40px;
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+}
+
+@media (max-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

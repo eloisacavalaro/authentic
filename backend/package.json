@@ -1,0 +1,34 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "migrate": "node scripts/migrate.js migrate-existing.sql",
+    "create-admin": "node scripts/create-admin.js",
+    "check": "node --check server.js && node tests/static-check.js",
+    "test": "npm run check && npm run test:auth && npm run test:payment && npm run test:dashboard && npm run test:critical",
+    "test:auth": "node tests/auth-e2e.js",
+    "test:payment": "node tests/payment-unit.js",
+    "test:dashboard": "node tests/dashboard-period-e2e.js",
+    "test:critical": "node tests/critical-e2e.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "joi": "^18.2.8",
+    "jsonwebtoken": "^9.0.3",
+    "mercadopago": "^3.6.0",
+    "multer": "^2.3.0",
+    "pg": "^8.23.0"
+  }
+}

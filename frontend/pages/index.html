@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUTHENTIC — Men's Wear</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        Frete grátis para compras acima de R$ 299
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-left">
+            <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+            <a href="index.html" class="logo">AUTHENTIC</a>
+        </div>
+
+        <nav id="main-nav">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Novidades</a>
+            <a href="produtos.html">Roupas</a>
+            <a href="produtos.html?categoria=Camisetas">Camisetas</a>
+            <a href="produtos.html?categoria=Calças">Calças</a>
+            <a href="produtos.html?categoria=Jaquetas">Jaquetas</a>
+            <a href="produtos.html?categoria=Acessórios">Acessórios</a>
+            <a href="produtos.html">Sale</a>
+        </nav>
+
+        <div class="header-icons">
+            <a href="produtos.html" class="search-link" aria-label="Buscar">⌕</a>
+            <a href="login.html" aria-label="Minha conta">♙</a>
+            <a href="carrinho.html" class="cart" aria-label="Carrinho">
+                ♧
+                <small class="cart-count">0</small>
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="eyebrow">Nova coleção · 2026</p>
+            <h1>
+                Be<br>
+                <span>Authentic.</span>
+            </h1>
+            <p class="hero-text">
+                Estilo masculino pensado para quem não precisa seguir tendências para se destacar. Descubra nossa nova
+                coleção.
+            </p>
+            <div class="hero-buttons">
+                <a href="./produtos.html" class="btn btn-dark">Comprar agora →</a>
+                <a href="./produtos.html" class="btn btn-light">Ver coleção</a>
+            </div>
+        </div>
+        <div class="hero-image"></div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+        <div class="feature">
+            <div class="feature-icon">◇</div>
+            <div>
+                <strong>Qualidade</strong>
+                <p>Peças selecionadas</p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">✦</div>
+            <div>
+                <strong>Estilo</strong>
+                <p>Design contemporâneo</p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">□</div>
+            <div>
+                <strong>Entrega rápida</strong>
+                <p>Enviamos para todo Brasil</p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">↻</div>
+            <div>
+                <strong>Troca fácil</strong>
+                <p>Processo simples e seguro</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-title">
+                <small>Explore</small>
+                <h2>Compre por categoria</h2>
+            </div>
+            <a href="./produtos.html" class="view-all">Ver tudo →</a>
+        </div>
+
+        <div class="categories">
+            <a href="produtos.html?categoria=Camisetas" class="category">
+                <img src="images/categoria-camisetas.png" alt="Camisetas">
+                <div class="category-overlay">
+                    <div>
+                        <h3>Camisetas</h3>
+                        <p>Explorar coleção →</p>
+                    </div>
+                </div>
+            </a>
+        
+            <a href="produtos.html?categoria=Calças" class="category">
+                <img src="images/categoria-calcas.png" alt="Calças">
+                <div class="category-overlay">
+                    <div>
+                        <h3>Calças</h3>
+                        <p>Explorar coleção →</p>
+                    </div>
+                </div>
+            </a>
+        
+            <a href="produtos.html?categoria=Jaquetas" class="category">
+                <img src="images/categoria-jaquetas.png" alt="Jaquetas">
+                <div class="category-overlay">
+                    <div>
+                        <h3>Jaquetas</h3>
+                        <p>Explorar coleção →</p>
+                    </div>
+                </div>
+            </a>
+        
+            <a href="produtos.html?categoria=Acessórios" class="category">
+                <img src="images/categoria-acessorios.png" alt="Acessórios">
+                <div class="category-overlay">
+                    <div>
+                        <h3>Acessórios</h3>
+                        <p>Explorar coleção →</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- PRODUCTS: MAIS VENDIDOS -->
+    <section class="section" style="padding-top: 20px;">
+        <div class="section-header">
+            <div class="section-title">
+                <small>Authentic selection</small>
+                <h2>Mais vendidos</h2>
+            </div>
+            <a href="./produtos.html" class="view-all">Ver produtos →</a>
+        </div>
+
+        <div class="products" id="home-products"></div>
+    </section>
+
+    <!-- NEW ARRIVALS -->
+    <section class="section new-arrivals-section">
+        <div class="section-header">
+            <div class="section-title">
+                <small>Just dropped</small>
+                <h2>New Arrivals</h2>
+            </div>
+            <a href="produtos.html" class="view-all">Ver todos →</a>
+        </div>
+
+        <div class="products" id="new-arrivals"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about">
+        <div class="about-image">
+            <img src="images/about.png" alt="AUTHENTIC">
+        </div>
+
+        <div class="about-content">
+            <small>About AUTHENTIC</small>
+            <h2>
+                Estilo que<br>
+                fala por <em>você.</em>
+            </h2>
+            <p>
+                A AUTHENTIC nasceu para homens que enxergam a moda como uma forma de expressão.
+            </p>
+            <p>
+                Criamos uma seleção de peças contemporâneas, versáteis e atemporais, escolhidas para acompanhar
+                diferentes momentos e estilos.
+            </p>
+            <a href="produtos.html" class="btn btn-dark">Conheça a coleção →</a>
+
+            <div class="about-meta">
+                <div>
+                    <strong>01</strong>
+                    <span>Identidade</span>
+                </div>
+                <div>
+                    <strong>02</strong>
+                    <span>Qualidade</span>
+                </div>
+                <div>
+                    <strong>03</strong>
+                    <span>Autenticidade</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact">
+        <div class="contact-top">
+            <div class="contact-title">
+                <small>Let's talk</small>
+                <h2>Vamos<br><em>conversar?</em></h2>
+            </div>
+            <div class="contact-intro">
+                <p>
+                    Seja para tirar uma dúvida, encontrar a peça ideal ou simplesmente conhecer melhor a AUTHENTIC,
+                    estamos aqui para ajudar.
+                </p>
+                <p class="contact-note">
+                    Atendimento pensado para tornar sua experiência simples, pessoal e especial.
+                </p>
+            </div>
+        </div>
+
+        <div class="contact-details">
+            <a href="#" class="contact-item">
+                <span class="contact-number">01</span>
+                <div>
+                    <small>Fale com a gente</small>
+                    <strong>WhatsApp</strong>
+                    <p>Atendimento rápido e personalizado →</p>
+                </div>
+            </a>
+
+            <a href="#" class="contact-item">
+                <span class="contact-number">02</span>
+                <div>
+                    <small>Acompanhe a AUTHENTIC</small>
+                    <strong>Instagram</strong>
+                    <p>Novidades, peças e inspirações →</p>
+                </div>
+            </a>
+
+            <a href="mailto:contato@authentic.com" class="contact-item">
+                <span class="contact-number">03</span>
+                <div>
+                    <small>Escreva para nós</small>
+                    <strong>E-mail</strong>
+                    <p>Envie sua dúvida ou solicitação →</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="contact-bottom">
+            <div>
+                <small>Atendimento</small>
+                <p>Segunda a sábado · 09h às 19h</p>
+            </div>
+            <div>
+                <small>Online</small>
+                <p>Respondemos o mais breve possível</p>
+            </div>
+            <a href="produtos.html">Conheça a coleção →</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo">AUTHENTIC</div>
+                <p class="footer-description">
+                    Moda masculina contemporânea para quem valoriza autenticidade, qualidade e estilo.
+                </p>
+            </div>
+
+            <div>
+                <h4>Loja</h4>
+                <ul>
+                    <li><a href="produtos.html">Novidades</a></li>
+                    <li><a href="produtos.html?categoria=Camiseta">Camisetas</a></li>
+                    <li><a href="produtos.html?categoria=Calça">Calças</a></li>
+                    <li><a href="produtos.html?categoria=Jaqueta">Jaquetas</a></li>
+                    <li><a href="produtos.html?categoria=Acessório">Acessórios</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4>Ajuda</h4>
+                <ul>
+                    <li><a href="login.html">Minha conta</a></li>
+                    <li><a href="conta.html">Pedidos</a></li>
+                    <li><a href="#">Trocas e devoluções</a></li>
+                    <li><a href="#">Entrega</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4>Siga-nos</h4>
+                <ul>
+                    <li>Instagram</li>
+                    <li>TikTok</li>
+                    <li>Pinterest</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <span>© 2026 AUTHENTIC. Todos os direitos reservados.</span>
+            <span>Feito para quem é autêntico.</span>
+        </div>
+    </footer>
+
+    <script src="../js/home.js"></script>
+</body>
+
+</html>

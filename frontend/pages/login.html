@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar — AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/login.css">
+    
+    <link rel="stylesheet" href="../css/login-inline.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <main class="auth-page">
+        <a href="index.html" class="logo">AUTHENTIC</a>
+
+        <section class="auth-box">
+            <div class="auth-header">
+                <p class="eyebrow">BEM-VINDO DE VOLTA</p>
+                <h1>Entrar</h1>
+                <p>Acesse sua conta para acompanhar seus pedidos.</p>
+            </div>
+
+            <div id="login-feedback" class="form-feedback"></div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required
+                        autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <div class="password-label"
+                        style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+                        <label for="senha">Senha</label>
+                        <a href="#" style="font-size: 11px; color: #777; text-decoration: underline;">Esqueci minha
+                            senha</a>
+                    </div>
+                    <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required
+                        autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="auth-button" id="btn-entrar">
+                    ENTRAR
+                </button>
+            </form>
+
+            <div class="auth-divider">
+                <span>ou</span>
+            </div>
+
+            <p class="register-link">
+                Ainda não tem uma conta?
+                <a href="cadastro.html">Criar conta</a>
+            </p>
+        </section>
+
+        <a href="index.html" class="back-home">← Voltar para a loja</a>
+    </main>
+
+    
+    <script src="../js/login-inline.js"></script>
+</body>
+
+</html>

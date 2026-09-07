@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios — AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Carregamento padronizado de estilos -->
+    <link rel="stylesheet" href="../../css/admin/admin.css">
+    <link rel="stylesheet" href="../../css/admin/relatorios.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">
+                <h2>AUTHENTIC</h2>
+                <span>ADMIN</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-label">GERAL</span>
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+                <a href="produtos.html" class="nav-item">
+                    <span class="nav-icon">▣</span>
+                    Produtos
+                </a>
+                <a href="estoque.html" class="nav-item">
+                    <span class="nav-icon">≡</span>
+                    Estoque
+                </a>
+                <a href="compras.html" class="nav-item">
+                    <span class="nav-icon">▤</span>
+                    Compras
+                </a>
+                <a href="pedidos.html" class="nav-item">
+                    <span class="nav-icon">□</span>
+                    Pedidos
+                </a>
+                <a href="clientes.html" class="nav-item">
+                    <span class="nav-icon">♟</span>
+                    Clientes
+                </a>
+
+                <span class="nav-label">FINANCEIRO</span>
+                <a href="financeiro.html" class="nav-item">
+                    <span class="nav-icon">R$</span>
+                    Financeiro
+                </a>
+                <a href="cupons.html" class="nav-item">
+                    <span class="nav-icon">%</span>
+                    Cupons
+                </a>
+                <a href="despesas.html" class="nav-item">
+                    <span class="nav-icon">−</span>
+                    Despesas
+                </a>
+                <a href="relatorios.html" class="nav-item active">
+                    <span class="nav-icon">◫</span>
+                    Relatórios
+                </a>
+
+                <span class="nav-label">SISTEMA</span>
+                <a href="configuracoes.html" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    Configurações
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="../index.html" class="back-link">
+                ← Voltar para a loja
+            </a>
+
+            <div class="admin-profile">
+                <div class="profile-avatar">A</div>
+                <div class="profile-meta">
+                    <strong>Administrador</strong>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CORTINA MENU MOBILE -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <main class="main-content">
+
+        <!-- CABEÇALHO SUPERIOR -->
+        <header class="top-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div>
+                    <span class="header-pretitle">Painel administrativo</span>
+                    <h1 class="header-title">Relatórios</h1>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <span class="icon-action">⚲</span>
+                <span class="current-date" id="dataAtual">Hoje, 6 de setembro</span>
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <section class="report-filters">
+            <div class="filter-group">
+                <label>Período</label>
+                <select id="periodoRelatorio">
+                    <option value="7">Últimos 7 dias</option>
+                    <option value="30" selected>Últimos 30 dias</option>
+                    <option value="90">Últimos 90 dias</option>
+                    <option value="365">Último ano</option>
+                    <option value="personalizado">Personalizado</option>
+                </select>
+            </div>
+
+            <div class="filter-group campo-personalizado">
+                <label>Data inicial</label>
+                <input type="date" id="dataInicial">
+            </div>
+
+            <div class="filter-group campo-personalizado">
+                <label>Data final</label>
+                <input type="date" id="dataFinal">
+            </div>
+
+            <button class="primary-button" id="btnGerarRelatorio">
+                Gerar relatório
+            </button>
+        </section>
+
+        <!-- CARDS DE RESUMO -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>FATURAMENTO</span>
+                    <span class="metric-badge">R$</span>
+                </div>
+                <strong class="metric-value" id="relatorioFaturamento">R$ 0,00</strong>
+                <span class="metric-desc">No período selecionado</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>VENDAS</span>
+                    <span class="metric-badge">□</span>
+                </div>
+                <strong class="metric-value" id="relatorioVendas">0</strong>
+                <span class="metric-desc">Pedidos realizados</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>DESPESAS</span>
+                    <span class="metric-badge">−</span>
+                </div>
+                <strong class="metric-value" id="relatorioDespesas">R$ 0,00</strong>
+                <span class="metric-desc">No período selecionado</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>RESULTADO LÍQUIDO</span>
+                    <span class="metric-badge">✓</span>
+                </div>
+                <strong class="metric-value" id="relatorioResultado">R$ 0,00</strong>
+                <span class="metric-desc">Faturamento − despesas</span>
+            </div>
+        </section>
+
+        <!-- GRÁFICO E FORMAS DE PAGAMENTO -->
+        <section class="report-grid">
+            <div class="report-panel">
+                <div class="panel-header">
+                    <h4>Vendas por período</h4>
+                </div>
+                <div class="chart-placeholder">
+                    <div class="chart-icon">◫</div>
+                    <strong>Gráfico de vendas</strong>
+                    <span>Os dados aparecerão aqui.</span>
+                </div>
+            </div>
+
+            <div class="report-panel">
+                <div class="panel-header">
+                    <h4>Formas de pagamento</h4>
+                </div>
+                <div class="payment-report">
+                    <div class="payment-row">
+                        <span>Pix</span>
+                        <strong id="relatorioPix">0</strong>
+                    </div>
+                    <div class="payment-row">
+                        <span>Cartão</span>
+                        <strong id="relatorioCartao">0</strong>
+                    </div>
+                    <div class="payment-row">
+                        <span>Pagamento na retirada</span>
+                        <strong id="relatorioRetirada">0</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABELA DE PRODUTOS MAIS VENDIDOS -->
+        <section class="orders-card" style="margin-top: 24px;">
+            <div class="orders-header">
+                <div>
+                    <h2>Produtos mais vendidos</h2>
+                    <p>Itens com maior saída e receita no período selecionado.</p>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PRODUTO</th>
+                            <th>CATEGORIA</th>
+                            <th>QUANTIDADE VENDIDA</th>
+                            <th>FATURAMENTO</th>
+                        </tr>
+                    </thead>
+                    <tbody id="produtosMaisVendidos">
+                        <tr>
+                            <td colspan="4" class="table-loading">Carregando dados...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SITUAÇÃO DO ESTOQUE -->
+        <section style="margin-top: 28px;">
+            <div style="margin-bottom: 14px;">
+                <span class="header-pretitle" style="letter-spacing: 1.2px; font-weight: 700;">ESTOQUE</span>
+                <h3 class="stock-title">Situação do estoque</h3>
+            </div>
+
+            <div class="stock-report-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span>Produtos em estoque</span>
+                        <span class="metric-badge">≡</span>
+                    </div>
+                    <strong class="metric-value" id="relatorioEstoque">0</strong>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span>Estoque baixo</span>
+                        <span class="metric-badge">⚠️</span>
+                    </div>
+                    <strong class="metric-value" id="relatorioEstoqueBaixo" style="color: #b45309;">0</strong>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span>Sem estoque</span>
+                        <span class="metric-badge">✕</span>
+                    </div>
+                    <strong class="metric-value" id="relatorioSemEstoque" style="color: #dc2626;">0</strong>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="../../js/admin/menu-mobile.js"></script>
+    <script src="../../js/admin/relatorios.js"></script>
+</body>
+
+</html>

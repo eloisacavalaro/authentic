@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos | AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../../css/admin/admin.css">
+    <link rel="stylesheet" href="../../css/admin/pedidos.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">
+                <h2>AUTHENTIC</h2>
+                <span>ADMIN</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-label">GERAL</span>
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+                <a href="produtos.html" class="nav-item">
+                    <span class="nav-icon">▣</span>
+                    Produtos
+                </a>
+                <a href="estoque.html" class="nav-item">
+                    <span class="nav-icon">≡</span>
+                    Estoque
+                </a>
+                <a href="compras.html" class="nav-item">
+                    <span class="nav-icon">▤</span>
+                    Compras
+                </a>
+                <a href="pedidos.html" class="nav-item active">
+                    <span class="nav-icon">□</span>
+                    Pedidos
+                </a>
+                <a href="clientes.html" class="nav-item">
+                    <span class="nav-icon">♟</span>
+                    Clientes
+                </a>
+
+                <span class="nav-label">FINANCEIRO</span>
+                <a href="financeiro.html" class="nav-item">
+                    <span class="nav-icon">R$</span>
+                    Financeiro
+                </a>
+                <a href="cupons.html" class="nav-item">
+                    <span class="nav-icon">%</span>
+                    Cupons
+                </a>
+                <a href="despesas.html" class="nav-item">
+                    <span class="nav-icon">−</span>
+                    Despesas
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <span class="nav-icon">◫</span>
+                    Relatórios
+                </a>
+
+                <span class="nav-label">SISTEMA</span>
+                <a href="configuracoes.html" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    Configurações
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="../index.html" class="back-link">
+                ← Voltar para a loja
+            </a>
+
+            <div class="admin-profile">
+                <div class="profile-avatar">A</div>
+                <div class="profile-meta">
+                    <strong>Administrador</strong>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CORTINA MENU MOBILE -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+
+        <!-- CABEÇALHO SUPERIOR -->
+        <header class="top-header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div>
+                    <span class="header-pretitle">Painel administrativo</span>
+                    <h1 class="header-title">Pedidos</h1>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <span class="icon-action">⚲</span>
+                <span class="current-date" id="dataAtual">Hoje, 6 de setembro</span>
+            </div>
+        </header>
+
+        <!-- CARDS DE MÉTRICAS -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Total em Pedidos</span>
+                    <span class="metric-badge">R$</span>
+                </div>
+                <strong class="metric-value" id="faturamentoTotal">R$ 0,00</strong>
+                <span class="metric-desc">Valor acumulado</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Aguardando Pagamento</span>
+                    <span class="metric-badge">⏳</span>
+                </div>
+                <strong class="metric-value" id="totalAguardando">0</strong>
+                <span class="metric-desc">Necessitam de baixa</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Processando / A Enviar</span>
+                    <span class="metric-badge">🚚</span>
+                </div>
+                <strong class="metric-value" id="totalProcessando">0</strong>
+                <span class="metric-desc">Prontos para preparo</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span>Concluídos</span>
+                    <span class="metric-badge">✓</span>
+                </div>
+                <strong class="metric-value" id="totalConcluidos">0</strong>
+                <span class="metric-desc">Entregues ou retirados</span>
+            </div>
+        </section>
+
+        <!-- CARD DE GESTÃO DA TABELA -->
+        <section class="orders-card">
+            <div class="orders-header">
+                <div>
+                    <h2>Gerenciar pedidos</h2>
+                    <p>Acompanhe, filtre e atualize o status de entrega e pagamento.</p>
+                </div>
+
+                <div class="order-filters">
+                    <button class="filter-btn active" data-status="todos">Todos</button>
+                    <button class="filter-btn" data-status="aguardando_pagamento">Aguardando pagamento</button>
+                    <button class="filter-btn" data-status="processando">Processando</button>
+                    <button class="filter-btn" data-status="enviado">Enviados</button>
+                    <button class="filter-btn" data-status="concluido">Concluídos</button>
+                    <button class="filter-btn" data-status="cancelado">Cancelados</button>
+                </div>
+            </div>
+
+            <div class="orders-toolbar">
+                <div class="orders-count">
+                    <span id="totalPedidos">0</span> pedidos listados
+                </div>
+
+                <div class="orders-search">
+                    <input type="text" id="buscarPedido" placeholder="Buscar por cliente, e-mail ou nº...">
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PEDIDO</th>
+                            <th>CLIENTE</th>
+                            <th>DATA</th>
+                            <th>VALOR</th>
+                            <th>PAGAMENTO</th>
+                            <th>RECEBIMENTO</th>
+                            <th>STATUS</th>
+                            <th>AÇÕES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaPedidos">
+                        <tr>
+                            <td colspan="8" class="table-loading">Carregando pedidos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <p>Nenhum pedido encontrado com o filtro selecionado.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="../../js/admin/menu-mobile.js"></script>
+    <script src="../../js/admin/pedidos.js"></script>
+</body>
+
+</html>

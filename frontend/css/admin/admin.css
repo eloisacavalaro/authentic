@@ -1,0 +1,827 @@
+/* =========================================================
+   AUTHENTIC ADMIN — DESIGN SYSTEM UNIFICADO (MASTER CSS)
+========================================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    background-color: #f6f5f2;
+    color: #171717;
+    font-family: "DM Sans", sans-serif;
+    overflow: hidden !important;
+    /* Trava a rolagem da página inteira */
+}
+
+/* Força tanto o body quanto containers intermediários a exibirem lado a lado */
+body,
+.admin-layout,
+.dashboard-layout,
+.container-admin {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+}
+
+/* =========================================================
+   SIDEBAR (CORREÇÃO DE ALTURA E ALINHAMENTO DO AVATAR)
+========================================================= */
+.sidebar {
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    background-color: #101010;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px 20px 20px 20px;
+    overflow-y: auto;
+    flex-shrink: 0 !important;
+    position: relative;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.sidebar-brand h2,
+.sidebar-logo h1,
+.sidebar-logo span:first-child {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #fff;
+    margin-bottom: 2px;
+    display: block;
+}
+
+.sidebar-brand span,
+.sidebar-logo small,
+.sidebar-logo span:last-child {
+    display: block;
+    color: #555;
+    font-size: 8px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-label,
+.nav-title {
+    color: #555;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    padding-left: 10px;
+    display: block;
+    text-transform: uppercase;
+}
+
+.nav-item,
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    color: #8c8c8c;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+}
+
+.nav-icon,
+.sidebar-nav a span {
+    font-size: 13px;
+    width: 16px;
+    text-align: center;
+    color: #666;
+}
+
+.nav-item:hover,
+.sidebar-nav a:hover {
+    color: #fff;
+    background-color: #1a1a1a;
+}
+
+.nav-item:hover .nav-icon,
+.sidebar-nav a:hover span {
+    color: #fff;
+}
+
+.nav-item.active,
+.sidebar-nav a.active {
+    background-color: #212121;
+    color: #fff;
+    font-weight: 600;
+}
+
+.nav-item.active .nav-icon,
+.sidebar-nav a.active span {
+    color: #fff;
+}
+
+/* RODAPÉ DA SIDEBAR */
+.sidebar-bottom {
+    margin-top: auto;
+    border-top: 1px solid #1e1e1e;
+    padding-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.back-link,
+.back-store,
+.store-link {
+    color: #666 !important;
+    text-decoration: none;
+    font-size: 11px;
+    display: block;
+    padding-left: 4px;
+    transition: color 0.15s ease;
+}
+
+.back-link:hover,
+.back-store:hover,
+.store-link:hover {
+    color: #fff !important;
+}
+
+.admin-profile,
+.admin-user {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 4px 6px;
+}
+
+.profile-avatar,
+.user-avatar {
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background-color: #222 !important;
+    color: #fff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    border: 1px solid #333 !important;
+    flex-shrink: 0 !important;
+}
+
+.profile-meta,
+.admin-user>div:not(.user-avatar) {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    line-height: 1.2 !important;
+}
+
+.profile-meta strong,
+.admin-user strong {
+    display: block !important;
+    color: #ddd !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.profile-meta span,
+.admin-user span,
+.admin-user small {
+    color: #666 !important;
+    font-size: 10px !important;
+    display: block !important;
+}
+
+/* =========================================================
+   CONTEÚDO PRINCIPAL (ROLAGEM DEDICADA SÓ AQUI)
+========================================================= */
+main,
+.main-content,
+.admin-main,
+.admin-content,
+.dashboard-content,
+.content {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: calc(100% - 250px) !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    padding: 34px 44px !important;
+    overflow-y: auto !important;
+    /* Rolagem vertical apenas no conteúdo */
+    display: block !important;
+}
+
+.top-header,
+.page-header,
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+}
+
+.header-pretitle,
+.page-label,
+.breadcrumb,
+.page-eyebrow {
+    color: #888;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.header-title,
+.top-header h1,
+.page-header h1,
+.page-header h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+.header-right,
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 8px;
+}
+
+.current-date,
+.topbar-date {
+    color: #777;
+    font-size: 11px;
+}
+
+/* =========================================================
+   CARDS DE MÉTRICAS (GRID DE 4 COLUNAS PADRONIZADO)
+========================================================= */
+.metrics-grid,
+.stats-grid,
+.finance-stats,
+.stock-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-card,
+.stat-card,
+.finance-stat,
+.stock-summary-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    padding: 18px 20px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.metric-header,
+.stat-top,
+.finance-stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.metric-header span:first-child,
+.stat-top>span,
+.finance-stat-top>span,
+.summary-label {
+    color: #777;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.metric-badge,
+.stat-icon,
+.finance-icon {
+    background-color: #f7f6f3;
+    border: 1px solid #eae7e1;
+    color: #777;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.metric-value,
+.stat-card>strong,
+.finance-stat strong,
+.stock-summary-card strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 4px;
+    font-family: "DM Sans", sans-serif;
+}
+
+.metric-desc,
+.stat-card p,
+.finance-stat p {
+    color: #999;
+    font-size: 11px;
+    margin: 0;
+}
+
+/* =========================================================
+   CARDS DA TABELA / CONTAINERS BRANCOS
+========================================================= */
+.orders-card,
+.finance-card,
+.dashboard-card,
+.products-card,
+.stock-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.orders-header,
+.card-header,
+.products-card-header,
+.stock-card-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0eee9;
+}
+
+.orders-header h2,
+.card-header h3,
+.stock-card-header strong {
+    font-family: "Playfair Display", serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.orders-header p,
+.card-header p {
+    color: #888;
+    font-size: 12px;
+    margin: 0;
+}
+
+/* FILTROS & BUSCA */
+.orders-toolbar,
+.products-filters,
+.stock-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #fbfbf9;
+    border-bottom: 1px solid #f0eee9;
+    gap: 12px;
+}
+
+.search-box,
+.orders-search input,
+.table-actions input {
+    width: 270px;
+    height: 36px;
+    padding: 0 12px;
+    background: #fff;
+    border: 1px solid #ded9d0;
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.search-box input:focus,
+.orders-search input:focus,
+.table-actions input:focus {
+    border-color: #111;
+}
+
+/* BOTÕES PADRÃO */
+.primary-button,
+.new-product-button,
+.stock-button:not(.secondary) {
+    height: 36px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 6px;
+    background: #111;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+}
+
+.primary-button:hover,
+.new-product-button:hover,
+.stock-button:not(.secondary):hover {
+    opacity: 0.85;
+}
+
+.secondary-button,
+.stock-button.secondary {
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* =========================================================
+   TABELAS (PRODUTOS, ESTOQUE, FINANCEIRO, PEDIDOS)
+========================================================= */
+.table-wrap,
+.table-wrapper,
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table,
+.products-table,
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead th,
+th {
+    padding: 13px 24px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #8c8880;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #f0eee9;
+    background: #fff;
+    white-space: nowrap;
+}
+
+tbody td,
+td {
+    padding: 15px 24px;
+    font-size: 12px;
+    color: #333;
+    border-bottom: 1px solid #f5f4ef;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background-color: #faf9f6;
+}
+
+/* =========================================================
+   COLUNAS DO FINANCEIRO & RESULTADOS
+========================================================= */
+.finance-columns,
+.dashboard-columns {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.result-content,
+.payment-list {
+    padding: 8px 24px 16px;
+}
+
+.result-item,
+.payment-item {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0eee9;
+}
+
+.result-item:last-child,
+.payment-item:last-child {
+    border-bottom: none;
+}
+
+.result-item span,
+.payment-item span {
+    color: #666;
+    font-size: 12px;
+}
+
+.result-item strong,
+.payment-item strong {
+    color: #111;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.result-total {
+    margin-top: 10px;
+    padding-top: 14px;
+    border-top: 1px solid #eee;
+    border-bottom: none;
+}
+
+.result-total strong {
+    font-size: 18px;
+    color: #111;
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+@media (max-width: 1100px) {
+
+    .metrics-grid,
+    .stats-grid,
+    .finance-stats,
+    .stock-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .finance-columns,
+    .dashboard-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .metrics-grid,
+    .stats-grid,
+    .finance-stats,
+    .stock-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+}
+
+/* =========================================================
+   BOTÃO HAMBÚRGUER (OCULTO NO COMPUTADOR)
+========================================================= */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 38px;
+    height: 38px;
+    background: #fff;
+    border: 1px solid #ded9d0;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 8px;
+    flex-shrink: 0;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #111;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Fonte do corpo e textos gerais */
+body,
+input,
+button,
+select,
+textarea,
+.breadcrumb,
+.header-pretitle,
+.nav-item,
+.stat-top span {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Fonte sofisticada COM SERIFA para Marca e Títulos principais (igual à tela de Configurações) */
+.sidebar-brand h2,
+.header-title,
+.topbar h1,
+.top-header h1,
+h1,
+.settings-heading h3,
+.section-heading h2,
+.orders-header h2,
+.card-header h3 {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+/* O "ADMIN" embaixo de AUTHENTIC em caixa alta e fonte limpa */
+.sidebar-brand span {
+    font-family: 'DM Sans', sans-serif !important;
+    letter-spacing: 0.15em;
+}
+
+/* =========================================================
+   COMPORTAMENTO MOBILE (< 768px)
+========================================================= */
+@media (max-width: 768px) {
+
+    /* Exibe o botão hambúrguer */
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    /* Permite o scroll vertical natural da tela no celular */
+    html,
+    body {
+        height: auto !important;
+        max-height: none !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+    body,
+    .admin-layout,
+    .dashboard-layout,
+    .container-admin {
+        flex-direction: column !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    /* SIDEBAR EM FORMATO DE GAVETA (DRAWER) */
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: 270px !important;
+        max-width: 80% !important;
+        height: 100vh !important;
+        z-index: 999 !important;
+        box-shadow: 10px 0 25px rgba(0, 0, 0, 0.4);
+        transform: translateX(-100%);
+        /* Oculta para fora da tela à esquerda */
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* Quando a classe .active for adicionada pelo JS, ela desliza para dentro */
+    .sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    .sidebar-backdrop.active {
+        display: block;
+        opacity: 1;
+    }
+
+    /* CONTEÚDO PRINCIPAL NO MOBILE */
+    main,
+    .main-content,
+    .admin-main,
+    .admin-content,
+    .dashboard-content,
+    .content {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: 20px 16px !important;
+        overflow-y: visible !important;
+    }
+
+    /* Top Header */
+    .top-header,
+    .page-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        margin-bottom: 22px !important;
+    }
+
+    .header-title,
+    .top-header h1,
+    .page-header h1,
+    .page-header h2 {
+        font-size: 26px !important;
+    }
+
+    /* Cards e Grids em 1 Coluna */
+    .metrics-grid,
+    .stats-grid,
+    .finance-stats,
+    .stock-summary,
+    .finance-columns,
+    .dashboard-columns,
+    .form-row,
+    .stock-form-row {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    /* Filtros e Caixas de Busca */
+    .orders-toolbar,
+    .products-filters,
+    .stock-filters {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 14px 16px !important;
+    }
+
+    .search-box,
+    .orders-search input,
+    .table-actions input {
+        width: 100% !important;
+    }
+
+    /* Tabelas com Scroll Horizontal Touch */
+    .table-wrap,
+    .table-wrapper,
+    .table-container {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    /* Ajuste de Modais */
+    .modal,
+    .stock-modal-content {
+        width: 95% !important;
+        padding: 18px !important;
+    }
+}

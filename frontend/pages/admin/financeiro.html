@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Financeiro | AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/frontend/css/admin/admin.css">
+    <link rel="stylesheet" href="/frontend/css/admin/financeiro.css">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="sidebar-brand">
+                    <h2>AUTHENTIC</h2>
+                    <span>ADMIN</span>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <span class="nav-label">GERAL</span>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="nav-icon">⌂</span>
+                        Dashboard
+                    </a>
+                    <a href="produtos.html" class="nav-item">
+                        <span class="nav-icon">▣</span>
+                        Produtos
+                    </a>
+                    <a href="estoque.html" class="nav-item">
+                        <span class="nav-icon">≡</span>
+                        Estoque
+                    </a>
+                    <a href="compras.html" class="nav-item">
+                        <span class="nav-icon">▤</span>
+                        Compras
+                    </a>
+                    <a href="pedidos.html" class="nav-item">
+                        <span class="nav-icon">□</span>
+                        Pedidos
+                    </a>
+                    <a href="clientes.html" class="nav-item">
+                        <span class="nav-icon">♟</span>
+                        Clientes
+                    </a>
+
+                    <span class="nav-label">FINANCEIRO</span>
+                    <a href="financeiro.html" class="nav-item active">
+                        <span class="nav-icon">R$</span>
+                        Financeiro
+                    </a>
+                    <a href="cupons.html" class="nav-item">
+                        <span class="nav-icon">%</span>
+                        Cupons
+                    </a>
+                    <a href="despesas.html" class="nav-item">
+                        <span class="nav-icon">−</span>
+                        Despesas
+                    </a>
+                    <a href="relatorios.html" class="nav-item">
+                        <span class="nav-icon">◫</span>
+                        Relatórios
+                    </a>
+
+                    <span class="nav-label">SISTEMA</span>
+                    <a href="configuracoes.html" class="nav-item">
+                        <span class="nav-icon">⚙</span>
+                        Configurações
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="../index.html" class="back-link">
+                    ← Voltar para a loja
+                </a>
+
+                <div class="admin-profile">
+                    <div class="profile-avatar">A</div>
+                    <div class="profile-meta">
+                        <strong>Administrador</strong>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- FUNDO ESCURO DO MENU MOBILE -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- CONTEÚDO -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div>
+                    <p class="breadcrumb">
+                        Painel administrativo
+                    </p>
+                    <h1>
+                        Financeiro
+                    </h1>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="notification">
+                        ♢
+                        <span></span>
+                    </button>
+
+                    <div class="topbar-date">
+                        Hoje, 6 de setembro
+                    </div>
+                </div>
+            </header>
+
+            <!-- RESUMO FINANCEIRO -->
+            <section class="finance-section">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Visão financeira</h2>
+                        <p>Acompanhe as entradas e o desempenho financeiro da loja.</p>
+                    </div>
+
+                    <div class="period-wrapper">
+                        <select id="filtroPeriodo" class="period-select">
+                            <option value="hoje">Hoje</option>
+                            <option value="7">Últimos 7 dias</option>
+                            <option value="30" selected>Últimos 30 dias</option>
+                            <option value="mes">Este mês</option>
+                            <option value="ano">Este ano</option>
+                            <option value="todos">Todo o período</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="finance-stats">
+
+                    <article class="finance-stat">
+                        <div class="finance-stat-top">
+                            <span>FATURAMENTO</span>
+                            <div class="finance-icon">R$</div>
+                        </div>
+
+                        <strong id="faturamento">R$ 0,00</strong>
+
+                        <p>Total em vendas</p>
+                    </article>
+
+                    <article class="finance-stat">
+                        <div class="finance-stat-top">
+                            <span>VENDAS</span>
+                            <div class="finance-icon">↗</div>
+                        </div>
+
+                        <strong id="totalVendas">0</strong>
+
+                        <p>Pedidos realizados</p>
+                    </article>
+
+                    <article class="finance-stat">
+                        <div class="finance-stat-top">
+                            <span>TICKET MÉDIO</span>
+                            <div class="finance-icon">R$</div>
+                        </div>
+
+                        <strong id="ticketMedio">R$ 0,00</strong>
+
+                        <p>Média por venda</p>
+                    </article>
+
+                    <article class="finance-stat">
+                        <div class="finance-stat-top">
+                            <span>DESPESAS</span>
+                            <div class="finance-icon">−</div>
+                        </div>
+
+                        <strong id="totalDespesas">R$ 0,00</strong>
+
+                        <p>Total de despesas</p>
+                    </article>
+
+                </div>
+
+            </section>
+
+            <!-- RESULTADO -->
+            <section class="finance-columns">
+
+                <div class="finance-card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Resultado financeiro</h3>
+                            <p>Relação entre receitas e despesas.</p>
+                        </div>
+
+                        <span class="card-period">30 dias</span>
+                    </div>
+
+                    <div class="result-content">
+                        <div class="result-item">
+                            <span>Receitas</span>
+                            <strong id="resultadoReceitas">R$ 0,00</strong>
+                        </div>
+
+                        <div class="result-item">
+                            <span>Despesas</span>
+                            <strong id="resultadoDespesas">R$ 0,00</strong>
+                        </div>
+
+                        <div class="result-divider"></div>
+
+                        <div class="result-item result-total">
+                            <span>Resultado líquido</span>
+                            <strong id="resultadoLiquido">R$ 0,00</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORMAS DE PAGAMENTO -->
+                <div class="finance-card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Formas de pagamento</h3>
+                            <p>Distribuição das vendas.</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-list">
+                        <div class="payment-item">
+                            <div>
+                                <span>Pix</span>
+                                <small id="pixQuantidade">0 vendas</small>
+                            </div>
+                            <strong id="pixValor">R$ 0,00</strong>
+                        </div>
+
+                        <div class="payment-item">
+                            <div>
+                                <span>Cartão</span>
+                                <small id="cartaoQuantidade">0 vendas</small>
+                            </div>
+                            <strong id="cartaoValor">R$ 0,00</strong>
+                        </div>
+
+                        <div class="payment-item">
+                            <div>
+                                <span>Pagamento na retirada</span>
+                                <small id="retiradaQuantidade">0 vendas</small>
+                            </div>
+                            <strong id="retiradaValor">R$ 0,00</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- MOVIMENTAÇÕES -->
+            <section class="finance-card transactions-card">
+                <div class="card-header">
+                    <div>
+                        <h3>Últimas movimentações</h3>
+                        <p>Entradas financeiras recentes.</p>
+                    </div>
+
+                    <a href="pedidos.html">Ver pedidos</a>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>PEDIDO</th>
+                                <th>CLIENTE</th>
+                                <th>DATA</th>
+                                <th>PAGAMENTO</th>
+                                <th>STATUS</th>
+                                <th>VALOR</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="listaMovimentacoes">
+                            <tr class="empty-row">
+                                <td colspan="6">
+                                    <div class="table-empty">
+                                        <div>R$</div>
+                                        <strong>Nenhuma movimentação</strong>
+                                        <p>As vendas realizadas aparecerão aqui.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="/frontend/js/admin/menu-mobile.js"></script>
+    <script src="/frontend/js/admin/financeiro.js"></script>
+</body>
+
+</html>

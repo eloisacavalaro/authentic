@@ -1,0 +1,174 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+            background: #f7f6f3;
+            color: #171717;
+        }
+
+        header {
+            height: 80px;
+            background: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #111;
+            text-decoration: none;
+        }
+
+        .seguro {
+            font-size: 13px;
+            color: #666;
+        }
+
+        main {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .confirmacao {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            padding: 50px 45px;
+            text-align: center;
+            border: 1px solid #e3e1dc;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        .icone {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 22px;
+            border: 2px solid #171717;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 34px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .mensagem {
+            color: #666;
+            line-height: 1.7;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .pedido-box {
+            background: #f8f7f4;
+            padding: 20px;
+            margin-bottom: 28px;
+            border: 1px dashed #dedbd5;
+        }
+
+        .pedido-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #777;
+            margin-bottom: 6px;
+        }
+
+        #numero-pedido {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .informacoes {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            text-align: left;
+        }
+
+        .informacao {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 10px 0;
+            font-size: 13px;
+        }
+
+        .informacao span:first-child {
+            color: #777;
+        }
+
+        .informacao span:last-child {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .botao {
+            flex: 1;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        .botao-principal {
+            background: #171717;
+            color: #fff;
+        }
+
+        .botao-principal:hover {
+            opacity: 0.85;
+        }
+
+        .botao-secundario {
+            border: 1px solid #171717;
+            color: #171717;
+        }
+
+        .botao-secundario:hover {
+            background: #f7f6f3;
+        }
+
+        @media (max-width: 600px) {
+            .confirmacao {
+                padding: 35px 22px;
+            }
+
+            .botoes {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }

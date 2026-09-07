@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produto — AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/produto.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"
+                style="background:none; border:none; font-size:20px; cursor:pointer; color:#111;">☰</button>
+            <a href="index.html" class="logo">AUTHENTIC</a>
+        </div>
+
+        <nav class="nav">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Novidades</a>
+            <a href="produtos.html">Roupas</a>
+            <a href="produtos.html?categoria=Camisetas">Camisetas</a>
+            <a href="produtos.html?categoria=Calça">Calças</a>
+            <a href="produtos.html?categoria=Acessório">Acessórios</a>
+            <a href="produtos.html">Sale</a>
+        </nav>
+
+        <div class="header-actions">
+            <a href="produtos.html?buscar=" class="cart" aria-label="Buscar">⌕</a>
+            <a href="login.html" class="cart" aria-label="Minha conta">♙</a>
+            <a href="carrinho.html" class="cart" aria-label="Carrinho">
+                ♧
+                <span class="cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="breadcrumb">
+            <a href="index.html">Início</a>
+            <span>/</span>
+            <a href="produtos.html">Produtos</a>
+            <span>/</span>
+            <span id="breadcrumb-product">Produto</span>
+        </div>
+
+        <section class="product-page">
+            <div class="product-visual">
+                <div class="product-image" id="product-image-container">
+                    <span id="product-image">CARREGANDO IMAGEM...</span>
+                </div>
+            </div>
+
+            <div class="product-details">
+                <span class="product-category" id="product-category">CARREGANDO...</span>
+                <h1 id="product-name">Carregando produto...</h1>
+                <p class="product-price" id="product-price">R$ 0,00</p>
+
+                <div class="product-divider"></div>
+
+                <p class="product-description" id="product-description">Carregando descrição...</p>
+
+                <!-- COR -->
+                <div class="option-group">
+                    <div class="option-header">
+                        <span>Cor</span>
+                        <strong id="selected-color">Preto</strong>
+                    </div>
+                    <div class="color-options" id="colorOptions">
+                        <button type="button" class="color active" data-color="Preto" title="Preto"></button>
+                        <button type="button" class="color" data-color="Branco" title="Branco"></button>
+                        <button type="button" class="color" data-color="Cinza" title="Cinza"></button>
+                    </div>
+                </div>
+
+                <!-- TAMANHO -->
+                <div class="option-group">
+                    <div class="option-header">
+                        <span>Tamanho</span>
+                        <span>Guia de tamanhos</span>
+                    </div>
+                    <div class="sizes" id="sizeOptions">
+                        <button type="button" data-size="P">P</button>
+                        <button type="button" class="active" data-size="M">M</button>
+                        <button type="button" data-size="G">G</button>
+                        <button type="button" data-size="GG">GG</button>
+                    </div>
+                </div>
+
+                <!-- QUANTIDADE -->
+                <div class="option-group">
+                    <div class="option-header">
+                        <span>Quantidade</span>
+                        <small id="stockNotice" style="color: #777;"></small>
+                    </div>
+                    <div class="quantity">
+                        <button type="button" id="decrease" aria-label="Diminuir">−</button>
+                        <span id="quantity">1</span>
+                        <button type="button" id="increase" aria-label="Aumentar">+</button>
+                    </div>
+                </div>
+
+                <button type="button" class="add-cart" id="add-cart">ADICIONAR AO CARRINHO</button>
+
+                <div class="product-info">
+                    <div class="info-item">
+                        <strong>Compra segura</strong>
+                        <span>Seus dados são protegidos por criptografia de ponta.</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Retirada na loja</strong>
+                        <span>Disponível para retirada gratuita na unidade Authentic.</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Atendimento</strong>
+                        <span>Segunda a sábado · 09h às 19h.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/carrinho.js"></script>
+
+    
+    <script src="../js/produto-inline.js"></script>
+</body>
+
+</html>

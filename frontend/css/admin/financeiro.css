@@ -1,0 +1,383 @@
+/* =========================================================
+   FINANCEIRO — AUTHENTIC ADMIN
+========================================================= */
+
+.finance-section {
+    margin-bottom: 28px;
+}
+
+/* =========================================================
+   TÍTULO PRINCIPAL EDITORIAL
+========================================================= */
+.topbar h1 {
+    font-family: "Playfair Display", serif !important;
+    font-size: 32px;
+    font-weight: 500 !important;
+    letter-spacing: -0.02em;
+    color: #111;
+    margin: 4px 0 0;
+}
+
+/* =========================================================
+   CABEÇALHO DA SEÇÃO E SELECT DE PERÍODO
+========================================================= */
+
+.finance-section .section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.finance-section .section-heading h2 {
+    margin: 0 0 6px 0;
+    color: #111;
+    font-family: "Playfair Display", serif !important;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.finance-section .section-heading p {
+    margin: 0;
+    color: #888;
+    font-size: 13px;
+}
+
+.period-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.period-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 38px;
+    padding: 0 34px 0 16px;
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 13px;
+    border: 1px solid #ded9d0;
+    border-radius: 4px;
+    color: #333;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.period-select:hover,
+.period-select:focus {
+    border-color: #111;
+    background-color: #faf9f7;
+}
+
+/* =========================================================
+   CARDS DE RESUMO
+========================================================= */
+
+.finance-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.finance-stat {
+    min-height: 145px;
+    padding: 22px 24px;
+    background: #fff;
+    border: 1px solid #e5e2dc;
+}
+
+.finance-stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.finance-stat-top>span {
+    color: #8a857e;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+}
+
+.finance-icon {
+    width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e2dc;
+    color: #777;
+    font-size: 9px;
+}
+
+.finance-stat strong {
+    display: block;
+    margin-bottom: 7px;
+    color: #111;
+    font-family: "Playfair Display", serif;
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.finance-stat p {
+    margin: 0;
+    color: #999;
+    font-size: 10px;
+}
+
+/* =========================================================
+   COLUNAS
+========================================================= */
+
+.finance-columns {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.finance-card {
+    background: #fff;
+    border: 1px solid #e5e2dc;
+}
+
+.finance-card .card-header {
+    min-height: 75px;
+    padding: 20px 24px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.finance-card .card-header h3 {
+    margin: 0 0 5px;
+    color: #111;
+    font-family: "Playfair Display", serif;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.finance-card .card-header p {
+    margin: 0;
+    color: #999;
+    font-size: 10px;
+}
+
+.finance-card .card-header a {
+    color: #111;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .8px;
+    text-decoration: none;
+}
+
+.card-period {
+    color: #999;
+    font-size: 9px;
+}
+
+/* =========================================================
+   RESULTADO
+========================================================= */
+
+.result-content {
+    padding: 10px 24px 20px;
+}
+
+.result-item {
+    min-height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.result-item span {
+    color: #777;
+    font-size: 10px;
+}
+
+.result-item strong {
+    color: #222;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.result-divider {
+    height: 10px;
+}
+
+.result-total {
+    border-bottom: none;
+}
+
+.result-total span {
+    color: #111;
+    font-weight: 600;
+}
+
+.result-total strong {
+    font-family: "Playfair Display", serif;
+    font-size: 21px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   PAGAMENTOS
+========================================================= */
+
+.payment-list {
+    padding: 10px 24px 15px;
+}
+
+.payment-item {
+    min-height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.payment-item:last-child {
+    border-bottom: none;
+}
+
+.payment-item div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.payment-item span {
+    color: #333;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.payment-item small {
+    color: #999;
+    font-size: 9px;
+}
+
+.payment-item strong {
+    color: #111;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   MOVIMENTAÇÕES
+========================================================= */
+
+.transactions-card {
+    margin-bottom: 30px;
+}
+
+.transactions-card .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.transactions-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transactions-card thead {
+    background: #faf9f7;
+}
+
+.transactions-card th {
+    height: 45px;
+    padding: 0 20px;
+    color: #8a857e;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.transactions-card td {
+    height: 65px;
+    padding: 0 20px;
+    border-top: 1px solid #eeeae4;
+    color: #444;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.table-empty {
+    padding: 55px 20px;
+    text-align: center;
+}
+
+.table-empty>div {
+    margin-bottom: 12px;
+    color: #bbb;
+    font-family: "Playfair Display", serif;
+    font-size: 22px;
+}
+
+.table-empty strong {
+    display: block;
+    margin-bottom: 7px;
+    color: #333;
+    font-family: "Playfair Display", serif;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.table-empty p {
+    margin: 0;
+    color: #999;
+    font-size: 10px;
+}
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 1100px) {
+    .finance-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .finance-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .finance-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .finance-stat {
+        min-height: 125px;
+    }
+
+    .finance-card .card-header {
+        padding: 18px;
+    }
+
+    .result-content,
+    .payment-list {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+}

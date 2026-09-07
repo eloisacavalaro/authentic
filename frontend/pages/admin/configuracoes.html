@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações — AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Folhas de estilo -->
+    <link rel="stylesheet" href="../../css/admin/admin.css">
+    <link rel="stylesheet" href="../../css/admin/configuracoes.css">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="sidebar-brand">
+                    <h2>AUTHENTIC</h2>
+                    <span>ADMIN</span>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <span class="nav-label">GERAL</span>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="nav-icon">⌂</span>
+                        Dashboard
+                    </a>
+                    <a href="produtos.html" class="nav-item">
+                        <span class="nav-icon">▣</span>
+                        Produtos
+                    </a>
+                    <a href="estoque.html" class="nav-item">
+                        <span class="nav-icon">≡</span>
+                        Estoque
+                    </a>
+                    <a href="compras.html" class="nav-item">
+                        <span class="nav-icon">▤</span>
+                        Compras
+                    </a>
+                    <a href="pedidos.html" class="nav-item">
+                        <span class="nav-icon">□</span>
+                        Pedidos
+                    </a>
+                    <a href="clientes.html" class="nav-item">
+                        <span class="nav-icon">♟</span>
+                        Clientes
+                    </a>
+
+                    <span class="nav-label">FINANCEIRO</span>
+                    <a href="financeiro.html" class="nav-item">
+                        <span class="nav-icon">R$</span>
+                        Financeiro
+                    </a>
+                    <a href="cupons.html" class="nav-item">
+                        <span class="nav-icon">%</span>
+                        Cupons
+                    </a>
+                    <a href="despesas.html" class="nav-item">
+                        <span class="nav-icon">−</span>
+                        Despesas
+                    </a>
+                    <a href="relatorios.html" class="nav-item">
+                        <span class="nav-icon">◫</span>
+                        Relatórios
+                    </a>
+
+                    <span class="nav-label">SISTEMA</span>
+                    <a href="configuracoes.html" class="nav-item active">
+                        <span class="nav-icon">⚙</span>
+                        Configurações
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="../index.html" class="back-link">
+                    ← Voltar para a loja
+                </a>
+
+                <div class="admin-profile">
+                    <div class="profile-avatar">A</div>
+                    <div class="profile-meta">
+                        <strong>Administrador</strong>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Cortina de fundo escuro para o menu gaveta -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+
+            <!-- CABEÇALHO SUPERIOR -->
+            <header class="top-header">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+
+                    <div>
+                        <span class="header-pretitle">Painel administrativo</span>
+                        <h1 class="header-title">Configurações</h1>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <span class="icon-action">⚲</span>
+                    <span class="current-date" id="dataAtual">Hoje, 6 de setembro</span>
+                </div>
+            </header>
+
+            <div class="settings-container">
+
+                <!-- PERFIL -->
+                <section class="settings-section">
+                    <div class="settings-heading">
+                        <span class="settings-eyebrow">CONTA</span>
+                        <h3>Perfil do administrador</h3>
+                        <p>Informações de acesso à conta administrativa.</p>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="nomeAdmin">Nome</label>
+                                <input type="text" id="nomeAdmin" placeholder="Nome do administrador">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emailAdmin">E-mail</label>
+                                <input type="email" id="emailAdmin" placeholder="admin@email.com">
+                            </div>
+                        </div>
+
+                        <div class="settings-footer">
+                            <button class="primary-button" id="btnSalvarPerfil">
+                                Salvar alterações
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SEGURANÇA -->
+                <section class="settings-section">
+                    <div class="settings-heading">
+                        <span class="settings-eyebrow">SEGURANÇA</span>
+                        <h3>Alterar senha</h3>
+                        <p>Mantenha sua conta protegida com uma senha forte.</p>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="senhaAtual">Senha atual</label>
+                                <input type="password" id="senhaAtual" placeholder="Digite sua senha atual">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="novaSenha">Nova senha</label>
+                                    <input type="password" id="novaSenha" placeholder="Digite a nova senha">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="confirmarSenha">Confirmar nova senha</label>
+                                    <input type="password" id="confirmarSenha" placeholder="Repita a nova senha">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-footer">
+                            <button class="primary-button" id="btnAlterarSenha">
+                                Alterar senha
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DADOS DA LOJA -->
+                <section class="settings-section">
+                    <div class="settings-heading">
+                        <span class="settings-eyebrow">LOJA</span>
+                        <h3>Dados da loja</h3>
+                        <p>Informações básicas exibidas no contato e cabeçalho.</p>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="nomeLoja">Nome da loja</label>
+                                <input type="text" id="nomeLoja" value="AUTHENTIC">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="emailLoja">E-mail</label>
+                                    <input type="email" id="emailLoja" placeholder="contato@loja.com">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="telefoneLoja">Telefone</label>
+                                    <input type="text" id="telefoneLoja" placeholder="(00) 00000-0000">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="enderecoLoja">Endereço</label>
+                                <input type="text" id="enderecoLoja" placeholder="Endereço físico da loja">
+                            </div>
+                        </div>
+
+                        <div class="settings-footer">
+                            <button class="primary-button" id="btnSalvarLoja">
+                                Salvar dados
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PEDIDOS -->
+                <section class="settings-section">
+                    <div class="settings-heading">
+                        <span class="settings-eyebrow">PEDIDOS</span>
+                        <h3>Configurações de pedidos</h3>
+                        <p>Defina quais formas de entrega e pagamento estão disponíveis.</p>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="setting-option">
+                            <div>
+                                <strong>Pagamento na retirada</strong>
+                                <span>Permitir que clientes paguem ao retirar o pedido.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="pagamentoRetirada" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-option">
+                            <div>
+                                <strong>Recebimento na loja</strong>
+                                <span>Permitir que clientes escolham retirada presencial.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="retiradaLoja" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-option">
+                            <div>
+                                <strong>Entrega em domicílio</strong>
+                                <span>Permitir pedidos com entrega para endereço.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="entregaPedidos" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="settings-footer">
+                            <button class="primary-button" id="btnSalvarPedidos">
+                                Salvar configurações
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ESTOQUE -->
+                <section class="settings-section">
+                    <div class="settings-heading">
+                        <span class="settings-eyebrow">ESTOQUE</span>
+                        <h3>Controle de estoque</h3>
+                        <p>Alerta automático para reposição de mercadorias.</p>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="estoqueMinimo">Estoque mínimo para alerta</label>
+                                <input type="number" id="estoqueMinimo" value="5" min="0">
+                                <small>Produtos com quantidade igual ou menor a esse número serão sinalizados como
+                                    estoque baixo.</small>
+                            </div>
+                        </div>
+
+                        <div class="settings-footer">
+                            <button class="primary-button" id="btnSalvarEstoque">
+                                Salvar configuração
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SESSÃO -->
+                <section class="settings-section">
+                    <div class="settings-heading">
+                        <span class="settings-eyebrow">SESSÃO</span>
+                        <h3>Sessão atual</h3>
+                        <p>Encerre o acesso no dispositivo atual com segurança.</p>
+                    </div>
+
+                    <div class="settings-card session-card">
+                        <div class="session-info">
+                            <div class="session-icon">✓</div>
+                            <div>
+                                <strong>Sessão ativa</strong>
+                                <span>Você está conectado como administrador.</span>
+                            </div>
+                        </div>
+
+                        <button class="danger-button" id="btnSair">
+                            Sair da conta
+                        </button>
+                    </div>
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="../../js/admin/menu-mobile.js"></script>
+    <script src="../../js/admin/configuracoes.js"></script>
+</body>
+
+</html>

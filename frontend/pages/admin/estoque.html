@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Estoque | AUTHENTIC</title>
+
+    <link rel="stylesheet" href="/frontend/css/admin/admin.css">
+    <link rel="stylesheet" href="/frontend/css/admin/estoque.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="sidebar-brand">
+                    <h2>AUTHENTIC</h2>
+                    <span>ADMIN</span>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <span class="nav-label">GERAL</span>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="nav-icon">⌂</span>
+                        Dashboard
+                    </a>
+                    <a href="produtos.html" class="nav-item">
+                        <span class="nav-icon">▣</span>
+                        Produtos
+                    </a>
+                    <a href="estoque.html" class="nav-item active">
+                        <span class="nav-icon">≡</span>
+                        Estoque
+                    </a>
+                    <a href="compras.html" class="nav-item">
+                        <span class="nav-icon">▤</span>
+                        Compras
+                    </a>
+                    <a href="pedidos.html" class="nav-item">
+                        <span class="nav-icon">□</span>
+                        Pedidos
+                    </a>
+                    <a href="clientes.html" class="nav-item">
+                        <span class="nav-icon">♟</span>
+                        Clientes
+                    </a>
+
+                    <span class="nav-label">FINANCEIRO</span>
+                    <a href="financeiro.html" class="nav-item">
+                        <span class="nav-icon">R$</span>
+                        Financeiro
+                    </a>
+                    <a href="cupons.html" class="nav-item">
+                        <span class="nav-icon">%</span>
+                        Cupons
+                    </a>
+                    <a href="despesas.html" class="nav-item">
+                        <span class="nav-icon">−</span>
+                        Despesas
+                    </a>
+                    <a href="relatorios.html" class="nav-item">
+                        <span class="nav-icon">◫</span>
+                        Relatórios
+                    </a>
+
+                    <span class="nav-label">SISTEMA</span>
+                    <a href="configuracoes.html" class="nav-item">
+                        <span class="nav-icon">⚙</span>
+                        Configurações
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="../index.html" class="back-link">
+                    ← Voltar para a loja
+                </a>
+
+                <div class="admin-profile">
+                    <div class="profile-avatar">A</div>
+                    <div class="profile-meta">
+                        <strong>Administrador</strong>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- FUNDO ESCURO DO MENU MOBILE -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- CONTEÚDO -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div>
+                    <p class="breadcrumb">Gerenciamento</p>
+                    <h1>Estoque</h1>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="notification">
+                        ♢
+                        <span></span>
+                    </button>
+
+                    <div class="topbar-date">
+                        Hoje, 6 de setembro
+                    </div>
+                </div>
+            </header>
+
+            <section class="stock-section">
+
+                <!-- CABEÇALHO -->
+                <div class="stock-heading-actions">
+                    <div>
+                        <h2>Controle de estoque</h2>
+                        <p>Gerencie as quantidades disponíveis de cada produto.</p>
+                    </div>
+
+                    <div class="stock-heading-buttons">
+                        <a href="produtos.html" class="stock-button secondary">
+                            Ver produtos
+                        </a>
+
+                        <button type="button" class="stock-button" id="abrir-modal">
+                            + Adicionar estoque
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RESUMO -->
+                <div class="stock-summary">
+                    <div class="stock-summary-card">
+                        <span class="summary-label">Produtos cadastrados</span>
+                        <strong id="total-produtos">0</strong>
+                    </div>
+
+                    <div class="stock-summary-card">
+                        <span class="summary-label">Variações</span>
+                        <strong id="total-variacoes">0</strong>
+                    </div>
+
+                    <div class="stock-summary-card warning">
+                        <span class="summary-label">Estoque baixo</span>
+                        <strong id="estoque-baixo">0</strong>
+                    </div>
+
+                    <div class="stock-summary-card danger">
+                        <span class="summary-label">Sem estoque</span>
+                        <strong id="sem-estoque">0</strong>
+                    </div>
+                </div>
+
+                <!-- FILTROS -->
+                <div class="stock-filters">
+                    <div class="search-box">
+                        <span>⌕</span>
+                        <input type="text" id="busca" placeholder="Buscar produto...">
+                    </div>
+                </div>
+
+                <!-- TABELA -->
+                <div class="stock-card">
+                    <div class="stock-card-header">
+                        <div>
+                            <strong>Variações em estoque</strong>
+                            <span id="contador">0 variações</span>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="stock-table">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Tamanho</th>
+                                    <th>Cor</th>
+                                    <th>Quantidade</th>
+                                    <th>Status</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="stock-table-body">
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="stock-loading">
+                                            Carregando estoque...
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- MODAL -->
+    <div class="stock-modal" id="stock-modal">
+        <div class="stock-modal-overlay" id="fechar-modal"></div>
+
+        <div class="stock-modal-content">
+            <div class="stock-modal-header">
+                <div>
+                    <h2>Adicionar estoque</h2>
+                    <p>Cadastre uma nova variação do produto.</p>
+                </div>
+
+                <button type="button" class="stock-modal-close" id="botao-fechar-modal">
+                    ×
+                </button>
+            </div>
+
+            <form id="stock-form">
+                <div class="stock-form-group">
+                    <label for="produto">Produto</label>
+                    <select id="produto" required>
+                        <option value="">Selecione um produto</option>
+                    </select>
+                </div>
+
+                <div class="stock-form-row">
+                    <div class="stock-form-group">
+                        <label for="tamanho">Tamanho</label>
+                        <select id="tamanho" required>
+                            <option value="">Selecione</option>
+                            <option value="PP">PP</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                        </select>
+                    </div>
+
+                    <div class="stock-form-group">
+                        <label for="cor">Cor</label>
+                        <select id="cor" required>
+                            <option value="">Selecione</option>
+                            <option value="Preto">Preto</option>
+                            <option value="Branco">Branco</option>
+                            <option value="Azul">Azul</option>
+                            <option value="Bege">Bege</option>
+                            <option value="Cinza">Cinza</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="stock-form-group">
+                    <label for="quantidade">Quantidade</label>
+                    <input type="number" id="quantidade" min="0" placeholder="Ex: 10" required>
+                </div>
+
+                <div class="stock-modal-actions">
+                    <button type="button" class="stock-cancel" id="cancelar-modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="stock-save">
+                        Adicionar estoque
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="/frontend/js/admin/menu-mobile.js"></script>
+    <script src="/frontend/js/admin/estoque.js"></script>
+
+</body>
+
+</html>

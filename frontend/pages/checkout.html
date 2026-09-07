@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar compra — AUTHENTIC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+
+    
+    <link rel="stylesheet" href="../css/checkout-inline.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <a href="index.html" class="logo">AUTHENTIC</a>
+        <span class="secure">🔒 Compra segura</span>
+    </header>
+
+    <main>
+        <h1>Finalizar compra</h1>
+
+        <div class="checkout">
+            <!-- COLUNA ESQUERDA -->
+            <div>
+                <!-- RECEBIMENTO -->
+                <section class="section">
+                    <h2>Forma de recebimento</h2>
+
+                    <div class="recebimento-opcoes">
+                        <div class="recebimento-option selecionado" id="opcao-retirada">
+                            <input type="radio" name="recebimento" value="retirada" id="radio-retirada" checked>
+                            <div class="recebimento-info">
+                                <span class="recebimento-titulo">📍 Retirar na loja</span>
+                                <span class="recebimento-descricao">AUTHENTIC — Areal/RJ</span>
+                                <span class="recebimento-descricao">Seu pedido ficará disponível para retirada após a
+                                    confirmação.</span>
+                            </div>
+                        </div>
+
+                        <div class="recebimento-option" id="opcao-entrega">
+                            <input type="radio" name="recebimento" value="entrega" id="radio-entrega">
+                            <div class="recebimento-info">
+                                <span class="recebimento-titulo">🚚 Receber em casa</span>
+                                <span class="recebimento-descricao">Informe seu endereço para enviarmos seu pacote com
+                                    segurança.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ENDEREÇO -->
+                    <div id="endereco-container">
+                        <h2>Endereço de entrega</h2>
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="cep">CEP</label>
+                                <input type="text" id="cep" placeholder="00000-000" maxlength="9">
+                            </div>
+
+                            <div class="field">
+                                <label for="numero">Número</label>
+                                <input type="text" id="numero" placeholder="123">
+                            </div>
+
+                            <div class="field full">
+                                <label for="endereco">Endereço</label>
+                                <input type="text" id="endereco" placeholder="Rua, avenida...">
+                            </div>
+
+                            <div class="field">
+                                <label for="complemento">Complemento</label>
+                                <input type="text" id="complemento" placeholder="Apartamento, sala, bloco...">
+                            </div>
+
+                            <div class="field">
+                                <label for="bairro">Bairro</label>
+                                <input type="text" id="bairro" placeholder="Seu bairro">
+                            </div>
+
+                            <div class="field">
+                                <label for="cidade">Cidade</label>
+                                <input type="text" id="cidade" placeholder="Sua cidade">
+                            </div>
+
+                            <div class="field">
+                                <label for="estado">Estado</label>
+                                <select id="estado">
+                                    <option value="">Selecione</option>
+                                    <option value="AC">AC</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AP">AP</option>
+                                    <option value="AM">AM</option>
+                                    <option value="BA">BA</option>
+                                    <option value="CE">CE</option>
+                                    <option value="DF">DF</option>
+                                    <option value="ES">ES</option>
+                                    <option value="GO">GO</option>
+                                    <option value="MA">MA</option>
+                                    <option value="MT">MT</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MG">MG</option>
+                                    <option value="PA">PA</option>
+                                    <option value="PB">PB</option>
+                                    <option value="PR">PR</option>
+                                    <option value="PE">PE</option>
+                                    <option value="PI">PI</option>
+                                    <option value="RJ">RJ</option>
+                                    <option value="RN">RN</option>
+                                    <option value="RS">RS</option>
+                                    <option value="RO">RO</option>
+                                    <option value="RR">RR</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SP">SP</option>
+                                    <option value="SE">SE</option>
+                                    <option value="TO">TO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PAGAMENTO -->
+                <section class="section">
+                    <h2>Forma de pagamento</h2>
+
+                    <label class="payment-option">
+                        <input type="radio" name="pagamento" value="pix" checked>
+                        <span>PIX</span>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="pagamento" value="cartao">
+                        <span>Cartão de Crédito</span>
+                    </label>
+
+                    <label class="payment-option" id="container-pagar-retirada">
+                        <input type="radio" name="pagamento" value="dinheiro" id="radio-pagar-retirada">
+                        <span>Pagar na retirada</span>
+                    </label>
+                </section>
+            </div>
+
+            <!-- RESUMO -->
+            <aside class="summary">
+                <h2>Resumo do pedido</h2>
+
+                <div class="coupon-box" style="margin: 20px 0; display: flex; gap: 8px;">
+                    <input type="text" id="cupomInput" placeholder="CUPOM DE DESCONTO"
+                        style="text-transform: uppercase; font-size: 12px; padding: 10px;">
+                    <button type="button" id="btnAplicarCupom" class="finish-button"
+                        style="margin-top: 0; padding: 10px 14px; width: auto; font-size: 12px;">Aplicar</button>
+                </div>
+                <span id="cupomMsg"
+                    style="display: block; font-size: 11px; margin-top: -12px; margin-bottom: 15px;"></span>
+
+                <div class="summary-row" id="linhaDesconto" style="display: none; color: #15803d;">
+                    <span>Desconto Cupom (<span id="cupomAplicadoNome"></span>)</span>
+                    <strong id="valorDesconto">- R$ 0,00</strong>
+                </div>
+
+                <div id="checkout-items"></div>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">R$ 0,00</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Recebimento</span>
+                    <span id="frete" class="frete-info">Retirada na loja — Grátis</span>
+                </div>
+
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="total">R$ 0,00</span>
+                </div>
+
+                <button class="finish-button" id="finish-button">FINALIZAR PEDIDO</button>
+
+                <div id="payment-stage" class="payment-stage" hidden>
+                    <p id="payment-loading" class="payment-feedback">Carregando ambiente seguro de pagamento...</p>
+                    <div id="paymentBrick_container"></div>
+                    <div id="payment-result" class="payment-result" role="status" aria-live="polite" hidden></div>
+                </div>
+
+                <p class="secure-message">🔒 Seus dados são protegidos.</p>
+            </aside>
+        </div>
+    </main>
+
+    
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script src="../js/checkout-inline.js"></script>
+</body>
+
+</html>

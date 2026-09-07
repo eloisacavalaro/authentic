@@ -1,0 +1,566 @@
+/* =========================================
+   ESTOQUE
+========================================= */
+
+.stock-section {
+    max-width: 1400px;
+}
+
+/* =========================================
+   TÍTULO PRINCIPAL EDITORIAL
+========================================= */
+.topbar h1 {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.02em;
+}
+
+/* =========================================
+   CABEÇALHO DA SEÇÃO E AÇÕES
+========================================= */
+
+.stock-heading-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 25px;
+    gap: 16px;
+}
+
+.stock-heading-actions h2 {
+    margin: 0 0 6px;
+    font-family: "Playfair Display", serif !important;
+    font-size: 22px;
+    font-weight: 500;
+    color: #111;
+}
+
+.stock-heading-actions p {
+    margin: 0;
+    color: #777;
+    font-size: 13px;
+}
+
+/* Agrupador dos botões da direita */
+.stock-heading-buttons {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stock-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 16px;
+    background: #111;
+    color: #fff;
+    border: 1px solid #111;
+    border-radius: 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.stock-button:hover {
+    background: #292929;
+    border-color: #292929;
+}
+
+.stock-button.secondary {
+    background: #fff;
+    color: #222;
+    border: 1px solid #ded9d0;
+}
+
+.stock-button.secondary:hover {
+    background: #faf8f5;
+    border-color: #c9c3b8;
+}
+
+/* =========================================
+   RESUMO
+========================================= */
+
+.stock-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.stock-summary-card {
+    padding: 20px 22px;
+    background: #fff;
+    border: 1px solid #eeeae4;
+    border-radius: 8px;
+}
+
+.summary-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #8a857e;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.stock-summary-card strong {
+    font-size: 26px;
+    font-weight: 600;
+    color: #111;
+}
+
+.stock-summary-card.warning strong {
+    color: #b58500;
+}
+
+.stock-summary-card.danger strong {
+    color: #d32f2f;
+}
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.stock-filters {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    width: 340px;
+    height: 40px;
+    background: #fff;
+    border: 1px solid #eeeae4;
+    border-radius: 5px;
+    padding: 0 13px;
+}
+
+.search-box span {
+    margin-right: 8px;
+    color: #888;
+    font-size: 18px;
+}
+
+.search-box input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 12px;
+    color: #111;
+}
+
+/* =========================================
+   CARD DA TABELA
+========================================= */
+
+.stock-card {
+    background: #fff;
+    border: 1px solid #eeeae4;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.stock-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.stock-card-header div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stock-card-header strong {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+}
+
+.stock-card-header span {
+    padding: 3px 8px;
+    background: #f5f4f0;
+    border-radius: 20px;
+    color: #777;
+    font-size: 10px;
+}
+
+/* =========================================
+   TABELA
+========================================= */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-table th {
+    padding: 12px 20px;
+    background: #faf9f7;
+    color: #8a857e;
+    font-size: 9px;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.stock-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid #eeeae4;
+    color: #333;
+    font-size: 12px;
+}
+
+.stock-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.stock-table tbody tr:hover {
+    background: #faf9f7;
+}
+
+/* =========================================
+   PRODUTO NA TABELA
+========================================= */
+
+.stock-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stock-product-image {
+    width: 38px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #f5f4f0;
+    border: 1px solid #eeeae4;
+    border-radius: 4px;
+    color: #aaa;
+    font-size: 9px;
+    flex-shrink: 0;
+}
+
+.stock-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.stock-product-info strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #111;
+}
+
+.stock-product-info small {
+    color: #999;
+    font-size: 10px;
+}
+
+/* =========================================
+   QUANTIDADE
+========================================= */
+
+.stock-quantity {
+    font-weight: 600;
+}
+
+.stock-quantity.low {
+    color: #b58500;
+}
+
+.stock-quantity.empty {
+    color: #d32f2f;
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.stock-status {
+    display: inline-flex;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.stock-status.normal {
+    background: #f0f0f0;
+    color: #555;
+}
+
+.stock-status.low {
+    background: #fff8e6;
+    color: #946c00;
+}
+
+.stock-status.empty {
+    background: #fdeeee;
+    color: #d32f2f;
+}
+
+/* =========================================
+   BOTÃO DA TABELA
+========================================= */
+
+.stock-action {
+    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid #ded9d0;
+    border-radius: 4px;
+    color: #333;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.stock-action:hover {
+    background: #f5f4f0;
+    border-color: #111;
+}
+
+/* =========================================
+   VAZIO / LOADING
+========================================= */
+
+.stock-loading,
+.stock-empty {
+    padding: 50px 20px;
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+}
+
+.stock-empty strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #222;
+    font-size: 13px;
+}
+
+.stock-empty p {
+    margin: 0;
+    color: #888;
+}
+
+/* =========================================
+   MODAL
+========================================= */
+
+.stock-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.stock-modal.active {
+    display: flex;
+}
+
+.stock-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.stock-modal-content {
+    position: relative;
+    width: min(480px, calc(100% - 30px));
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    overflow: hidden;
+}
+
+.stock-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 22px 24px;
+    border-bottom: 1px solid #eeeae4;
+}
+
+.stock-modal-header h2 {
+    margin: 0 0 4px;
+    font-family: "Playfair Display", serif !important;
+    font-size: 20px;
+    font-weight: 500;
+    color: #111;
+}
+
+.stock-modal-header p {
+    margin: 0;
+    color: #888;
+    font-size: 12px;
+}
+
+.stock-modal-close {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: #777;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.stock-modal-close:hover {
+    background: #f5f4f0;
+}
+
+#stock-form {
+    padding: 24px;
+}
+
+.stock-form-group {
+    margin-bottom: 18px;
+}
+
+.stock-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #444;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.stock-form-group select,
+.stock-form-group input {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    background: #fff;
+    border: 1px solid #ded9d0;
+    border-radius: 5px;
+    outline: none;
+    font-family: inherit;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.stock-form-group select:focus,
+.stock-form-group input:focus {
+    border-color: #111;
+}
+
+.stock-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.stock-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+.stock-cancel,
+.stock-save {
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.stock-cancel {
+    background: #fff;
+    border: 1px solid #ded9d0;
+    color: #444;
+}
+
+.stock-cancel:hover {
+    background: #faf8f5;
+}
+
+.stock-save {
+    background: #111;
+    border: 1px solid #111;
+    color: #fff;
+}
+
+.stock-save:hover {
+    background: #2b2b2b;
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 1000px) {
+    .stock-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .stock-heading-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .stock-heading-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .stock-button {
+        width: 100%;
+    }
+
+    .stock-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .stock-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

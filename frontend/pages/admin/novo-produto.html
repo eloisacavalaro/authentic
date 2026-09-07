@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Novo Produto | AUTHENTIC</title>
+
+    <link rel="stylesheet" href="/frontend/css/admin/admin.css">
+    <link rel="stylesheet" href="/frontend/css/admin/novo-produto.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="sidebar-brand">
+                    <h2>AUTHENTIC</h2>
+                    <span>ADMIN</span>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <span class="nav-label">GERAL</span>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="nav-icon">⌂</span>
+                        Dashboard
+                    </a>
+                    <a href="produtos.html" class="nav-item active">
+                        <span class="nav-icon">▣</span>
+                        Produtos
+                    </a>
+                    <a href="estoque.html" class="nav-item">
+                        <span class="nav-icon">≡</span>
+                        Estoque
+                    </a>
+                    <a href="compras.html" class="nav-item">
+                        <span class="nav-icon">▤</span>
+                        Compras
+                    </a>
+                    <a href="pedidos.html" class="nav-item">
+                        <span class="nav-icon">□</span>
+                        Pedidos
+                    </a>
+                    <a href="clientes.html" class="nav-item">
+                        <span class="nav-icon">♟</span>
+                        Clientes
+                    </a>
+
+                    <span class="nav-label">FINANCEIRO</span>
+                    <a href="financeiro.html" class="nav-item">
+                        <span class="nav-icon">R$</span>
+                        Financeiro
+                    </a>
+                    <a href="cupons.html" class="nav-item">
+                        <span class="nav-icon">%</span>
+                        Cupons
+                    </a>
+                    <a href="despesas.html" class="nav-item">
+                        <span class="nav-icon">−</span>
+                        Despesas
+                    </a>
+                    <a href="relatorios.html" class="nav-item">
+                        <span class="nav-icon">◫</span>
+                        Relatórios
+                    </a>
+
+                    <span class="nav-label">SISTEMA</span>
+                    <a href="configuracoes.html" class="nav-item">
+                        <span class="nav-icon">⚙</span>
+                        Configurações
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="../index.html" class="back-link">
+                    ← Voltar para a loja
+                </a>
+
+                <div class="admin-profile">
+                    <div class="profile-avatar">A</div>
+                    <div class="profile-meta">
+                        <strong>Administrador</strong>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- FUNDO ESCURO DO MENU MOBILE -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- CONTEÚDO -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <button id="btnMenuMobile" class="mobile-menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div>
+                    <p class="breadcrumb">
+                        Produtos / Novo produto
+                    </p>
+                    <h1>Novo produto</h1>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="notification">
+                        ♢
+                        <span></span>
+                    </button>
+
+                    <div class="topbar-date">
+                        Hoje, 6 de setembro
+                    </div>
+                </div>
+            </header>
+
+            <!-- FORMULÁRIO -->
+            <section class="new-product-section">
+
+                <form id="product-form">
+
+                    <!-- INFORMAÇÕES BÁSICAS -->
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div>
+                                <h2>Informações do produto</h2>
+                                <p>Informações principais que serão exibidas na loja.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-content">
+                            <div class="form-group">
+                                <label for="nome">Nome do produto</label>
+                                <input type="text" id="nome" name="nome" placeholder="Ex: Camisa Oxford Premium"
+                                    required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="categoria">Categoria</label>
+                                    <select id="categoria" name="categoria" required>
+                                        <option value="">Selecione uma categoria</option>
+                                        <option value="camisas">Camisas</option>
+                                        <option value="calcas">Calças</option>
+                                        <option value="ternos">Ternos</option>
+                                        <option value="jaquetas">Jaquetas</option>
+                                        <option value="acessorios">Acessórios</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="preco">Preço</label>
+                                    <div class="price-input">
+                                        <span>R$</span>
+                                        <input type="number" id="preco" name="preco" placeholder="0,00" min="0"
+                                            step="0.01" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="descricao">Descrição</label>
+                                <textarea id="descricao" name="descricao" rows="5"
+                                    placeholder="Descreva o produto, seus materiais, modelagem e características..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IMAGEM -->
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div>
+                                <h2>Imagem do produto</h2>
+                                <p>Adicione uma imagem principal para o produto.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-content">
+                            <label class="image-upload">
+                                <input type="file" id="imagem" name="imagem" accept="image/png, image/jpeg, image/webp">
+                                <div class="upload-icon">↑</div>
+                                <strong>Clique para adicionar uma imagem</strong>
+                                <span>PNG, JPG ou WEBP · Máximo 5 MB</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- VARIAÇÕES -->
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div>
+                                <h2>Variações e estoque</h2>
+                                <p>Defina os tamanhos, cores e quantidades disponíveis.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-content">
+                            <!-- TAMANHOS -->
+                            <div class="form-group">
+                                <label>Tamanhos disponíveis</label>
+                                <div class="options-grid">
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="tamanho" value="PP">
+                                        <span>PP</span>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="tamanho" value="P">
+                                        <span>P</span>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="tamanho" value="M">
+                                        <span>M</span>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="tamanho" value="G">
+                                        <span>G</span>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="tamanho" value="GG">
+                                        <span>GG</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- CORES -->
+                            <div class="form-group">
+                                <label>Cores disponíveis</label>
+                                <div class="options-grid colors">
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="cor" value="Preto">
+                                        <span>Preto</span>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="cor" value="Branco">
+                                        <span>Branco</span>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="cor" value="Azul">
+                                        <span>Azul</span>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="cor" value="Bege">
+                                        <span>Bege</span>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="cor" value="Cinza">
+                                        <span>Cinza</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="stock-info">
+                                <div class="stock-info-icon">i</div>
+                                <div>
+                                    <strong>Controle de estoque</strong>
+                                    <p>Depois de salvar o produto, você poderá controlar a quantidade disponível de cada
+                                        tamanho e cor na área de estoque.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div>
+                                <h2>Status do produto</h2>
+                                <p>Escolha se o produto ficará visível na loja.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-content">
+                            <label class="status-option">
+                                <input type="radio" name="status" value="ativo" checked>
+                                <div>
+                                    <strong>Produto ativo</strong>
+                                    <span>O produto ficará disponível para os clientes.</span>
+                                </div>
+                            </label>
+
+                            <label class="status-option">
+                                <input type="radio" name="status" value="inativo">
+                                <div>
+                                    <strong>Produto inativo</strong>
+                                    <span>O produto ficará oculto da loja.</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- AÇÕES -->
+                    <div class="form-actions">
+                        <a href="/frontend/pages/admin/produtos.html" class="cancel-button">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="save-button">
+                            Salvar produto
+                        </button>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="/frontend/js/admin/sidebar.js"></script>
+    <script src="/frontend/js/admin/novo-produto.js"></script>
+
+</body>
+
+</html>

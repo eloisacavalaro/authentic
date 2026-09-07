@@ -1,0 +1,423 @@
+/* =========================================================
+   ESTRUTURA GLOBAL DO DASHBOARD
+========================================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "DM Sans", sans-serif;
+    background-color: #f6f5f2;
+    color: #171717;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+.sidebar {
+    width: 250px;
+    min-width: 250px;
+    background-color: #101010;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px 20px 20px 20px;
+    min-height: 100vh;
+}
+
+.sidebar-brand h2 {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.sidebar-brand span {
+    display: block;
+    color: #555;
+    font-size: 8px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-label {
+    color: #555;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    padding-left: 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    color: #8c8c8c;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+}
+
+.nav-icon {
+    font-size: 13px;
+    width: 16px;
+    text-align: center;
+    color: #666;
+}
+
+.nav-item:hover {
+    color: #fff;
+    background-color: #1a1a1a;
+}
+
+.nav-item:hover .nav-icon {
+    color: #fff;
+}
+
+.nav-item.active {
+    background-color: #212121;
+    color: #fff;
+    font-weight: 600;
+}
+
+.nav-item.active .nav-icon {
+    color: #fff;
+}
+
+.sidebar-bottom {
+    margin-top: 30px;
+    border-top: 1px solid #1e1e1e;
+    padding-top: 18px;
+}
+
+.back-link {
+    display: inline-block;
+    color: #666;
+    text-decoration: none;
+    font-size: 11px;
+    margin-bottom: 18px;
+    padding-left: 6px;
+    transition: color 0.15s ease;
+}
+
+.back-link:hover {
+    color: #fff;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 8px;
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #222;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid #333;
+}
+
+.profile-meta strong {
+    display: block;
+    color: #ddd;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.profile-meta span {
+    color: #666;
+    font-size: 10px;
+}
+
+/* =========================================================
+   CONTEÚDO PRINCIPAL
+========================================================= */
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 34px 44px;
+    overflow-y: auto;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+}
+
+.header-pretitle {
+    color: #888;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.header-title {
+    font-family: "Playfair Display", serif;
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 8px;
+}
+
+.icon-action {
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.current-date {
+    color: #777;
+    font-size: 11px;
+}
+
+/* =========================================================
+   CARDS DE MÉTRICAS (3 COLUNAS)
+========================================================= */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    padding: 18px 20px;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.metric-header span:first-child {
+    color: #777;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.metric-badge {
+    background-color: #f7f6f3;
+    border: 1px solid #eae7e1;
+    color: #777;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.metric-value {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 4px;
+    font-family: "DM Sans", sans-serif;
+}
+
+.metric-desc {
+    color: #999;
+    font-size: 11px;
+}
+
+/* =========================================================
+   CARD DA TABELA
+========================================================= */
+.clients-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.clients-header {
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.clients-header h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.clients-header p {
+    color: #888;
+    font-size: 12px;
+}
+
+.clients-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #fbfbf9;
+    border-top: 1px solid #f0eee9;
+    border-bottom: 1px solid #f0eee9;
+}
+
+.clients-count {
+    color: #777;
+    font-size: 12px;
+}
+
+.clients-count span {
+    color: #111;
+    font-weight: 700;
+}
+
+.clients-search input {
+    width: 270px;
+    height: 34px;
+    padding: 0 12px;
+    background: #fff;
+    border: 1px solid #ded9d0;
+    border-radius: 6px;
+    font-size: 11px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.clients-search input:focus {
+    border-color: #111;
+}
+
+/* =========================================================
+   TABELA
+========================================================= */
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead th {
+    padding: 13px 24px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #8c8880;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #f0eee9;
+    background: #fff;
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 15px 24px;
+    font-size: 12px;
+    color: #333;
+    border-bottom: 1px solid #f5f4ef;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background-color: #faf9f6;
+}
+
+.client-name {
+    display: block;
+    color: #111;
+    font-weight: 600;
+}
+
+.client-email {
+    display: block;
+    font-size: 10px;
+    color: #999;
+    margin-top: 2px;
+}
+
+.client-phone,
+.client-date {
+    color: #666;
+    font-size: 12px;
+}
+
+.client-orders,
+.client-total {
+    font-weight: 700;
+    color: #111;
+}
+
+.view-client {
+    border: none;
+    background: transparent;
+    color: #111;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.view-client:hover {
+    opacity: 0.45;
+}
+
+.table-loading {
+    text-align: center;
+    padding: 45px 0 !important;
+    color: #888;
+}
+
+.empty-state {
+    display: none;
+    padding: 40px;
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 1000px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}

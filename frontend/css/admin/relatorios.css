@@ -1,0 +1,345 @@
+/* =========================================================
+   RELATÓRIOS — AUTHENTIC ADMIN
+========================================================= */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 34px 44px;
+    overflow-y: auto;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.header-pretitle {
+    color: #888;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.header-title {
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 8px;
+}
+
+.icon-action {
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.current-date {
+    color: #777;
+    font-size: 11px;
+}
+
+/* BARRA DE FILTROS */
+.report-filters {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-group label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.filter-group select,
+.filter-group input {
+    height: 38px;
+    min-width: 170px;
+    padding: 0 12px;
+    border: 1px solid #ded9d0;
+    border-radius: 6px;
+    background: #fff;
+    font-family: "DM Sans", sans-serif;
+    font-size: 12px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    border-color: #111;
+}
+
+.campo-personalizado {
+    display: none;
+}
+
+.primary-button {
+    height: 38px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 6px;
+    background: #111;
+    color: #fff;
+    font-family: "DM Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.primary-button:hover {
+    background: #2b2b2b;
+}
+
+/* CARDS DE MÉTRICAS */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    padding: 18px 20px;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.metric-header span:first-child {
+    color: #777;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+}
+
+.metric-badge {
+    background-color: #f7f6f3;
+    border: 1px solid #eae7e1;
+    color: #777;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.metric-value {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 4px;
+    font-family: "DM Sans", sans-serif;
+}
+
+.metric-desc {
+    color: #999;
+    font-size: 11px;
+}
+
+/* PAINÉIS DE GRÁFICO E PAGAMENTOS */
+.report-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 16px;
+}
+
+.report-panel {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0eee9;
+}
+
+.panel-header h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+}
+
+.chart-placeholder {
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #888;
+}
+
+.chart-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    border: 1px solid #e5e2db;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+.chart-placeholder strong {
+    font-size: 13px;
+    color: #333;
+}
+
+.chart-placeholder span {
+    font-size: 11px;
+}
+
+.payment-report {
+    padding: 6px 20px;
+}
+
+.payment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #f2efe9;
+}
+
+.payment-row:last-child {
+    border-bottom: none;
+}
+
+.payment-row span {
+    font-size: 12px;
+    color: #666;
+}
+
+.payment-row strong {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+}
+
+/* TABELA DE PRODUTOS MAIS VENDIDOS */
+.orders-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.orders-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid #f0eee9;
+}
+
+.orders-header h2,
+.stock-title {
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.orders-header p {
+    color: #888;
+    font-size: 12px;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead th {
+    padding: 12px 24px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #8c8880;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #f0eee9;
+    background: #faf9f7;
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 14px 24px;
+    font-size: 12px;
+    color: #333;
+    border-bottom: 1px solid #f5f4ef;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background-color: #faf9f6;
+}
+
+.table-loading {
+    text-align: center;
+    padding: 40px 0 !important;
+    color: #888;
+}
+
+.stock-report-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 1100px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .metrics-grid,
+    .stock-report-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,263 @@
+/* =========================================================
+   CUPONS — AUTHENTIC ADMIN
+========================================================= */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 34px 44px;
+    overflow-y: auto;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+}
+
+.header-pretitle {
+    color: #888;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.header-title {
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+.current-date {
+    color: #777;
+    font-size: 11px;
+    padding-top: 8px;
+}
+
+/* =========================================================
+   CARD DA TABELA
+========================================================= */
+
+.orders-card {
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.orders-header {
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid #f0eee9;
+}
+
+.orders-header h2 {
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.orders-header p {
+    color: #888;
+    font-size: 12px;
+}
+
+.primary-button {
+    height: 38px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 6px;
+    background: #111;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.primary-button:hover {
+    background: #2b2b2b;
+}
+
+.secondary-button {
+    height: 38px;
+    padding: 0 18px;
+    border: 1px solid #ded9d0;
+    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.secondary-button:hover {
+    background: #faf8f5;
+}
+
+/* =========================================================
+   TABELA
+========================================================= */
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead th {
+    padding: 13px 24px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #8c8880;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #f0eee9;
+    background: #faf9f7;
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 16px 24px;
+    font-size: 12px;
+    color: #333;
+    border-bottom: 1px solid #f5f4ef;
+    vertical-align: middle;
+}
+
+tbody tr:hover {
+    background-color: #faf9f6;
+}
+
+.table-loading {
+    text-align: center;
+    padding: 50px 0 !important;
+    color: #888;
+}
+
+/* =========================================================
+   MODAL (CORREÇÃO DA TELA CHEIA E CENTRALIZAÇÃO)
+========================================================= */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
+
+.modal {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 28px;
+    border: 1px solid #e5e2dc;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.modal-header p {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.modal-header h2 {
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-size: 22px;
+    font-weight: 500;
+    color: #111;
+}
+
+.modal-close {
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    color: #777;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #111;
+}
+
+.form-group {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-group label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #444;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ded9d0;
+    border-radius: 6px;
+    padding: 0 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: #111;
+    background: #fff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #111;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
