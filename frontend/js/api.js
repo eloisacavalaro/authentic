@@ -14,11 +14,22 @@
         return global.fetch(url, configuracao);
     }
 
-    const tagsPermitidas = new Set(["A", "ARTICLE", "BUTTON", "DIV", "H2", "H3", "IMG", "OPTION", "P", "SMALL", "SPAN", "STRONG", "TD", "TR"]);
+    const tagsPermitidas = new Set(["A", "ARTICLE", "BUTTON", "DIV", "H2", "H3", "IMG", "LI", "OPTION", "P", "SELECT", "SMALL", "SPAN", "STRONG", "TD", "TH", "TR", "UL"]);
     const atributosPermitidos = new Set(["alt", "aria-label", "class", "colspan", "data-cart-action", "data-confirm-payment", "data-delete-expense", "data-disable-product", "data-edit-stock", "data-id", "data-index", "data-preco", "data-quantity", "data-status-atual", "data-view-client", "data-view-order", "disabled", "href", "id", "selected", "src", "style", "title", "type", "value"]);
-    function fragmentoHtmlSeguro(html) {
-        const documento = new DOMParser().parseFromString(`<body>${String(html ?? "")}</body>`, "text/html");
-        for (const elemento of [...documento.body.querySelectorAll("*")]) {
+    function fragmentoHtmlSeguro(html, contexto) {
+        const conteudo = String(html ?? "");
+        const tagContexto = contexto?.tagName;
+        const envoltorio = tagContexto === "TBODY"
+            ? `<table><tbody id="safe-root">${conteudo}</tbody></table>`
+            : tagContexto === "TR"
+                ? `<table><tbody><tr id="safe-root">${conteudo}</tr></tbody></table>`
+                : tagContexto === "SELECT"
+                    ? `<select id="safe-root">${conteudo}</select>`
+                    : `<div id="safe-root">${conteudo}</div>`;
+        const documento = new DOMParser().parseFromString(envoltorio, "text/html");
+        const raiz = documento.getElementById("safe-root");
+        if (!raiz) return document.createDocumentFragment();
+        for (const elemento of [...raiz.querySelectorAll("*")]) {
             if (!tagsPermitidas.has(elemento.tagName)) { elemento.replaceWith(...elemento.childNodes); continue; }
             for (const atributo of [...elemento.attributes]) {
                 const nome = atributo.name.toLowerCase();
@@ -37,13 +48,13 @@
             }
         }
         const fragmento = document.createDocumentFragment();
-        fragmento.append(...documento.body.childNodes);
+        fragmento.append(...raiz.childNodes);
         return fragmento;
     }
 
     Object.defineProperty(Element.prototype, "safeHTML", {
         configurable: false,
-        set(html) { this.replaceChildren(fragmentoHtmlSeguro(html)); }
+        set(html) { this.replaceChildren(fragmentoHtmlSeguro(html, this)); }
     });
 
     global.AUTHENTIC_API_URL = API_URL;

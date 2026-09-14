@@ -61,6 +61,10 @@ async function criarPedido(cookie) {
   }
   const tokenAdmin = await login(`${marca}-admin@example.com`, senha);
   const tokenCliente = await login(`${marca}-cliente@example.com`, senha);
+  const pedidoComoAdmin = await fetch(`${base}/pedidos`, {
+    method: "POST", headers: { "Content-Type": "application/json", Cookie: tokenAdmin, "Idempotency-Key": crypto.randomUUID() }, body: JSON.stringify({})
+  });
+  assert(pedidoComoAdmin.status === 403, "Conta administrativa conseguiu criar pedido de cliente.");
   const paginaLogin = await fetch(`${base}/frontend/pages/login.html`);
   const csp = paginaLogin.headers.get("content-security-policy") || "";
   assert(paginaLogin.ok && csp.includes("script-src 'self'") && !csp.includes("script-src 'self' 'unsafe-inline'"), "CSP de scripts nao esta restritiva.");
@@ -83,6 +87,8 @@ async function criarPedido(cookie) {
 
   const primeiro = await criarPedido(tokenCliente);
   assert(primeiro.reserva_expira_em, "Pedido nao recebeu validade da reserva.");
+  const listagemAdmin = await api("/pedidos", { headers: { Cookie: tokenAdmin } });
+  assert(listagemAdmin.some(item => Number(item.id) === Number(primeiro.id)), "Pedido do cliente nao apareceu na listagem administrativa.");
   await api(`/pedidos/${primeiro.id}/status`, { method: "PATCH", headers: { "Content-Type": "application/json", Cookie: tokenAdmin }, body: JSON.stringify({ status: "cancelado" }) });
   let saldo = Number((await pool.query("SELECT quantidade FROM estoque WHERE produto_id=$1", [produtoId])).rows[0].quantidade);
   assert(saldo === 3, "Cancelamento nao devolveu o estoque.");

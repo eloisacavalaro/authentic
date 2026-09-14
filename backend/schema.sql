@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS produtos (
   preco_custo NUMERIC(12,2) CHECK (preco_custo IS NULL OR preco_custo >= 0),
   categoria VARCHAR(80),
   imagem VARCHAR(255),
+  imagem_dados BYTEA,
+  imagem_mime VARCHAR(50),
   ativo BOOLEAN NOT NULL DEFAULT TRUE,
   criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   atualizado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()

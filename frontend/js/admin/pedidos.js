@@ -70,13 +70,14 @@ const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":
         });
 
         if (!resposta.ok) {
-            if (resposta.status === 401) {
+            if ([401, 403].includes(resposta.status)) {
                 alert("Sessão expirada. Faça login novamente.");
 
                 window.location.href = "../login.html";
                 return;
             }
-            throw new Error("Erro ao buscar pedidos.");
+            const erroApi = await resposta.json().catch(() => ({}));
+            throw new Error(`Erro ${resposta.status}: ${erroApi.erro || "não foi possível buscar pedidos."}`);
         }
 
         const dados = await resposta.json();
@@ -86,11 +87,11 @@ const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":
         renderizarPedidos();
 
     } catch (erro) {
-        console.error(erro);
+        console.error("Falha ao carregar pedidos:", erro);
         listaPedidos.safeHTML = `
             <tr>
                 <td colspan="8" class="table-loading" style="color: #b91c1c;">
-                    Não foi possível conectar ao servidor.
+                    ${escaparHtml(erro.message || "Não foi possível carregar os pedidos.")}
                 </td>
             </tr>
         `;

@@ -4,6 +4,23 @@ const API_BASE_URL = window.AUTHENTIC_API_URL;
         let descontoCalculado = 0;
         let subtotalCalculado = 0;
         let inicializacaoPagamentoEmAndamento = false;
+        let clienteAutenticado = false;
+
+        async function validarClienteCheckout() {
+            const botao = document.getElementById("finish-button");
+            try {
+                const resposta = await apiFetch("/api/auth/me", { cache: "no-store" });
+                const dados = await resposta.json().catch(() => ({}));
+                if (!resposta.ok || dados.usuario?.tipo !== "cliente") throw new Error("Sessao de cliente necessaria.");
+                clienteAutenticado = true;
+                botao.textContent = "FINALIZAR PEDIDO";
+                botao.disabled = (JSON.parse(localStorage.getItem("carrinho") || "[]")).length === 0;
+            } catch (_) {
+                clienteAutenticado = false;
+                botao.disabled = false;
+                botao.textContent = "ENTRAR PARA FINALIZAR";
+            }
+        }
 
         function formatarPreco(valor) {
             return Number(valor).toLocaleString("pt-BR", {
@@ -302,11 +319,8 @@ const API_BASE_URL = window.AUTHENTIC_API_URL;
         // ==========================================
         document.getElementById("finish-button").addEventListener("click", async function () {
             const botao = document.getElementById("finish-button");
-            const token = window.AUTHENTIC_SESSION;
-
-            if (!token) {
-                alert("Você precisa fazer login para finalizar o pedido.");
-                window.location.href = "login.html";
+            if (!clienteAutenticado) {
+                window.location.href = "login.html?redirect=checkout.html";
                 return;
             }
 
@@ -369,8 +383,10 @@ const API_BASE_URL = window.AUTHENTIC_API_URL;
 
             try {
                 const sessao = await apiFetch(`${API_BASE_URL}/api/auth/me`, { headers: {}, cache: "no-store" });
-                if (!sessao.ok) {
-                     localStorage.removeItem("usuario");
+                const dadosSessao = await sessao.json().catch(() => ({}));
+                if (!sessao.ok || dadosSessao.usuario?.tipo !== "cliente") {
+                    clienteAutenticado = false;
+                    localStorage.removeItem("usuario");
                     const retorno = encodeURIComponent("checkout.html");
                     window.location.replace(`login.html?redirect=${retorno}`);
                     return;
@@ -424,3 +440,4 @@ const API_BASE_URL = window.AUTHENTIC_API_URL;
         });
 
         carregarResumoCheckout();
+        validarClienteCheckout();

@@ -16,18 +16,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pagamentoEl = document.getElementById("pagamento");
     pagamentoEl.textContent = `${nomes[ultimoPedido.forma_pagamento] || ultimoPedido.forma_pagamento} - verificando`;
     mensagem.textContent = "Seu pedido foi registrado. A preparacao comeca somente depois da confirmacao do pagamento.";
-    const token = window.AUTHENTIC_SESSION;
-    if (!token) return;
     try {
+        const sessao = await apiFetch("/api/auth/me", { cache: "no-store" });
+        const dadosSessao = await sessao.json().catch(() => ({}));
+        if (!sessao.ok || dadosSessao.usuario?.tipo !== "cliente") {
+            localStorage.removeItem("ultimoPedido");
+            window.location.replace("login.html?redirect=conta.html");
+            return;
+        }
         const resposta = await apiFetch(`/pedidos/${ultimoPedido.id}/pagamento`, { headers: {} });
-        if (!resposta.ok) return;
+        if (resposta.status === 403 || resposta.status === 404) {
+            localStorage.removeItem("ultimoPedido");
+            mensagem.textContent = "Este pedido não pertence à conta conectada. Consulte seus pedidos na área da conta.";
+            return;
+        }
+        if (!resposta.ok) throw new Error("Nao foi possivel consultar o pedido.");
         const { pagamento } = await resposta.json();
         const status = { pago: "Pago", pendente: "Pendente", recusado: "Recusado", cancelado: "Cancelado", estorno_pendente: "Estorno pendente", estornado: "Estornado" };
         pagamentoEl.textContent = `${nomes[pagamento.metodo] || pagamento.metodo} - ${status[pagamento.status] || pagamento.status}`;
         if (pagamento.status === "pago") mensagem.textContent = "Pagamento confirmado. Seu pedido agora sera preparado pela nossa equipe.";
         else if (pagamento.status === "recusado") mensagem.textContent = "O pagamento foi recusado. Acesse seus pedidos para tentar novamente antes da reserva expirar.";
         else if (pagamento.status === "pendente") mensagem.textContent = "Pedido registrado. Aguardamos a confirmacao do pagamento pelo Mercado Pago.";
-    } catch (_) {
+    } catch (erro) {
+        console.error("Falha ao acompanhar pedido:", erro);
         mensagem.textContent = "Pedido registrado. Consulte seu historico para acompanhar a confirmacao do pagamento.";
     }
 });

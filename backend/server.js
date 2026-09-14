@@ -13,6 +13,7 @@ const path = require("path");
 const fs = require("fs");
 const autenticar = require("./authMiddleware");
 const apenasAdmin = require("./adminMiddleware");
+const apenasCliente = require("./customerMiddleware");
 const gateway = require("./paymentGateway");
 const { decidirStatusPagamento } = require("./paymentState");
 
@@ -79,16 +80,8 @@ const tiposPermitidos = Object.keys(extensaoPorMimetype);
 const diretorioUploads = path.join(__dirname, "../frontend/images/produtos");
 fs.mkdirSync(diretorioUploads, { recursive: true });
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, diretorioUploads);
-    },
-    filename: function (req, file, cb) {
-        const extensao = extensaoPorMimetype[file.mimetype] || ".jpg";
-        const nomeArquivo = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extensao}`;
-        cb(null, nomeArquivo);
-    }
-});
+const storage = multer.memoryStorage();
+const nomeSeguroUpload = arquivo => `${Date.now()}-${Math.round(Math.random() * 1e9)}${extensaoPorMimetype[arquivo.mimetype]}`;
 
 const upload = multer({
     storage: storage,
@@ -333,10 +326,27 @@ const limpezaReservas = setInterval(() => {
 limpezaReservas.unref();
 
 // Servir imagens estáticas ANTES do rate limiting para não esgotar as requisições do usuário
-app.use(
-    "/images/produtos",
-    express.static(path.join(__dirname, "../frontend/images/produtos"))
-);
+app.get("/images/produtos/:nome", async (req, res) => {
+    const nome = path.basename(String(req.params.nome || ""));
+    if (!/^[\w.-]+\.(?:jpe?g|png|webp)$/i.test(nome)) return res.sendStatus(404);
+    try {
+        const resultado = await pool.query(
+            "SELECT imagem_dados,imagem_mime FROM produtos WHERE imagem=$1 AND imagem_dados IS NOT NULL LIMIT 1",
+            [nome]
+        );
+        if (resultado.rows.length) {
+            res.set("Cache-Control", "public, max-age=31536000, immutable");
+            res.type(resultado.rows[0].imagem_mime || "application/octet-stream");
+            return res.send(resultado.rows[0].imagem_dados);
+        }
+        const legado = path.join(diretorioUploads, nome);
+        if (fs.existsSync(legado)) return res.sendFile(legado);
+        return res.sendStatus(404);
+    } catch (erro) {
+        console.error("Erro ao carregar imagem de produto:", erro.message);
+        return res.sendStatus(500);
+    }
+});
 
 // =========================================================
 // RATE LIMITERS
@@ -556,7 +566,7 @@ app.put("/alterar-senha", autenticar, async (req, res) => {
 // =========================================================
 app.get("/admin/produtos", autenticar, apenasAdmin, async (req, res) => {
     try {
-        const resultado = await pool.query("SELECT * FROM produtos ORDER BY id DESC");
+        const resultado = await pool.query("SELECT id,nome,descricao,preco,preco_custo,categoria,imagem,ativo,criado_em,atualizado_em FROM produtos ORDER BY id DESC");
         res.set("Cache-Control", "no-store");
         res.json(resultado.rows);
     } catch (erro) {
@@ -567,7 +577,7 @@ app.get("/admin/produtos", autenticar, apenasAdmin, async (req, res) => {
 app.get("/admin/produtos/:id", autenticar, apenasAdmin, async (req, res) => {
     if (!idValido(req.params.id)) return res.status(400).json({ erro: "ID inválido." });
     try {
-        const resultado = await pool.query("SELECT * FROM produtos WHERE id = $1", [req.params.id]);
+        const resultado = await pool.query("SELECT id,nome,descricao,preco,preco_custo,categoria,imagem,ativo,criado_em,atualizado_em FROM produtos WHERE id = $1", [req.params.id]);
         if (!resultado.rows.length) return res.status(404).json({ erro: "Produto não encontrado." });
         res.set("Cache-Control", "no-store");
         res.json(resultado.rows[0]);
@@ -578,7 +588,7 @@ app.get("/admin/produtos/:id", autenticar, apenasAdmin, async (req, res) => {
 
 app.get("/produtos", async (req, res) => {
     try {
-        const resultado = await pool.query("SELECT * FROM produtos WHERE ativo = true ORDER BY id DESC");
+        const resultado = await pool.query("SELECT id,nome,descricao,preco,categoria,imagem,ativo,criado_em,atualizado_em FROM produtos WHERE ativo = true ORDER BY id DESC");
         res.set("Cache-Control", "no-store");
         res.json(resultado.rows);
     } catch (erro) {
@@ -588,7 +598,7 @@ app.get("/produtos", async (req, res) => {
 
 app.get("/produtos/:id", async (req, res) => {
     try {
-        const resultado = await pool.query("SELECT * FROM produtos WHERE id = $1 AND ativo = true", [req.params.id]);
+        const resultado = await pool.query("SELECT id,nome,descricao,preco,categoria,imagem,ativo,criado_em,atualizado_em FROM produtos WHERE id = $1 AND ativo = true", [req.params.id]);
         if (resultado.rows.length === 0) return res.status(404).json({ erro: "Produto não encontrado." });
         res.set("Cache-Control", "no-store");
         res.json(resultado.rows[0]);
@@ -629,8 +639,12 @@ app.post("/produtos", autenticar, apenasAdmin, upload.single("imagem"), async (r
     try {
         await client.query("BEGIN");
         const resultado = await client.query(
-            `INSERT INTO produtos(nome,descricao,preco,categoria,imagem,ativo) VALUES($1,$2,$3,$4,$5,$6::boolean) RETURNING *`,
-            [nome.trim(), descricao || null, Number(preco), categoria || null, req.file ? req.file.filename : null, ativo === "false" ? false : true]
+            `INSERT INTO produtos(nome,descricao,preco,categoria,imagem,imagem_dados,imagem_mime,ativo)
+             VALUES($1,$2,$3,$4,$5,$6,$7,$8::boolean)
+             RETURNING id,nome,descricao,preco,categoria,imagem,ativo,criado_em,atualizado_em`,
+            [nome.trim(), descricao || null, Number(preco), categoria || null,
+                req.file ? nomeSeguroUpload(req.file) : null, req.file?.buffer || null, req.file?.mimetype || null,
+                ativo === "false" ? false : true]
         );
         for (const tamanho of listaTamanhos) for (const cor of listaCores) {
             await client.query("INSERT INTO estoque(produto_id,tamanho,cor,quantidade) VALUES($1,$2,$3,0)", [resultado.rows[0].id, tamanho, cor]);
@@ -699,7 +713,7 @@ app.put("/estoque/:id", autenticar, apenasAdmin, async (req, res) => {
 // =========================================================
 // PEDIDOS (TRANSAÇÃO ROBUSTA COM CUPOM E LOCK DE ESTOQUE)
 // =========================================================
-app.post("/pedidos", autenticar, async (req, res) => {
+app.post("/pedidos", autenticar, apenasCliente, async (req, res) => {
     const chaveIdempotencia = req.get("Idempotency-Key");
     if (!chaveIdempotencia || Joi.string().guid({ version: ["uuidv4"] }).validate(chaveIdempotencia).error) {
         return res.status(400).json({ erro: "Idempotency-Key UUID v4 é obrigatório." });
@@ -906,7 +920,7 @@ app.post("/pedidos", autenticar, async (req, res) => {
 });
 
 
-app.post("/pedidos/:id/pagamento", autenticar, async (req, res) => {
+app.post("/pedidos/:id/pagamento", autenticar, apenasCliente, async (req, res) => {
     if (!idValido(req.params.id)) return res.status(400).json({ erro: "Pedido invalido." });
     const chave = req.get("Idempotency-Key");
     if (!chave || Joi.string().guid({ version: ["uuidv4"] }).validate(chave).error) {
@@ -1232,6 +1246,7 @@ app.get("/pedidos", autenticar, async (req, res) => {
             `, [req.usuario.id]);
         }
 
+        res.set("Cache-Control", "no-store");
         res.json(resultado.rows);
 
     } catch (erro) {
@@ -1876,9 +1891,14 @@ app.put("/produtos/:id", autenticar, apenasAdmin, upload.single("imagem"), async
         }
 
         await auditar(client, req, "editar", "produto", Number(req.params.id), { nome: nome.trim() });
+        const novoNomeImagem = req.file ? nomeSeguroUpload(req.file) : null;
         const resultado = await client.query(`UPDATE produtos SET nome=$1,descricao=$2,preco=$3,categoria=$4,
-            imagem=COALESCE($5,imagem),ativo=COALESCE($6::boolean,ativo),atualizado_em=NOW() WHERE id=$7 RETURNING *`,
-            [nome.trim(), descricao || null, Number(preco), categoria || null, req.file ? req.file.filename : null, ativo === undefined ? null : ativo, req.params.id]);
+            imagem=COALESCE($5,imagem),imagem_dados=CASE WHEN $5::varchar IS NULL THEN imagem_dados ELSE $6 END,
+            imagem_mime=CASE WHEN $5::varchar IS NULL THEN imagem_mime ELSE $7 END,
+            ativo=COALESCE($8::boolean,ativo),atualizado_em=NOW() WHERE id=$9
+            RETURNING id,nome,descricao,preco,categoria,imagem,ativo,criado_em,atualizado_em`,
+            [nome.trim(), descricao || null, Number(preco), categoria || null, novoNomeImagem,
+                req.file?.buffer || null, req.file?.mimetype || null, ativo === undefined ? null : ativo, req.params.id]);
         if (!resultado.rows.length) { await client.query("ROLLBACK"); return res.status(404).json({ erro: "Produto não encontrado." }); }
         await client.query("UPDATE estoque SET ativo=false,atualizado_em=NOW() WHERE produto_id=$1", [req.params.id]);
         for (const tamanho of listaTamanhos) for (const cor of listaCores) {

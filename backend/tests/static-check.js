@@ -49,6 +49,14 @@ if (!checkoutJs.includes("TENTAR NOVAMENTE") || !checkoutJs.includes("finally"))
 if (!apiJs.includes("new URL(valor, global.location.href)") || !carrinhoJs.includes('href="/pages/produtos.html"')) {
   falhas.push("Links relativos seguros ou a navegacao do carrinho para produtos nao estao preservados.");
 }
+if (!apiJs.includes('tagContexto === "TBODY"') || !apiJs.includes('<table><tbody id="safe-root">')) {
+  falhas.push("Sanitizador nao preserva a estrutura de linhas e celulas inseridas em tbody.");
+}
+const pedidosAdminJs = fs.readFileSync(path.join(frontend, "js", "admin", "pedidos.js"), "utf8");
+const linhaPedido = pedidosAdminJs.match(/function criarLinhaPedido[\s\S]*?async function confirmarPagamento/)?.[0] || "";
+if ((linhaPedido.match(/<td>/g) || []).length !== 8 || !linhaPedido.includes("<tr>")) {
+  falhas.push("Linha administrativa de pedido nao corresponde as oito colunas do cabecalho.");
+}
 for (const arquivo of arquivos(path.join(frontend, "js", "admin"))) {
   if (!arquivo.endsWith(".js")) continue;
   const js = fs.readFileSync(arquivo, "utf8");
