@@ -26,7 +26,14 @@
             }
             for (const atributo of ["href", "src"]) {
                 const valor = elemento.getAttribute(atributo);
-                if (valor && !/^(?:https?:|\/|\.\.?\/|#)/i.test(valor)) elemento.removeAttribute(atributo);
+                if (!valor) continue;
+                const dataImagemSegura = atributo === "src" && elemento.tagName === "IMG" && /^data:image\/(?:png|jpe?g|webp);base64,/i.test(valor);
+                let protocoloSeguro = false;
+                try {
+                    const url = new URL(valor, global.location.href);
+                    protocoloSeguro = ["http:", "https:", "mailto:", "tel:"].includes(url.protocol);
+                } catch (_) {}
+                if (!dataImagemSegura && !protocoloSeguro && !valor.startsWith("#")) elemento.removeAttribute(atributo);
             }
         }
         const fragmento = document.createDocumentFragment();
@@ -40,6 +47,12 @@
     });
 
     global.AUTHENTIC_API_URL = API_URL;
+    global.AUTHENTIC_PRODUCT_IMAGE_URL = nome => {
+        const referencia = String(nome || "").trim();
+        if (!referencia) return "";
+        if (/^https?:\/\//i.test(referencia)) return referencia;
+        return `${API_URL}/images/produtos/${encodeURIComponent(referencia)}`;
+    };
     global.AUTHENTIC_SESSION = true;
     global.apiFetch = apiFetch;
 })(window);

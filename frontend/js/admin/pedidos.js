@@ -59,7 +59,7 @@ const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":
 
     if (!token) {
         alert("Você precisa estar logado como administrador.");
-        window.location.href = "login.html";
+        window.location.href = "../login.html";
         return;
     }
 
@@ -73,7 +73,7 @@ const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":
             if (resposta.status === 401) {
                 alert("Sessão expirada. Faça login novamente.");
 
-                window.location.href = "login.html";
+                window.location.href = "../login.html";
                 return;
             }
             throw new Error("Erro ao buscar pedidos.");

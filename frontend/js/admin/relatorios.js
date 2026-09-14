@@ -2,7 +2,7 @@ const API_URL = window.AUTHENTIC_API_URL;
 
 const token = window.AUTHENTIC_SESSION;
 if (!token) {
-    window.location.href = "login.html";
+window.location.href = "../login.html";
 }
 
 const periodoRelatorio = document.getElementById("periodoRelatorio");
@@ -52,7 +52,7 @@ async function carregarRelatorio() {
 
         if (resposta.status === 401 || resposta.status === 403) {
 
-            window.location.href = "login.html";
+            window.location.href = "../login.html";
             return;
         }
 

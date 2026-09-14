@@ -5,13 +5,15 @@ const API_URL = window.AUTHENTIC_API_URL;
 const produtoId = new URLSearchParams(location.search).get("id");
 
 if (produtoId) Promise.all([
-    apiFetch(`${API_URL}/produtos/${produtoId}`).then(r => r.ok ? r.json() : Promise.reject()),
+    apiFetch(`${API_URL}/admin/produtos/${produtoId}`, { cache: "no-store" }).then(r => r.ok ? r.json() : Promise.reject()),
     apiFetch(`${API_URL}/produtos/${produtoId}/estoque`).then(r => r.ok ? r.json() : Promise.reject())
 ]).then(([produto, variacoes]) => {
     document.getElementById("nome").value = produto.nome || "";
     document.getElementById("descricao").value = produto.descricao || "";
     document.getElementById("preco").value = produto.preco || "";
     document.getElementById("categoria").value = produto.categoria || "";
+    const status = document.querySelector(`input[name='status'][value='${produto.ativo ? "ativo" : "inativo"}']`);
+    if (status) status.checked = true;
     const tamanhos = new Set(variacoes.map(v => v.tamanho));
     const cores = new Set(variacoes.map(v => v.cor));
     document.querySelectorAll("input[name='tamanho']").forEach(input => { input.checked = tamanhos.has(input.value); });

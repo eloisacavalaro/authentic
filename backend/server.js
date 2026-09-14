@@ -507,9 +507,10 @@ app.get("/api/auth/me", autenticar, async (req, res) => {
 });
 
 app.get("/api/config/payment", (req, res) => {
-    if (!process.env.MERCADO_PAGO_PUBLIC_KEY) return res.status(503).json({ erro: "Pagamento online nao configurado." });
+    const publicKey = String(process.env.MERCADO_PAGO_PUBLIC_KEY || "").trim();
+    if (!publicKey) return res.status(503).json({ erro: "Pagamento online nao configurado." });
     res.set("Cache-Control", "no-store");
-    res.json({ gateway: "mercado_pago", public_key: process.env.MERCADO_PAGO_PUBLIC_KEY });
+    res.json({ gateway: "mercado_pago", public_key: publicKey });
 });
 
 app.patch("/perfil", autenticar, async (req, res) => {
@@ -553,9 +554,32 @@ app.put("/alterar-senha", autenticar, async (req, res) => {
 // =========================================================
 // PRODUTOS
 // =========================================================
+app.get("/admin/produtos", autenticar, apenasAdmin, async (req, res) => {
+    try {
+        const resultado = await pool.query("SELECT * FROM produtos ORDER BY id DESC");
+        res.set("Cache-Control", "no-store");
+        res.json(resultado.rows);
+    } catch (erro) {
+        res.status(500).json({ erro: "Erro ao listar produtos do painel." });
+    }
+});
+
+app.get("/admin/produtos/:id", autenticar, apenasAdmin, async (req, res) => {
+    if (!idValido(req.params.id)) return res.status(400).json({ erro: "ID inválido." });
+    try {
+        const resultado = await pool.query("SELECT * FROM produtos WHERE id = $1", [req.params.id]);
+        if (!resultado.rows.length) return res.status(404).json({ erro: "Produto não encontrado." });
+        res.set("Cache-Control", "no-store");
+        res.json(resultado.rows[0]);
+    } catch (erro) {
+        res.status(500).json({ erro: "Erro ao buscar produto do painel." });
+    }
+});
+
 app.get("/produtos", async (req, res) => {
     try {
         const resultado = await pool.query("SELECT * FROM produtos WHERE ativo = true ORDER BY id DESC");
+        res.set("Cache-Control", "no-store");
         res.json(resultado.rows);
     } catch (erro) {
         res.status(500).json({ erro: "Erro ao listar produtos." });
@@ -566,6 +590,7 @@ app.get("/produtos/:id", async (req, res) => {
     try {
         const resultado = await pool.query("SELECT * FROM produtos WHERE id = $1 AND ativo = true", [req.params.id]);
         if (resultado.rows.length === 0) return res.status(404).json({ erro: "Produto não encontrado." });
+        res.set("Cache-Control", "no-store");
         res.json(resultado.rows[0]);
     } catch (erro) {
         res.status(500).json({ erro: "Erro ao buscar produto." });
@@ -586,7 +611,7 @@ app.get("/produtos/:id/estoque", async (req, res) => {
 });
 
 app.post("/produtos", autenticar, apenasAdmin, upload.single("imagem"), async (req, res) => {
-    const { nome, descricao, preco, categoria, tamanhos, cores } = req.body;
+    const { nome, descricao, preco, categoria, ativo, tamanhos, cores } = req.body;
     if (!nome || !dinheiroValido(preco) || Number(preco) <= 0) {
         return res.status(400).json({ erro: "Nome e preço válido são obrigatórios." });
     }
@@ -604,8 +629,8 @@ app.post("/produtos", autenticar, apenasAdmin, upload.single("imagem"), async (r
     try {
         await client.query("BEGIN");
         const resultado = await client.query(
-            `INSERT INTO produtos(nome,descricao,preco,categoria,imagem) VALUES($1,$2,$3,$4,$5) RETURNING *`,
-            [nome.trim(), descricao || null, Number(preco), categoria || null, req.file ? req.file.filename : null]
+            `INSERT INTO produtos(nome,descricao,preco,categoria,imagem,ativo) VALUES($1,$2,$3,$4,$5,$6::boolean) RETURNING *`,
+            [nome.trim(), descricao || null, Number(preco), categoria || null, req.file ? req.file.filename : null, ativo === "false" ? false : true]
         );
         for (const tamanho of listaTamanhos) for (const cor of listaCores) {
             await client.query("INSERT INTO estoque(produto_id,tamanho,cor,quantidade) VALUES($1,$2,$3,0)", [resultado.rows[0].id, tamanho, cor]);
@@ -625,7 +650,7 @@ app.get("/estoque", autenticar, apenasAdmin, async (req, res) => {
     try {
         await liberarReservasExpiradas();
         const resultado = await pool.query(`
-            SELECT e.id, e.produto_id, p.nome AS produto, e.tamanho, e.cor, e.quantidade
+            SELECT e.id, e.produto_id, p.nome AS produto, p.imagem, p.ativo AS produto_ativo, e.tamanho, e.cor, e.quantidade
             FROM estoque e
             INNER JOIN produtos p ON e.produto_id = p.id
             ORDER BY e.id DESC
@@ -1827,20 +1852,6 @@ app.patch("/pedidos/:id/rastreio", autenticar, apenasAdmin, async (req, res) => 
     }
 });
 
-// Middleware Global de Tratamento de Erros (incluindo estouro de limites do Multer)
-app.use((err, req, res, next) => {
-    if (err instanceof multer.MulterError) {
-        return res.status(400).json({ erro: `Erro no upload de arquivo: ${err.message}` });
-    } else if (err) {
-        return res.status(400).json({ erro: err.message || "Requisição inválida." });
-    }
-    next();
-});
-
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
-
 app.put("/produtos/:id", autenticar, apenasAdmin, upload.single("imagem"), async (req, res) => {
     if (!idValido(req.params.id)) return res.status(400).json({ erro: "ID inválido." });
     const { nome, descricao, preco, categoria, ativo, tamanhos, cores } = req.body;
@@ -1890,4 +1901,17 @@ app.delete("/produtos/:id", autenticar, apenasAdmin, async (req, res) => {
     );
     if (!resultado.rows.length) return res.status(404).json({ erro: "Produto não encontrado ou já inativo." });
     res.json({ mensagem: "Produto desativado com sucesso." });
+});
+
+// O tratamento de erros precisa vir depois de todas as rotas, inclusive upload/edição.
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        return res.status(400).json({ erro: `Erro no upload de arquivo: ${err.message}` });
+    }
+    if (err) return res.status(400).json({ erro: err.message || "Requisição inválida." });
+    next();
+});
+
+app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

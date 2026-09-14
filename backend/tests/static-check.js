@@ -27,6 +27,36 @@ for (const arquivo of arquivos(frontend)) {
   }
 }
 
+const checkoutHtml = fs.readFileSync(path.join(frontend, "pages", "checkout.html"), "utf8");
+const checkoutJs = fs.readFileSync(path.join(frontend, "js", "checkout-inline.js"), "utf8");
+const apiJs = fs.readFileSync(path.join(frontend, "js", "api.js"), "utf8");
+const carrinhoJs = fs.readFileSync(path.join(frontend, "js", "carrinho.js"), "utf8");
+if ((checkoutHtml.match(/https:\/\/sdk\.mercadopago\.com\/js\/v2/g) || []).length !== 1) {
+  falhas.push("checkout.html deve carregar exatamente uma instancia do SDK Mercado Pago v2.");
+}
+if ((checkoutHtml.match(/id=["']paymentBrick_container["']/g) || []).length !== 1) {
+  falhas.push("checkout.html deve conter exatamente um container do Payment Brick.");
+}
+if (!checkoutJs.includes('builder.create("payment", "paymentBrick_container", settings)')) {
+  falhas.push("Payment Brick nao usa o tipo ou container esperado.");
+}
+if (!checkoutJs.includes("public_key.trim()") || !checkoutJs.includes("paymentBrickController.unmount()")) {
+  falhas.push("Inicializacao do Payment Brick nao valida a Public Key ou nao desmonta a instancia anterior.");
+}
+if (!checkoutJs.includes("TENTAR NOVAMENTE") || !checkoutJs.includes("finally")) {
+  falhas.push("Falha do Payment Brick pode deixar o checkout sem retry ou preso em loading.");
+}
+if (!apiJs.includes("new URL(valor, global.location.href)") || !carrinhoJs.includes('href="/pages/produtos.html"')) {
+  falhas.push("Links relativos seguros ou a navegacao do carrinho para produtos nao estao preservados.");
+}
+for (const arquivo of arquivos(path.join(frontend, "js", "admin"))) {
+  if (!arquivo.endsWith(".js")) continue;
+  const js = fs.readFileSync(arquivo, "utf8");
+  if (/window\.location\.(?:href|replace)\s*=\s*["']login\.html/.test(js)) {
+    falhas.push(`${path.relative(raiz, arquivo)} redireciona para login inexistente dentro de /pages/admin.`);
+  }
+}
+
 if (falhas.length) {
   console.error(falhas.join("\n"));
   process.exit(1);

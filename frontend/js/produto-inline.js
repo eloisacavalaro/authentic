@@ -87,8 +87,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const imageContainer = document.getElementById("product-image-container");
                     imageContainer.replaceChildren();
                     if (produtoAtual.imagem) {
-                        const imgUrl = produtoAtual.imagem.startsWith("http") ? produtoAtual.imagem : `${API_URL}/images/produtos/${produtoAtual.imagem}`;
-                        const imagem = document.createElement("img"); imagem.src = imgUrl; imagem.alt = produtoAtual.nome; imagem.style.cssText = "width:100%;height:100%;object-fit:cover"; imageContainer.appendChild(imagem);
+                        const imagem = document.createElement("img"); imagem.src = window.AUTHENTIC_PRODUCT_IMAGE_URL(produtoAtual.imagem); imagem.alt = produtoAtual.nome; imagem.style.cssText = "width:100%;height:100%;object-fit:cover";
+                        imagem.addEventListener("error", () => { const vazio = document.createElement("span"); vazio.style.color = "#888"; vazio.textContent = "SEM IMAGEM"; imageContainer.replaceChildren(vazio); }, { once: true });
+                        imageContainer.appendChild(imagem);
                     } else {
                         const vazio = document.createElement("span"); vazio.style.color = "#888"; vazio.textContent = "SEM IMAGEM"; imageContainer.appendChild(vazio);
                     }

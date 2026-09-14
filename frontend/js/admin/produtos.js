@@ -2,7 +2,7 @@ const API_URL = window.AUTHENTIC_API_URL;
 
 async function carregarProdutos() {
     try {
-        const resposta = await apiFetch(`${API_URL}/produtos`);
+        const resposta = await apiFetch(`${API_URL}/admin/produtos`, { cache: "no-store" });
 
         if (!resposta.ok) {
             throw new Error("Erro ao carregar produtos.");
@@ -51,6 +51,9 @@ async function carregarProdutos() {
         produtos.forEach(produto => {
 
             const linha = document.createElement("tr");
+            linha.dataset.nome = String(produto.nome || "").toLocaleLowerCase("pt-BR");
+            linha.dataset.categoria = String(produto.categoria || "").toLocaleLowerCase("pt-BR");
+            linha.dataset.status = produto.ativo ? "ativo" : "inativo";
 
             linha.safeHTML = `
                 <td>
@@ -60,7 +63,7 @@ async function carregarProdutos() {
                            ${
                                 produto.imagem
                                     ? `<img
-                                            src="${API_URL}/images/produtos/${produto.imagem}"
+                                            src="${window.AUTHENTIC_PRODUCT_IMAGE_URL(produto.imagem)}"
                                             alt="${produto.nome}"
                                     >`
                                     : "IMG"
@@ -92,8 +95,8 @@ async function carregarProdutos() {
                 </td>
 
                 <td>
-                    <span class="status-badge ativo">
-                        Ativo
+                    <span class="status-badge ${produto.ativo ? "ativo" : "inativo"}">
+                        ${produto.ativo ? "Ativo" : "Inativo"}
                     </span>
                 </td>
 
@@ -107,6 +110,7 @@ async function carregarProdutos() {
 
             tabela.appendChild(linha);
         });
+        aplicarFiltrosProdutos();
 
     } catch (erro) {
 
@@ -140,7 +144,36 @@ async function desativarProduto(id) {
     carregarProdutos();
 }
 
-document.addEventListener("DOMContentLoaded", carregarProdutos);
+function categoriaEquivalente(valor) {
+    const categoria = String(valor || "").toLocaleLowerCase("pt-BR")
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/s$/, "");
+    return categoria === "camisa" ? "camiseta" : categoria;
+}
+
+function aplicarFiltrosProdutos() {
+    const tabela = document.querySelector(".products-table tbody");
+    if (!tabela) return;
+    const busca = String(document.getElementById("buscaProduto")?.value || "").trim().toLocaleLowerCase("pt-BR");
+    const categoria = categoriaEquivalente(document.getElementById("filtroCategoria")?.value);
+    const status = document.getElementById("filtroStatus")?.value || "";
+    let visiveis = 0;
+    tabela.querySelectorAll("tr[data-status]").forEach(linha => {
+        const correspondeBusca = !busca || linha.dataset.nome.includes(busca);
+        const correspondeCategoria = !categoria || categoriaEquivalente(linha.dataset.categoria) === categoria;
+        const correspondeStatus = !status || linha.dataset.status === status;
+        linha.hidden = !(correspondeBusca && correspondeCategoria && correspondeStatus);
+        if (!linha.hidden) visiveis++;
+    });
+    const contador = document.querySelector(".products-card-header span");
+    if (contador) contador.textContent = `${visiveis} ${visiveis === 1 ? "produto" : "produtos"}`;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("buscaProduto")?.addEventListener("input", aplicarFiltrosProdutos);
+    document.getElementById("filtroCategoria")?.addEventListener("change", aplicarFiltrosProdutos);
+    document.getElementById("filtroStatus")?.addEventListener("change", aplicarFiltrosProdutos);
+    carregarProdutos();
+});
 document.addEventListener("click", evento => {
     const botao = evento.target.closest("[data-disable-product]");
     if (botao) desativarProduto(Number(botao.dataset.disableProduct));

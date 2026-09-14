@@ -71,6 +71,12 @@ async function criarPedido(cookie) {
   form.append("imagem", new Blob([Buffer.from("89504e470d0a1a0a", "hex")], { type: "image/png" }), "teste.png");
   const produto = await api("/produtos", { method: "POST", headers: { Cookie: tokenAdmin }, body: form });
   produtoId = produto.id; imagem = produto.imagem;
+  const catalogoPublico = await api("/produtos");
+  const catalogoAdmin = await api("/admin/produtos", { headers: { Cookie: tokenAdmin } });
+  assert(catalogoPublico.some(item => Number(item.id) === Number(produtoId)), "Produto ativo cadastrado nao apareceu no catalogo publico.");
+  assert(catalogoAdmin.some(item => Number(item.id) === Number(produtoId)), "Produto cadastrado nao apareceu no catalogo administrativo.");
+  const imagemResposta = await fetch(`${base}/images/produtos/${encodeURIComponent(imagem)}`);
+  assert(imagemResposta.ok, "Upload do produto nao ficou acessivel pela API.");
   const variacoes = await api(`/produtos/${produtoId}/estoque`);
   assert(variacoes.length === 1, "Cadastro nao criou a variacao.");
   await api("/estoque", { method: "POST", headers: { "Content-Type": "application/json", Cookie: tokenAdmin }, body: JSON.stringify({ produto_id: produtoId, tamanho: "M", cor: "Preto", quantidade: 3 }) });

@@ -14,11 +14,12 @@ const API_URL = window.AUTHENTIC_API_URL;
         // Remove acentos e plurais para comparar de forma uniforme
         function normalizarTexto(txt) {
             if (!txt) return "";
-            return txt.toLowerCase()
+            const normalizado = txt.toLowerCase()
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "")
                 .trim()
                 .replace(/s$/, ""); // transforma 'camisetas' em 'camiseta'
+            return normalizado === "camisa" ? "camiseta" : normalizado;
         }
 
         if (buscaInicial) searchInput.value = buscaInicial;
@@ -34,7 +35,7 @@ const API_URL = window.AUTHENTIC_API_URL;
 
         async function carregarProdutos() {
             try {
-                const resposta = await apiFetch(`${API_URL}/produtos`);
+                const resposta = await apiFetch(`${API_URL}/produtos`, { cache: "no-store" });
                 if (!resposta.ok) throw new Error("Erro ao buscar catálogo.");
                 todosOsProdutos = await resposta.json();
                 aplicarFiltros();
@@ -63,9 +64,7 @@ const API_URL = window.AUTHENTIC_API_URL;
                     window.location.href = `produto.html?id=${produto.id}`;
                 });
 
-                const imagemSrc = produto.imagem
-                    ? (produto.imagem.startsWith("http") ? produto.imagem : `${API_URL}/images/produtos/${produto.imagem}`)
-                    : null;
+                const imagemSrc = window.AUTHENTIC_PRODUCT_IMAGE_URL(produto.imagem);
 
                 const imagemContainer = document.createElement("div"); imagemContainer.className = "product-image";
                 const semFoto = () => { const span = document.createElement("span"); span.textContent = "SEM FOTO"; span.style.cssText = "color:#999;font-size:11px"; imagemContainer.replaceChildren(span); };

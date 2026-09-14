@@ -1,12 +1,13 @@
 const { MercadoPagoConfig, Payment, WebhookSignatureValidator } = require("mercadopago");
 
 function exigirConfiguracao() {
-    if (!process.env.MERCADO_PAGO_ACCESS_TOKEN) {
+    const accessToken = String(process.env.MERCADO_PAGO_ACCESS_TOKEN || "").trim();
+    if (!accessToken) {
         const erro = new Error("Mercado Pago nao configurado no servidor.");
         erro.statusCode = 503;
         throw erro;
     }
-    return new MercadoPagoConfig({ accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN, options: { timeout: 10000 } });
+    return new MercadoPagoConfig({ accessToken, options: { timeout: 10000 } });
 }
 
 async function buscarPagamento(id) { return new Payment(exigirConfiguracao()).get({ id: String(id) }); }

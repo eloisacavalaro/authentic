@@ -107,7 +107,7 @@ function mostrarCarrinho() {
             <div style="text-align: center; padding: 50px 0;">
                 <h2 style="font-family:'Playfair Display', serif; font-size: 22px; margin-bottom: 8px;">Seu carrinho está vazio</h2>
                 <p style="color: #777; margin-bottom: 25px; font-size: 13px;">Explore nossa coleção para adicionar novos itens.</p>
-                <a href="produtos.html" class="checkout-btn" style="display:inline-flex; align-items:center; justify-content:center; width:auto; padding: 0 30px; text-decoration:none;">EXPLORAR PRODUTOS</a>
+                <a href="/pages/produtos.html" class="checkout-btn" style="display:inline-flex; align-items:center; justify-content:center; width:auto; padding: 0 30px; text-decoration:none;">EXPLORAR PRODUTOS</a>
             </div>
         `;
         atualizarResumo();
@@ -123,9 +123,7 @@ function mostrarCarrinho() {
 
     carrinho.forEach((produto, index) => {
         const valorTotalItem = Number(produto.preco) * Number(produto.quantidade);
-        const imagemSrc = produto.imagem
-            ? (produto.imagem.startsWith("http") ? produto.imagem : `${API_BASE_URL}/images/produtos/${produto.imagem}`)
-            : null;
+        const imagemSrc = window.AUTHENTIC_PRODUCT_IMAGE_URL(produto.imagem);
 
         html += `
             <article class="cart-item">

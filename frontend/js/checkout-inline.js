@@ -3,6 +3,7 @@ const API_BASE_URL = window.AUTHENTIC_API_URL;
         let cupomAtivo = null;
         let descontoCalculado = 0;
         let subtotalCalculado = 0;
+        let inicializacaoPagamentoEmAndamento = false;
 
         function formatarPreco(valor) {
             return Number(valor).toLocaleString("pt-BR", {
@@ -174,80 +175,126 @@ const API_BASE_URL = window.AUTHENTIC_API_URL;
             atualizarValoresTotais();
         }
 
-        async function iniciarPagamentoOnline(pedido, metodo, token) {
+        function mostrarFalhaInicializacaoPagamento(pedido, metodo, erro) {
+            const carregando = document.getElementById("payment-loading");
+            const resultado = document.getElementById("payment-result");
+            carregando.hidden = true;
+            resultado.hidden = false;
+            resultado.className = "payment-result error";
+
+            const mensagem = document.createElement("p");
+            mensagem.textContent = "Não foi possível carregar o pagamento seguro. Tente novamente em instantes.";
+            const tentarNovamente = document.createElement("button");
+            tentarNovamente.type = "button";
+            tentarNovamente.className = "copy-pix";
+            tentarNovamente.textContent = "TENTAR NOVAMENTE";
+            tentarNovamente.addEventListener("click", () => iniciarPagamentoOnline(pedido, metodo));
+            resultado.replaceChildren(mensagem, tentarNovamente);
+
+            const detalheSeguro = String(erro?.message || "Erro não detalhado pelo SDK")
+                .replace(/(?:APP_USR|TEST)-[\w-]+/gi, "[credencial omitida]");
+            console.error("Falha ao inicializar Payment Brick:", {
+                name: erro?.name || "Error",
+                message: detalheSeguro
+            });
+        }
+
+        async function iniciarPagamentoOnline(pedido, metodo) {
             const etapa = document.getElementById("payment-stage");
             const carregando = document.getElementById("payment-loading");
             const resultado = document.getElementById("payment-result");
+            const container = document.getElementById("paymentBrick_container");
+
+            if (inicializacaoPagamentoEmAndamento) return;
+            inicializacaoPagamentoEmAndamento = true;
             etapa.hidden = false;
             resultado.hidden = true;
             carregando.hidden = false;
             etapa.scrollIntoView({ behavior: "smooth", block: "start" });
 
-            const configResposta = await apiFetch(`${API_BASE_URL}/api/config/payment`, { cache: "no-store" });
-            const config = await configResposta.json();
-            if (!configResposta.ok) throw new Error(config.erro || "Pagamento online não configurado.");
-            if (!window.MercadoPago) throw new Error("O componente seguro do Mercado Pago não foi carregado.");
+            try {
+                if (!container) throw new Error("Container do Payment Brick não encontrado.");
+                const valor = Number(pedido.valor_total);
+                if (!Number.isFinite(valor) || valor <= 0) throw new Error("Valor do pedido inválido para pagamento.");
 
-            const mp = new window.MercadoPago(config.public_key, { locale: "pt-BR" });
-            const builder = mp.bricks();
-            const customization = metodo === "pix"
-                ? { paymentMethods: { bankTransfer: ["pix"] } }
-                : { paymentMethods: { creditCard: "all" }, visual: { style: { theme: "default" } } };
-            const settings = {
-                initialization: { amount: Number(pedido.valor_total) },
-                customization,
-                callbacks: {
-                    onReady: () => { carregando.hidden = true; },
-                    onSubmit: ({ selectedPaymentMethod, formData }) => new Promise(async (resolve, reject) => {
-                        resultado.hidden = false;
-                        resultado.className = "payment-result";
-                        resultado.textContent = "Processando pagamento com segurança...";
-                        const chavePagamento = sessionStorage.getItem(`paymentIdempotencyKey:${pedido.id}`) || crypto.randomUUID();
-                        sessionStorage.setItem(`paymentIdempotencyKey:${pedido.id}`, chavePagamento);
-                        try {
-                            const resposta = await apiFetch(`${API_BASE_URL}/pedidos/${pedido.id}/pagamento`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json", "Idempotency-Key": chavePagamento },
-                                body: JSON.stringify({ ...formData, selected_payment_method: selectedPaymentMethod })
-                            });
-                            const pagamento = await resposta.json();
-                            if (!resposta.ok && resposta.status !== 402) throw new Error(pagamento.erro || "Pagamento não processado.");
-                            resultado.replaceChildren();
-                            if (pagamento.status === "recusado") {
-                                resultado.className = "payment-result error";
-                                resultado.textContent = "Pagamento recusado. Confira os dados ou utilize outra forma de pagamento.";
-                                resolve();
-                                return;
-                            }
-                            resultado.className = "payment-result success";
-                            const mensagem = document.createElement("p");
-                            mensagem.textContent = pagamento.status === "pago" ? "Pagamento aprovado." : "Aguardando confirmação do pagamento.";
-                            resultado.appendChild(mensagem);
-                            if (pagamento.metodo === "pix" && pagamento.pix) {
-                                if (pagamento.pix.qr_code_base64) {
-                                    const imagem = document.createElement("img"); imagem.className = "pix-qr"; imagem.alt = "QR Code Pix";
-                                    imagem.src = `data:image/png;base64,${pagamento.pix.qr_code_base64}`; resultado.appendChild(imagem);
-                                }
-                                if (pagamento.pix.qr_code) {
-                                    const codigo = document.createElement("textarea"); codigo.className = "pix-code"; codigo.readOnly = true; codigo.value = pagamento.pix.qr_code;
-                                    const copiar = document.createElement("button"); copiar.type = "button"; copiar.className = "copy-pix"; copiar.textContent = "COPIAR CÓDIGO PIX";
-                                    copiar.addEventListener("click", async () => { await navigator.clipboard.writeText(codigo.value); copiar.textContent = "CÓDIGO COPIADO"; });
-                                    resultado.append(codigo, copiar);
-                                }
-                            }
-                            localStorage.removeItem("carrinho");
-                            sessionStorage.removeItem("checkoutIdempotencyKey");
-                            resolve();
-                        } catch (erro) {
-                            resultado.className = "payment-result error";
-                            resultado.textContent = erro.message;
-                            reject(erro);
-                        }
-                    }),
-                    onError: erro => { carregando.hidden = true; resultado.hidden = false; resultado.className = "payment-result error"; resultado.textContent = "Não foi possível carregar o pagamento seguro."; console.error(erro); }
+                const configResposta = await apiFetch(`${API_BASE_URL}/api/config/payment`, { cache: "no-store" });
+                const config = await configResposta.json();
+                if (!configResposta.ok) throw new Error(config.erro || "Pagamento online não configurado.");
+                const publicKey = typeof config.public_key === "string" ? config.public_key.trim() : "";
+                if (!publicKey) throw new Error("Public Key do Mercado Pago ausente.");
+                if (!window.MercadoPago) throw new Error("O componente seguro do Mercado Pago não foi carregado.");
+
+                if (window.paymentBrickController) {
+                    await window.paymentBrickController.unmount();
+                    window.paymentBrickController = null;
                 }
-            };
-            window.paymentBrickController = await builder.create("payment", "paymentBrick_container", settings);
+                container.replaceChildren();
+
+                const mp = new window.MercadoPago(publicKey, { locale: "pt-BR" });
+                const builder = mp.bricks();
+                const customization = metodo === "pix"
+                    ? { paymentMethods: { bankTransfer: ["pix"] } }
+                    : { paymentMethods: { creditCard: "all" }, visual: { style: { theme: "default" } } };
+                const settings = {
+                    initialization: { amount: valor },
+                    customization,
+                    callbacks: {
+                        onReady: () => { carregando.hidden = true; },
+                        onSubmit: ({ selectedPaymentMethod, formData }) => new Promise(async (resolve, reject) => {
+                            resultado.hidden = false;
+                            resultado.className = "payment-result";
+                            resultado.textContent = "Processando pagamento com segurança...";
+                            const chavePagamento = sessionStorage.getItem(`paymentIdempotencyKey:${pedido.id}`) || crypto.randomUUID();
+                            sessionStorage.setItem(`paymentIdempotencyKey:${pedido.id}`, chavePagamento);
+                            try {
+                                const resposta = await apiFetch(`${API_BASE_URL}/pedidos/${pedido.id}/pagamento`, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json", "Idempotency-Key": chavePagamento },
+                                    body: JSON.stringify({ ...formData, selected_payment_method: selectedPaymentMethod })
+                                });
+                                const pagamento = await resposta.json();
+                                if (!resposta.ok && resposta.status !== 402) throw new Error(pagamento.erro || "Pagamento não processado.");
+                                resultado.replaceChildren();
+                                if (pagamento.status === "recusado") {
+                                    resultado.className = "payment-result error";
+                                    resultado.textContent = "Pagamento recusado. Confira os dados ou utilize outra forma de pagamento.";
+                                    resolve();
+                                    return;
+                                }
+                                resultado.className = "payment-result success";
+                                const mensagem = document.createElement("p");
+                                mensagem.textContent = pagamento.status === "pago" ? "Pagamento aprovado." : "Aguardando confirmação do pagamento.";
+                                resultado.appendChild(mensagem);
+                                if (pagamento.metodo === "pix" && pagamento.pix) {
+                                    if (pagamento.pix.qr_code_base64) {
+                                        const imagem = document.createElement("img"); imagem.className = "pix-qr"; imagem.alt = "QR Code Pix";
+                                        imagem.src = `data:image/png;base64,${pagamento.pix.qr_code_base64}`; resultado.appendChild(imagem);
+                                    }
+                                    if (pagamento.pix.qr_code) {
+                                        const codigo = document.createElement("textarea"); codigo.className = "pix-code"; codigo.readOnly = true; codigo.value = pagamento.pix.qr_code;
+                                        const copiar = document.createElement("button"); copiar.type = "button"; copiar.className = "copy-pix"; copiar.textContent = "COPIAR CÓDIGO PIX";
+                                        copiar.addEventListener("click", async () => { await navigator.clipboard.writeText(codigo.value); copiar.textContent = "CÓDIGO COPIADO"; });
+                                        resultado.append(codigo, copiar);
+                                    }
+                                }
+                                localStorage.removeItem("carrinho");
+                                sessionStorage.removeItem("checkoutIdempotencyKey");
+                                resolve();
+                            } catch (erro) {
+                                resultado.className = "payment-result error";
+                                resultado.textContent = erro.message;
+                                reject(erro);
+                            }
+                        }),
+                        onError: erro => mostrarFalhaInicializacaoPagamento(pedido, metodo, erro)
+                    }
+                };
+                window.paymentBrickController = await builder.create("payment", "paymentBrick_container", settings);
+            } catch (erro) {
+                mostrarFalhaInicializacaoPagamento(pedido, metodo, erro);
+            } finally {
+                inicializacaoPagamentoEmAndamento = false;
+            }
         }
 
         // ==========================================
@@ -360,7 +407,7 @@ const API_BASE_URL = window.AUTHENTIC_API_URL;
                 if (["pix", "cartao"].includes(pagamento)) {
                     botao.hidden = true;
                     document.querySelectorAll('input[name="pagamento"],input[name="recebimento"]').forEach(input => input.disabled = true);
-                    await iniciarPagamentoOnline(dados.pedido, pagamento, token);
+                    await iniciarPagamentoOnline(dados.pedido, pagamento);
                     return;
                 }
                 localStorage.removeItem("carrinho");

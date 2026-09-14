@@ -126,7 +126,7 @@ function renderizarEstoque(lista) {
                 <div class="stock-product">
                     <div class="stock-product-image">
                         ${item.imagem
-                            ? `<img src="${API_URL}/images/produtos/${item.imagem}" alt="${item.produto}">`
+                            ? `<img src="${window.AUTHENTIC_PRODUCT_IMAGE_URL(item.imagem)}" alt="${item.produto}">`
                             : "IMG"}
                     </div>
                     <div class="stock-product-info">

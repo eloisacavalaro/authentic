@@ -2,7 +2,7 @@ const API_URL = window.AUTHENTIC_API_URL;
 const token = window.AUTHENTIC_SESSION;
 
 if (!token) {
-    window.location.href = "login.html";
+    window.location.href = "../login.html";
 }
 
 const modalCupom = document.getElementById("modalCupom");

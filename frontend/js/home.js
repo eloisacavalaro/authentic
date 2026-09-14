@@ -25,8 +25,13 @@ function criarProduto(produto) {
   imagemContainer.appendChild(heartBtn);
   if (produto.imagem) {
     const imagem = document.createElement("img");
-    imagem.src = `${API_BASE_URL}/images/produtos/${encodeURIComponent(produto.imagem)}`;
+    imagem.src = window.AUTHENTIC_PRODUCT_IMAGE_URL(produto.imagem);
     imagem.alt = String(produto.nome || "Produto");
+    imagem.addEventListener("error", () => {
+      const placeholder = document.createElement("span");
+      placeholder.textContent = "SEM FOTO";
+      imagemContainer.replaceChildren(heartBtn, placeholder);
+    }, { once: true });
     imagemContainer.appendChild(imagem);
   } else {
     const placeholder = document.createElement("span");
@@ -77,7 +82,7 @@ function salvarFavorito(id, status) {
 // =========================================
 async function carregarProdutos() {
   try {
-    const resposta = await apiFetch(`${API_BASE_URL}/produtos`);
+    const resposta = await apiFetch(`${API_BASE_URL}/produtos`, { cache: "no-store" });
 
     if (!resposta.ok) {
       throw new Error("Erro ao carregar produtos.");
