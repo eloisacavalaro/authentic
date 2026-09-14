@@ -1,4 +1,4 @@
-const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhost:3000" : "";
+const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhost:3000" :  "https://authentic-api-h42a.onrender.com ";
 
         let cupomAtivo = null;
         let descontoCalculado = 0;

@@ -4,7 +4,7 @@ const newArrivals = document.getElementById("new-arrivals");
 // Configuração de URL base (evita falhas ao rodar em produção)
 const API_BASE_URL = window.location.hostname === "localhost" 
   ? "http://localhost:3000" 
-  : "";
+  : "https://authentic-api-h42a.onrender.com";
 
 // =========================================
 // CRIAR CARD DO PRODUTO
