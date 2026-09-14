@@ -2,9 +2,7 @@ const homeProducts = document.getElementById("home-products");
 const newArrivals = document.getElementById("new-arrivals");
 
 // Configuração de URL base (evita falhas ao rodar em produção)
-const API_BASE_URL = window.location.hostname === "localhost" 
-  ? "http://localhost:3000" 
-  : "https://authentic-api-h42a.onrender.com";
+const API_BASE_URL = window.AUTHENTIC_API_URL;
 
 // =========================================
 // CRIAR CARD DO PRODUTO
@@ -16,36 +14,33 @@ function criarProduto(produto) {
   card.style.textDecoration = "none";
   card.style.color = "inherit";
 
-  card.innerHTML = `
-    <div class="product-image">
-      <button type="button" class="heart" aria-label="Adicionar aos favoritos" data-id="${produto.id}">
-        ♡
-      </button>
-
-      ${
-        produto.imagem
-          ? `<img src="${API_BASE_URL}/images/produtos/${produto.imagem}" alt="${produto.nome}">`
-          : `<span>IMAGEM</span>`
-      }
-    </div>
-
-    <div class="product-info">
-      <p class="product-category">
-        ${produto.categoria || "Produto"}
-      </p>
-
-      <h3>
-        ${produto.nome}
-      </h3>
-
-      <p>
-        R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}
-      </p>
-    </div>
-  `;
+  const imagemContainer = document.createElement("div");
+  imagemContainer.className = "product-image";
+  const heartBtn = document.createElement("button");
+  heartBtn.type = "button";
+  heartBtn.className = "heart";
+  heartBtn.setAttribute("aria-label", "Adicionar aos favoritos");
+  heartBtn.dataset.id = String(produto.id);
+  heartBtn.textContent = "♡";
+  imagemContainer.appendChild(heartBtn);
+  if (produto.imagem) {
+    const imagem = document.createElement("img");
+    imagem.src = `${API_BASE_URL}/images/produtos/${encodeURIComponent(produto.imagem)}`;
+    imagem.alt = String(produto.nome || "Produto");
+    imagemContainer.appendChild(imagem);
+  } else {
+    const placeholder = document.createElement("span");
+    placeholder.textContent = "IMAGEM";
+    imagemContainer.appendChild(placeholder);
+  }
+  const info = document.createElement("div"); info.className = "product-info";
+  const categoria = document.createElement("p"); categoria.className = "product-category"; categoria.textContent = produto.categoria || "Produto";
+  const nome = document.createElement("h3"); nome.textContent = produto.nome;
+  const preco = document.createElement("p"); preco.textContent = `R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}`;
+  info.append(categoria, nome, preco);
+  card.append(imagemContainer, info);
 
   // Intercepta o clique para não navegar para a página do produto
-  const heartBtn = card.querySelector(".heart");
   heartBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -82,7 +77,7 @@ function salvarFavorito(id, status) {
 // =========================================
 async function carregarProdutos() {
   try {
-    const resposta = await fetch(`${API_BASE_URL}/produtos`);
+    const resposta = await apiFetch(`${API_BASE_URL}/produtos`);
 
     if (!resposta.ok) {
       throw new Error("Erro ao carregar produtos.");
@@ -92,7 +87,7 @@ async function carregarProdutos() {
 
     // Mais vendidos: primeiros 4 itens
     if (homeProducts) {
-      homeProducts.innerHTML = "";
+      homeProducts.replaceChildren();
       produtos.slice(0, 4).forEach((produto) => {
         homeProducts.appendChild(criarProduto(produto));
       });
@@ -100,7 +95,7 @@ async function carregarProdutos() {
 
     // New Arrivals: próximos 4 itens (ou produtos recentes)
     if (newArrivals) {
-      newArrivals.innerHTML = "";
+      newArrivals.replaceChildren();
       const novidades = produtos.length > 4 ? produtos.slice(4, 8) : produtos.slice(0, 4);
       novidades.forEach((produto) => {
         newArrivals.appendChild(criarProduto(produto));
@@ -109,9 +104,11 @@ async function carregarProdutos() {
   } catch (erro) {
     console.error(erro);
 
-    const mensagemErro = `<p class="error-state">Não foi possível carregar os produtos no momento.</p>`;
-    if (homeProducts) homeProducts.innerHTML = mensagemErro;
-    if (newArrivals) newArrivals.innerHTML = mensagemErro;
+    [homeProducts, newArrivals].filter(Boolean).forEach(container => {
+      const mensagem = document.createElement("p"); mensagem.className = "error-state";
+      mensagem.textContent = "Não foi possível carregar os produtos no momento.";
+      container.replaceChildren(mensagem);
+    });
   }
 }
 
@@ -129,12 +126,12 @@ document.addEventListener("DOMContentLoaded", () => {
     menuToggle.addEventListener("click", () => {
       const isOpen = mainNav.classList.toggle("open");
       menuToggle.setAttribute("aria-expanded", isOpen);
-      menuToggle.innerHTML = isOpen ? "✕" : "☰";
+      menuToggle.textContent = isOpen ? "✕" : "☰";
     });
     mainNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
       mainNav.classList.remove("open");
       menuToggle.setAttribute("aria-expanded", "false");
-      menuToggle.innerHTML = "&#9776;";
+      menuToggle.textContent = "☰";
     }));
 
     // Fecha ao clicar fora
@@ -142,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
         mainNav.classList.remove("open");
         menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.innerHTML = "☰";
+        menuToggle.textContent = "☰";
       }
     });
   }

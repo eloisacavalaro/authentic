@@ -2,7 +2,7 @@
 // CONFIGURAÇÃO & SELETORES
 // =========================================================
 
-const API_URL = window.location.hostname === "localhost" ? "http://localhost:3000" : "";
+const API_URL = window.AUTHENTIC_API_URL;
 const formulario = document.getElementById("register-form");
 const telefoneInput = document.getElementById("telefone");
 const submitButton = formulario.querySelector(".auth-button");
@@ -85,7 +85,7 @@ formulario.addEventListener("submit", async (event) => {
     submitButton.textContent = "CRIANDO CONTA...";
 
     try {
-        const resposta = await fetch(`${API_URL}/usuarios`, {
+        const resposta = await apiFetch(`${API_URL}/usuarios`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -1,6 +1,6 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 
-const token = localStorage.getItem("token");
+const token = window.AUTHENTIC_SESSION;
 const usuarioSalvo = localStorage.getItem("usuario");
 
 // =========================================================
@@ -100,11 +100,10 @@ if (btnAlterarSenha) {
         }
 
         try {
-            const resposta = await fetch(`${API_URL}/alterar-senha`, {
+            const resposta = await apiFetch(`${API_URL}/alterar-senha`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     senhaAtual: senhaAtualValor,
@@ -231,11 +230,11 @@ function carregarConfiguracaoEstoque() {
 // SAIR DA CONTA
 // =========================================================
 if (btnSair) {
-    btnSair.addEventListener("click", () => {
+    btnSair.addEventListener("click", async () => {
         const confirmar = confirm("Deseja realmente sair da sua conta?");
         if (!confirmar) return;
 
-        localStorage.removeItem("token");
+        try { await apiFetch(`${API_URL}/logout`, { method: "POST" }); } catch (_) {}
         localStorage.removeItem("usuario");
         window.location.href = "../login.html";
     });

@@ -2,8 +2,9 @@
 // CARRINHO & ESTADO GLOBAL — AUTHENTIC
 // =========================================================
 
-const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhost:3000"  : "https://authentic-api-h42a.onrender.com";
+const API_BASE_URL = window.AUTHENTIC_API_URL;
 let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+const escaparHtmlCarrinho = valor => String(valor ?? "").replace(/[&<>"']/g, caractere => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[caractere]);
 
 function salvarCarrinho() {
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
@@ -102,7 +103,7 @@ function mostrarCarrinho() {
     if (!container) return;
 
     if (carrinho.length === 0) {
-        container.innerHTML = `
+        container.safeHTML = `
             <div style="text-align: center; padding: 50px 0;">
                 <h2 style="font-family:'Playfair Display', serif; font-size: 22px; margin-bottom: 8px;">Seu carrinho está vazio</h2>
                 <p style="color: #777; margin-bottom: 25px; font-size: 13px;">Explore nossa coleção para adicionar novos itens.</p>
@@ -130,24 +131,24 @@ function mostrarCarrinho() {
             <article class="cart-item">
                 <div class="item-image">
                     ${imagemSrc
-                        ? `<img src="${imagemSrc}" alt="${produto.nome}" onerror="this.onerror=null;this.parentElement.innerHTML='<span style=\\'color:#999;font-size:10px;\\'>SEM FOTO</span>';">`
+                        ? `<img src="${escaparHtmlCarrinho(imagemSrc)}" alt="${escaparHtmlCarrinho(produto.nome)}">`
                         : `<span style="color:#999; font-size:10px;">SEM FOTO</span>`
                     }
                 </div>
 
                 <div class="item-info">
-                    <span class="item-category">${produto.categoria || "AUTHENTIC"}</span>
-                    <h2>${produto.nome}</h2>
-                    <p>Cor: ${produto.cor || "-"}</p>
-                    <p>Tamanho: ${produto.tamanho || "-"}</p>
+                    <span class="item-category">${escaparHtmlCarrinho(produto.categoria || "AUTHENTIC")}</span>
+                    <h2>${escaparHtmlCarrinho(produto.nome)}</h2>
+                    <p>Cor: ${escaparHtmlCarrinho(produto.cor || "-")}</p>
+                    <p>Tamanho: ${escaparHtmlCarrinho(produto.tamanho || "-")}</p>
 
                     <div class="item-actions">
                         <div class="quantity">
-                            <button type="button" onclick="alterarQuantidade(${index}, ${produto.quantidade - 1})" aria-label="Diminuir">−</button>
+                            <button type="button" data-cart-action="decrease" data-index="${index}" aria-label="Diminuir">−</button>
                             <span>${produto.quantidade}</span>
-                            <button type="button" onclick="alterarQuantidade(${index}, ${produto.quantidade + 1})" aria-label="Aumentar">+</button>
+                            <button type="button" data-cart-action="increase" data-index="${index}" aria-label="Aumentar">+</button>
                         </div>
-                        <button type="button" class="remove" onclick="removerProduto(${index})">Remover</button>
+                        <button type="button" class="remove" data-cart-action="remove" data-index="${index}">Remover</button>
                     </div>
                 </div>
 
@@ -162,7 +163,13 @@ function mostrarCarrinho() {
         </a>
     `;
 
-    container.innerHTML = html;
+    container.safeHTML = html;
+    container.querySelectorAll("[data-cart-action]").forEach(botao => botao.addEventListener("click", () => {
+        const indice = Number(botao.dataset.index);
+        if (botao.dataset.cartAction === "remove") return removerProduto(indice);
+        const delta = botao.dataset.cartAction === "increase" ? 1 : -1;
+        alterarQuantidade(indice, Number(carrinho[indice].quantidade) + delta);
+    }));
     atualizarResumo();
 }
 

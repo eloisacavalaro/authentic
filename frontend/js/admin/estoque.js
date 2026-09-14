@@ -1,4 +1,4 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 let estoque = [];
 let produtos = [];
 
@@ -7,7 +7,7 @@ let produtos = [];
 ========================================= */
 async function carregarProdutos() {
     try {
-        const resposta = await fetch(`${API_URL}/produtos`);
+        const resposta = await apiFetch(`${API_URL}/produtos`);
         if (!resposta.ok) {
             throw new Error("Erro ao carregar produtos.");
         }
@@ -15,7 +15,7 @@ async function carregarProdutos() {
         produtos = await resposta.json();
         const select = document.getElementById("produto");
 
-        select.innerHTML = `<option value="">Selecione um produto</option>`;
+        select.safeHTML = `<option value="">Selecione um produto</option>`;
 
         produtos.forEach(produto => {
             const option = document.createElement("option");
@@ -34,7 +34,7 @@ async function carregarProdutos() {
 ========================================= */
 async function carregarEstoque() {
     try {
-        const resposta = await fetch(`${API_URL}/estoque`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+        const resposta = await apiFetch(`${API_URL}/estoque`, { headers: {} });
         if (!resposta.ok) {
             throw new Error("Erro ao carregar estoque.");
         }
@@ -45,7 +45,7 @@ async function carregarEstoque() {
     } catch (erro) {
         console.error("Erro ao carregar estoque:", erro);
 
-        document.getElementById("stock-table-body").innerHTML = `
+        document.getElementById("stock-table-body").safeHTML = `
             <tr>
                 <td colspan="6">
                     <div class="stock-empty">
@@ -83,10 +83,10 @@ function renderizarEstoque(lista) {
         item => Number(item.quantidade) === 0
     ).length;
 
-    tabela.innerHTML = "";
+    tabela.safeHTML = "";
 
     if (lista.length === 0) {
-        tabela.innerHTML = `
+        tabela.safeHTML = `
             <tr>
                 <td colspan="6">
                     <div class="stock-empty">
@@ -121,12 +121,12 @@ function renderizarEstoque(lista) {
 
         const linha = document.createElement("tr");
 
-        linha.innerHTML = `
+        linha.safeHTML = `
             <td>
                 <div class="stock-product">
                     <div class="stock-product-image">
-                        ${item.imagem 
-                            ? `<img src="${API_URL}/images/produtos/${item.imagem}" alt="${item.produto}">` 
+                        ${item.imagem
+                            ? `<img src="${API_URL}/images/produtos/${item.imagem}" alt="${item.produto}">`
                             : "IMG"}
                     </div>
                     <div class="stock-product-info">
@@ -148,7 +148,7 @@ function renderizarEstoque(lista) {
                 </span>
             </td>
             <td>
-                <button class="stock-action" onclick="alterarEstoque(${item.id}, ${quantidade})">
+                <button class="stock-action" data-edit-stock="${item.id}" data-quantity="${quantidade}">
                     Editar
                 </button>
             </td>
@@ -165,7 +165,7 @@ const campoBusca = document.getElementById("busca");
 if (campoBusca) {
     campoBusca.addEventListener("input", () => {
         const termo = campoBusca.value.trim().toLowerCase();
-        const filtrados = estoque.filter(item => 
+        const filtrados = estoque.filter(item =>
             (item.produto && item.produto.toLowerCase().includes(termo)) ||
             (item.cor && item.cor.toLowerCase().includes(termo)) ||
             (item.tamanho && item.tamanho.toLowerCase().includes(termo))
@@ -198,13 +198,12 @@ formularioEstoque.addEventListener("submit", async (event) => {
     }
 
     try {
-        const token = localStorage.getItem("token");
+        const token = window.AUTHENTIC_SESSION;
 
-        const resposta = await fetch(`${API_URL}/estoque`, {
+        const resposta = await apiFetch(`${API_URL}/estoque`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
                 produto_id: Number(produto_id),
@@ -275,13 +274,12 @@ async function alterarEstoque(id, quantidadeAtual) {
     }
 
     try {
-        const token = localStorage.getItem("token");
+        const token = window.AUTHENTIC_SESSION;
 
-        const resposta = await fetch(`${API_URL}/estoque/${id}`, {
+        const resposta = await apiFetch(`${API_URL}/estoque/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({ quantidade })
         });
@@ -307,4 +305,8 @@ async function alterarEstoque(id, quantidadeAtual) {
 document.addEventListener("DOMContentLoaded", () => {
     carregarEstoque();
     carregarProdutos();
+});
+document.addEventListener("click", evento => {
+    const botao = evento.target.closest("[data-edit-stock]");
+    if (botao) alterarEstoque(Number(botao.dataset.editStock), Number(botao.dataset.quantity));
 });

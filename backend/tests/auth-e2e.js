@@ -16,19 +16,27 @@ async function request(url, options={}) { const resposta=await fetch(base+url,op
   usuarioId=(await pool.query("INSERT INTO usuarios(nome,email,senha,tipo) VALUES($1,$2,$3,'cliente') RETURNING id",[marca,`${marca}@example.com`,hash])).rows[0].id;
   outroId=(await pool.query("INSERT INTO usuarios(nome,email,senha,tipo) VALUES($1,$2,$3,'cliente') RETURNING id",[`${marca}-outro`,`${marca}-outro@example.com`,hash])).rows[0].id;
   pedidoId=(await pool.query("INSERT INTO pedidos(usuario_id,forma_recebimento,forma_pagamento,status,valor_total) VALUES($1,'retirada','dinheiro','aguardando_pagamento',10) RETURNING id",[outroId])).rows[0].id;
-  servidor=spawn(process.execPath,["server.js"],{cwd:path.resolve(__dirname,".."),env:{...process.env,PORT:String(porta),NODE_ENV:"test"},stdio:"inherit"});
-  for(let i=0;i<30;i++){try{if((await fetch(`${base}/teste`)).ok)break;}catch(_){}await new Promise(r=>setTimeout(r,150));if(i===29)throw new Error("Servidor nao iniciou.");}
+  servidor=spawn(process.execPath,["server.js"],{cwd:path.resolve(__dirname,".."),env:{...process.env,PORT:String(porta),NODE_ENV:"production",ALLOW_INSECURE_HTTP:"true"},stdio:"inherit"});
+  for(let i=0;i<100;i++){try{if((await fetch(`${base}/teste`)).ok)break;}catch(_){}await new Promise(r=>setTimeout(r,150));if(i===99)throw new Error("Servidor nao iniciou.");}
   assert((await request("/api/auth/me")).resposta.status===401,"/auth/me aceitou usuario anonimo.");
   assert((await request("/api/auth/me",{headers:{Authorization:"Bearer token-invalido"}})).resposta.status===401,"Token invalido foi aceito.");
   const errado=await request("/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:`${marca}@example.com`,senha:"errada"})});
   assert(errado.resposta.status===401,"Senha incorreta foi aceita.");
   const login=await request("/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:`${marca}@example.com`,senha:"Senha-forte-123!"})});
-  assert(login.resposta.status===200 && login.body.token,"Login correto falhou.");
-  const me=await request("/api/auth/me",{headers:{Authorization:`Bearer ${login.body.token}`}});
+  const cookie=(login.resposta.headers.get("set-cookie")||"").split(";")[0];
+  const setCookie=login.resposta.headers.get("set-cookie")||"";
+  assert(login.resposta.status===200 && cookie.startsWith("authentic_session=") && /HttpOnly/i.test(setCookie) && /Secure/i.test(setCookie) && /SameSite=None/i.test(setCookie) && !Object.hasOwn(login.body,"token"),"Login nao criou cookie seguro ou expos JWT.");
+  const me=await request("/api/auth/me",{headers:{Cookie:cookie}});
   assert(me.resposta.status===200 && Number(me.body.usuario.id)===Number(usuarioId) && !Object.hasOwn(me.body.usuario,"senha"),"/auth/me retornou usuario incorreto ou dado sensivel.");
-  assert((await request(`/pedidos/${pedidoId}`,{headers:{Authorization:`Bearer ${login.body.token}`}})).resposta.status===403,"IDOR permitiu consultar pedido de outro usuario.");
+  assert((await request(`/pedidos/${pedidoId}`,{headers:{Cookie:cookie}})).resposta.status===403,"IDOR permitiu consultar pedido de outro usuario.");
+  const origemPermitida=process.env.CORS_ORIGIN.replace(/\/$/,"");
+  const corsOk=await request("/api/auth/me",{headers:{Cookie:cookie,Origin:origemPermitida}});
+  assert(corsOk.resposta.status===200 && corsOk.resposta.headers.get("access-control-allow-origin")===origemPermitida && corsOk.resposta.headers.get("access-control-allow-credentials")==="true","CORS com credenciais nao autorizou a origem correta.");
+  assert((await request("/api/auth/me",{headers:{Cookie:cookie,Origin:"https://malicioso.example"}})).resposta.status===400,"CORS aceitou origem indevida.");
+  const logout=await request("/logout",{method:"POST",headers:{Cookie:cookie}});
+  assert(logout.resposta.status===204 && (logout.resposta.headers.get("set-cookie")||"").includes("authentic_session="),"Logout nao limpou cookie.");
   await pool.query("UPDATE usuarios SET ativo=false WHERE id=$1",[usuarioId]);
-  assert((await request("/api/auth/me",{headers:{Authorization:`Bearer ${login.body.token}`}})).resposta.status===401,"Token de usuario desativado continuou valido.");
+  assert((await request("/api/auth/me",{headers:{Cookie:cookie}})).resposta.status===401,"Cookie de usuario desativado continuou valido.");
   const loginJs=fs.readFileSync(path.resolve(__dirname,"../../frontend/js/login-inline.js"),"utf8");
   const contaJs=fs.readFileSync(path.resolve(__dirname,"../../frontend/js/conta.js"),"utf8");
   assert(loginJs.includes("/api/auth/me") && contaJs.includes("/api/auth/me"),"Frontend nao valida sessao no backend.");

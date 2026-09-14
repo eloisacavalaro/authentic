@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: authentic-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /teste
+
+  - type: web
+    name: authentic
+    runtime: static
+    buildCommand: echo "AUTHENTIC static frontend"
+    staticPublishPath: frontend
+    headers:
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' https://sdk.mercadopago.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://authentic-api-h42a.onrender.com https://viacep.com.br https://api.mercadopago.com https://*.mercadopago.com; frame-src https://*.mercadopago.com; upgrade-insecure-requests"
+      - path: /*
+        name: Referrer-Policy
+        value: no-referrer
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Permissions-Policy
+        value: "camera=(), microphone=(), geolocation=()"
+    routes:
+      - type: redirect
+        source: /
+        destination: /pages/index.html

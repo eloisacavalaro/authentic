@@ -19,6 +19,17 @@ DB_SSL_REJECT_UNAUTHORIZED=true
 ALLOW_INSECURE_HTTP=false
 ```
 
+Nunca inclua barra final em `CORS_ORIGIN`. No deploy atual, use:
+
+```env
+APP_PUBLIC_URL=https://authentic-api-h42a.onrender.com
+CORS_ORIGIN=https://authentic-f8nd.onrender.com
+```
+
+O frontend centraliza a API em `frontend/js/api.js`. As chamadas autenticadas usam `credentials: "include"`; o JWT fica em cookie `HttpOnly`, `Secure` e `SameSite=None` em produção. Como frontend e API usam hosts Render distintos, o bloqueio de cookies de terceiros em alguns navegadores ainda pode impedir a sessão. Para produção real, prefira domínio próprio com frontend e API no mesmo site ou sirva o frontend pelo mesmo serviço do backend.
+
+O `render.yaml` inclui o redirecionamento da raiz estática para `/pages/index.html`. Se o serviço já existir fora de Blueprint, replique essa regra no painel Render.
+
 No painel Mercado Pago, crie uma aplicação Checkout Bricks, cadastre `https://www.seudominio.com.br/webhooks/mercado-pago`, selecione o evento **Pagamentos**, copie a assinatura secreta para `MERCADO_PAGO_WEBHOOK_SECRET` e faça a simulação de webhook. O Access Token é exclusivo do backend; somente a Public Key é entregue ao navegador.
 
 Antes do deploy, aplique:

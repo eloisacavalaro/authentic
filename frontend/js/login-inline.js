@@ -1,8 +1,4 @@
-const API_URL =
-                window.location.hostname === "localhost" ||
-                    window.location.hostname === "127.0.0.1"
-                    ? "http://localhost:3000"
-                    : "";
+const API_URL = window.AUTHENTIC_API_URL;
         const loginForm = document.getElementById("login-form");
         const btnEntrar = document.getElementById("btn-entrar");
         const feedback = document.getElementById("login-feedback");
@@ -14,16 +10,13 @@ const API_URL =
         }
 
         async function validarSessaoExistente() {
-            const tokenExistente = localStorage.getItem("token");
-            if (!tokenExistente) return;
             try {
-                const resposta = await fetch(`${API_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${tokenExistente}` }, cache: "no-store" });
+                const resposta = await apiFetch(`${API_URL}/api/auth/me`, { cache: "no-store" });
                 if (!resposta.ok) throw new Error("Sessao invalida");
                 const { usuario } = await resposta.json();
                 const destino = destinoSolicitado();
                 window.location.replace(destino || (usuario.tipo === "admin" ? "admin/dashboard.html" : "conta.html"));
             } catch (_) {
-                localStorage.removeItem("token");
                 localStorage.removeItem("usuario");
             }
         }
@@ -45,7 +38,7 @@ const API_URL =
             btnEntrar.textContent = "ENTRANDO...";
 
             try {
-                const resposta = await fetch(`${API_URL}/login`, {
+                const resposta = await apiFetch(`${API_URL}/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, senha })
@@ -60,8 +53,7 @@ const API_URL =
                     return;
                 }
 
-                localStorage.setItem("token", dados.token);
-                localStorage.removeItem("usuario");
+                localStorage.setItem("usuario", JSON.stringify(dados.usuario));
 
                 exibirAviso("Login realizado com sucesso! Redirecionando...", "sucesso");
 

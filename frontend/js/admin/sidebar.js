@@ -1,6 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
-    if (!localStorage.getItem("token") || !usuario || usuario.tipo !== "admin") {
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const resposta = await apiFetch("/api/auth/me", { cache: "no-store" });
+        const dados = await resposta.json().catch(() => ({}));
+        if (!resposta.ok || dados.usuario?.tipo !== "admin") throw new Error("Acesso negado");
+        localStorage.setItem("usuario", JSON.stringify(dados.usuario));
+    } catch (_) {
         window.location.replace("../login.html");
         return;
     }

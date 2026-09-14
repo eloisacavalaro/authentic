@@ -18,10 +18,12 @@ async function api(url, opcoes = {}) {
   return dados;
 }
 async function login(email, senha) {
-  return (await api("/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, senha }) })).token;
+  const resposta = await fetch(base + "/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, senha }) });
+  assert(resposta.ok, "Login de teste falhou.");
+  return (resposta.headers.get("set-cookie") || "").split(";")[0];
 }
-async function criarPedido(token) {
-  const dados = await api("/pedidos", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, "Idempotency-Key": crypto.randomUUID() }, body: JSON.stringify({
+async function criarPedido(cookie) {
+  const dados = await api("/pedidos", { method: "POST", headers: { "Content-Type": "application/json", Cookie: cookie, "Idempotency-Key": crypto.randomUUID() }, body: JSON.stringify({
     itens: [{ produto_id: produtoId, tamanho: "M", cor: "Preto", quantidade: 1 }], forma_recebimento: "retirada", forma_pagamento: "dinheiro"
   }) });
   pedidos.push(dados.pedido.id); return dados.pedido;
@@ -52,10 +54,10 @@ async function criarPedido(token) {
   const cadastro = await pool.query("INSERT INTO usuarios(nome,email,senha,tipo) VALUES($1,$2,$3,'cliente') RETURNING id", [marca, `${marca}-cliente@example.com`, hash]);
   clienteId = cadastro.rows[0].id;
   servidor = spawn(process.execPath, ["server.js"], { cwd: path.resolve(__dirname, ".."), env: { ...process.env, PORT: String(porta), NODE_ENV: "test", RESERVA_ESTOQUE_MINUTOS: "5" }, stdio: "inherit" });
-  for (let tentativa = 0; tentativa < 30; tentativa++) {
+  for (let tentativa = 0; tentativa < 100; tentativa++) {
     try { if ((await fetch(`${base}/teste`)).ok) break; } catch (_) {}
     await new Promise(resolve => setTimeout(resolve, 200));
-    if (tentativa === 29) throw new Error("Servidor de teste nao iniciou.");
+    if (tentativa === 99) throw new Error("Servidor de teste nao iniciou.");
   }
   const tokenAdmin = await login(`${marca}-admin@example.com`, senha);
   const tokenCliente = await login(`${marca}-cliente@example.com`, senha);
@@ -67,22 +69,22 @@ async function criarPedido(token) {
   form.append("nome", marca); form.append("preco", "99.90"); form.append("categoria", "camisas");
   form.append("tamanhos", JSON.stringify(["M"])); form.append("cores", JSON.stringify(["Preto"]));
   form.append("imagem", new Blob([Buffer.from("89504e470d0a1a0a", "hex")], { type: "image/png" }), "teste.png");
-  const produto = await api("/produtos", { method: "POST", headers: { Authorization: `Bearer ${tokenAdmin}` }, body: form });
+  const produto = await api("/produtos", { method: "POST", headers: { Cookie: tokenAdmin }, body: form });
   produtoId = produto.id; imagem = produto.imagem;
   const variacoes = await api(`/produtos/${produtoId}/estoque`);
   assert(variacoes.length === 1, "Cadastro nao criou a variacao.");
-  await api("/estoque", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tokenAdmin}` }, body: JSON.stringify({ produto_id: produtoId, tamanho: "M", cor: "Preto", quantidade: 3 }) });
+  await api("/estoque", { method: "POST", headers: { "Content-Type": "application/json", Cookie: tokenAdmin }, body: JSON.stringify({ produto_id: produtoId, tamanho: "M", cor: "Preto", quantidade: 3 }) });
 
   const primeiro = await criarPedido(tokenCliente);
   assert(primeiro.reserva_expira_em, "Pedido nao recebeu validade da reserva.");
-  await api(`/pedidos/${primeiro.id}/status`, { method: "PATCH", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tokenAdmin}` }, body: JSON.stringify({ status: "cancelado" }) });
+  await api(`/pedidos/${primeiro.id}/status`, { method: "PATCH", headers: { "Content-Type": "application/json", Cookie: tokenAdmin }, body: JSON.stringify({ status: "cancelado" }) });
   let saldo = Number((await pool.query("SELECT quantidade FROM estoque WHERE produto_id=$1", [produtoId])).rows[0].quantidade);
   assert(saldo === 3, "Cancelamento nao devolveu o estoque.");
 
   const segundo = await criarPedido(tokenCliente);
-  const pagamento = (await api(`/pedidos/${segundo.id}/pagamento`, { headers: { Authorization: `Bearer ${tokenAdmin}` } })).pagamento;
-  await api(`/pagamentos/${pagamento.id}/status`, { method: "PATCH", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tokenAdmin}` }, body: JSON.stringify({ status: "pago" }) });
-  await api(`/pedidos/${segundo.id}/status`, { method: "PATCH", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tokenAdmin}` }, body: JSON.stringify({ status: "cancelado" }) });
+  const pagamento = (await api(`/pedidos/${segundo.id}/pagamento`, { headers: { Cookie: tokenAdmin } })).pagamento;
+  await api(`/pagamentos/${pagamento.id}/status`, { method: "PATCH", headers: { "Content-Type": "application/json", Cookie: tokenAdmin }, body: JSON.stringify({ status: "pago" }) });
+  await api(`/pedidos/${segundo.id}/status`, { method: "PATCH", headers: { "Content-Type": "application/json", Cookie: tokenAdmin }, body: JSON.stringify({ status: "cancelado" }) });
   const statusPagamento = (await pool.query("SELECT status FROM pagamentos WHERE id=$1", [pagamento.id])).rows[0].status;
   assert(statusPagamento === "estorno_pendente", "Cancelamento registrou estorno sem confirmacao.");
 

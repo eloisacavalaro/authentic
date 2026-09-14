@@ -1,6 +1,6 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 
-const token = localStorage.getItem("token");
+const token = window.AUTHENTIC_SESSION;
 if (!token) {
     window.location.href = "login.html";
 }
@@ -45,14 +45,13 @@ async function carregarRelatorio() {
             url += `&data_inicial=${dataInicial.value}&data_final=${dataFinal.value}`;
         }
 
-        const resposta = await fetch(url, {
+        const resposta = await apiFetch(url, {
             headers: {
-                Authorization: `Bearer ${token}`
             }
         });
 
         if (resposta.status === 401 || resposta.status === 403) {
-            localStorage.removeItem("token");
+
             window.location.href = "login.html";
             return;
         }
@@ -98,11 +97,11 @@ function preencherPagamentos(dados) {
 function preencherProdutos(dados) {
     const tabela = document.getElementById("produtosMaisVendidos");
     if (!tabela) return;
-    
-    tabela.innerHTML = "";
+
+    tabela.safeHTML = "";
 
     if (!dados.produtos_mais_vendidos || dados.produtos_mais_vendidos.length === 0) {
-        tabela.innerHTML = `
+        tabela.safeHTML = `
             <tr>
                 <td colspan="4" class="table-loading">
                     Nenhum produto vendido no período selecionado.
@@ -114,7 +113,7 @@ function preencherProdutos(dados) {
 
     dados.produtos_mais_vendidos.forEach(p => {
         const linha = document.createElement("tr");
-        linha.innerHTML = `
+        linha.safeHTML = `
             <td><strong>${p.nome}</strong></td>
             <td>${p.categoria || "—"}</td>
             <td>${p.quantidade}</td>

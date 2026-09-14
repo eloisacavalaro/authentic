@@ -1,12 +1,12 @@
 const formulario = document.getElementById("product-form");
 const imagemInput = document.getElementById("imagem");
 const imageUploadBox = document.querySelector(".image-upload");
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 const produtoId = new URLSearchParams(location.search).get("id");
 
 if (produtoId) Promise.all([
-    fetch(`${API_URL}/produtos/${produtoId}`).then(r => r.ok ? r.json() : Promise.reject()),
-    fetch(`${API_URL}/produtos/${produtoId}/estoque`).then(r => r.ok ? r.json() : Promise.reject())
+    apiFetch(`${API_URL}/produtos/${produtoId}`).then(r => r.ok ? r.json() : Promise.reject()),
+    apiFetch(`${API_URL}/produtos/${produtoId}/estoque`).then(r => r.ok ? r.json() : Promise.reject())
 ]).then(([produto, variacoes]) => {
     document.getElementById("nome").value = produto.nome || "";
     document.getElementById("descricao").value = produto.descricao || "";
@@ -24,7 +24,7 @@ imagemInput.addEventListener("change", () => {
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            imageUploadBox.innerHTML = `
+            imageUploadBox.safeHTML = `
                 <img src="${e.target.result}" style="max-height: 180px; max-width: 100%; border-radius: 4px; object-fit: contain;">
                 <span style="margin-top: 8px; font-size: 10px; color: #666;">Clique para trocar a imagem</span>
             `;
@@ -62,12 +62,11 @@ formulario.addEventListener("submit", async (event) => {
     }
 
     try {
-        const token = localStorage.getItem("token");
+        const token = window.AUTHENTIC_SESSION;
 
-        const resposta = await fetch(produtoId ? `${API_URL}/produtos/${produtoId}` : `${API_URL}/produtos`, {
+        const resposta = await apiFetch(produtoId ? `${API_URL}/produtos/${produtoId}` : `${API_URL}/produtos`, {
             method: produtoId ? "PUT" : "POST",
             headers: {
-                Authorization: `Bearer ${token}`
             },
             body: formData
         });

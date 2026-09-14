@@ -3,16 +3,26 @@ const pool = require("./db");
 
 async function autenticar(req, res, next) {
     const autorizacao = req.headers.authorization;
+    const cookies = String(req.headers.cookie || "").split(";").reduce((acc, parte) => {
+        const indice = parte.indexOf("=");
+        if (indice > 0) {
+            const valor = parte.slice(indice + 1).trim();
+            try { acc[parte.slice(0, indice).trim()] = decodeURIComponent(valor); }
+            catch (_) { acc[parte.slice(0, indice).trim()] = valor; }
+        }
+        return acc;
+    }, {});
+    const tokenCookie = cookies.authentic_session;
 
-    if (!autorizacao) {
+    if (!autorizacao && !tokenCookie) {
         return res.status(401).json({
             erro: "Token não informado."
         });
     }
 
-    const partes = autorizacao.trim().split(/\s+/);
+    const partes = autorizacao ? autorizacao.trim().split(/\s+/) : [];
 
-    if (partes.length !== 2 || partes[0] !== "Bearer" || !partes[1]) {
+    if (!tokenCookie && (partes.length !== 2 || partes[0] !== "Bearer" || !partes[1])) {
         return res.status(401).json({
             erro: "Formato de token inválido."
         });
@@ -20,7 +30,7 @@ async function autenticar(req, res, next) {
 
     try {
         const usuario = jwt.verify(
-            partes[1],
+            tokenCookie || partes[1],
             process.env.JWT_SECRET,
             {
                 algorithms: ["HS256"]

@@ -8,8 +8,8 @@ const base = `http://127.0.0.1:${porta}`;
 const marca = `dashboard-e2e-${Date.now()}`;
 let servidor, adminId, clienteId, produtoId, pedidoAtual, pedidoAntigo, despesaAtual, despesaAntiga;
 const assert = (ok, msg) => { if (!ok) throw new Error(msg); };
-async function api(caminho, token) {
-  const resposta = await fetch(base + caminho, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+async function api(caminho, cookie) {
+  const resposta = await fetch(base + caminho, { headers: cookie ? { Cookie: cookie } : {} });
   const corpo = await resposta.json().catch(() => ({}));
   return { resposta, corpo };
 }
@@ -20,9 +20,9 @@ async function api(caminho, token) {
   clienteId = (await pool.query("INSERT INTO usuarios(nome,email,senha,tipo) VALUES($1,$2,$3,'cliente') RETURNING id", [marca,`${marca}-cliente@example.com`,hash])).rows[0].id;
   produtoId = (await pool.query("INSERT INTO produtos(nome,preco,categoria,ativo) VALUES($1,50,'teste',true) RETURNING id", [marca])).rows[0].id;
   servidor = spawn(process.execPath,["server.js"],{cwd:path.resolve(__dirname,".."),env:{...process.env,PORT:String(porta),NODE_ENV:"test"},stdio:"inherit"});
-  for (let i=0;i<30;i++) { try { if ((await fetch(`${base}/teste`)).ok) break; } catch (_) {} await new Promise(r=>setTimeout(r,150)); if(i===29) throw new Error("Servidor nao iniciou."); }
+  for (let i=0;i<100;i++) { try { if ((await fetch(`${base}/teste`)).ok) break; } catch (_) {} await new Promise(r=>setTimeout(r,150)); if(i===99) throw new Error("Servidor nao iniciou."); }
   const login = await fetch(`${base}/login`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:`${marca}-admin@example.com`,senha:"Teste-forte-123!"})});
-  const token = (await login.json()).token;
+  const token = (login.headers.get("set-cookie") || "").split(";")[0];
   const bases = {};
   for (const periodo of ["hoje","7","30","mes","ano","todos"]) bases[periodo] = (await api(`/dashboard?periodo=${periodo}`,token)).corpo;
 

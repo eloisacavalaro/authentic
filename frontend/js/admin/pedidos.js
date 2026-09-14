@@ -1,4 +1,4 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 
 const listaPedidos = document.getElementById("listaPedidos");
 const totalPedidos = document.getElementById("totalPedidos");
@@ -54,7 +54,7 @@ function formatarMoeda(valor) {
 }
 
 async function carregarPedidos() {
-const token = localStorage.getItem("token");
+const token = window.AUTHENTIC_SESSION;
 const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 
     if (!token) {
@@ -64,16 +64,15 @@ const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":
     }
 
     try {
-        const resposta = await fetch(`${API_URL}/pedidos`, {
+        const resposta = await apiFetch(`${API_URL}/pedidos`, {
             headers: {
-                Authorization: `Bearer ${token}`
             }
         });
 
         if (!resposta.ok) {
             if (resposta.status === 401) {
                 alert("Sessão expirada. Faça login novamente.");
-                localStorage.removeItem("token");
+
                 window.location.href = "login.html";
                 return;
             }
@@ -88,7 +87,7 @@ const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":
 
     } catch (erro) {
         console.error(erro);
-        listaPedidos.innerHTML = `
+        listaPedidos.safeHTML = `
             <tr>
                 <td colspan="8" class="table-loading" style="color: #b91c1c;">
                     Não foi possível conectar ao servidor.
@@ -132,13 +131,13 @@ function renderizarPedidos() {
     totalPedidos.textContent = pedidosFiltrados.length;
 
     if (pedidosFiltrados.length === 0) {
-        listaPedidos.innerHTML = "";
+        listaPedidos.safeHTML = "";
         emptyState.style.display = "block";
         return;
     }
 
     emptyState.style.display = "none";
-    listaPedidos.innerHTML = pedidosFiltrados.map(criarLinhaPedido).join("");
+    listaPedidos.safeHTML = pedidosFiltrados.map(criarLinhaPedido).join("");
 }
 
 function criarLinhaPedido(pedido) {
@@ -169,7 +168,6 @@ function criarLinhaPedido(pedido) {
                     class="status-select status-${status}"
                     data-id="${pedido.id}"
                     data-status-atual="${status}"
-                    onchange="alterarStatusPedido(this)"
                 >
                     <option value="aguardando_pagamento" ${status === "aguardando_pagamento" ? "selected" : ""}>Aguardando pagamento</option>
                     <option value="pendente" ${status === "pendente" ? "selected" : ""}>Pendente</option>
@@ -180,10 +178,10 @@ function criarLinhaPedido(pedido) {
                 </select>
             </td>
             <td>
-                <button class="view-order" onclick="verPedido(${pedido.id})">
+                <button class="view-order" data-view-order="${pedido.id}">
                     VER →
                 </button>
-                ${status === "aguardando_pagamento" ? `<button class="view-order" onclick="confirmarPagamento(${pedido.id})">CONFIRMAR PAGAMENTO</button>` : ""}
+                ${status === "aguardando_pagamento" ? `<button class="view-order" data-confirm-payment="${pedido.id}">CONFIRMAR PAGAMENTO</button>` : ""}
             </td>
         </tr>
     `;
@@ -192,11 +190,11 @@ function criarLinhaPedido(pedido) {
 async function confirmarPagamento(pedidoId) {
     if (!confirm(`Confirma que o pagamento do pedido #${pedidoId} foi realmente recebido?`)) return;
     try {
-        const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
-        const consulta = await fetch(`${API_URL}/pedidos/${pedidoId}/pagamento`, { headers });
+        const headers = {};
+        const consulta = await apiFetch(`${API_URL}/pedidos/${pedidoId}/pagamento`, { headers });
         const dadosConsulta = await consulta.json();
         if (!consulta.ok) throw new Error(dadosConsulta.erro || "Pagamento não encontrado.");
-        const resposta = await fetch(`${API_URL}/pagamentos/${dadosConsulta.pagamento.id}/status`, {
+        const resposta = await apiFetch(`${API_URL}/pagamentos/${dadosConsulta.pagamento.id}/status`, {
             method: "PATCH", headers: { ...headers, "Content-Type": "application/json" }, body: JSON.stringify({ status: "pago" })
         });
         const dados = await resposta.json();
@@ -236,7 +234,7 @@ async function alterarStatusPedido(select) {
         return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = window.AUTHENTIC_SESSION;
 
     if (!token) {
         alert("Sua sessão expirou. Faça login novamente.");
@@ -247,11 +245,10 @@ async function alterarStatusPedido(select) {
     try {
         select.disabled = true;
 
-        const resposta = await fetch(`${API_URL}/pedidos/${pedidoId}/status`, {
+        const resposta = await apiFetch(`${API_URL}/pedidos/${pedidoId}/status`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({ status: novoStatus })
         });
@@ -280,3 +277,12 @@ async function alterarStatusPedido(select) {
 }
 
 document.addEventListener("DOMContentLoaded", carregarPedidos);
+document.addEventListener("change", evento => {
+    if (evento.target.matches(".status-select")) alterarStatusPedido(evento.target);
+});
+document.addEventListener("click", evento => {
+    const ver = evento.target.closest("[data-view-order]");
+    const confirmar = evento.target.closest("[data-confirm-payment]");
+    if (ver) verPedido(Number(ver.dataset.viewOrder));
+    if (confirmar) confirmarPagamento(Number(confirmar.dataset.confirmPayment));
+});

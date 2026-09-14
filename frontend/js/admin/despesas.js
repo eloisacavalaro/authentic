@@ -1,4 +1,4 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 
 const modal = document.getElementById("modalDespesa");
 const btnNovaDespesa = document.getElementById("btnNovaDespesa");
@@ -38,7 +38,7 @@ function fecharModalDespesa() {
 // CARREGAR DESPESAS
 // =========================================================
 async function carregarDespesas() {
-    const token = localStorage.getItem("token");
+    const token = window.AUTHENTIC_SESSION;
 
     if (!token) {
         window.location.href = "../login.html";
@@ -46,15 +46,14 @@ async function carregarDespesas() {
     }
 
     try {
-        const resposta = await fetch(`${API_URL}/despesas`, {
+        const resposta = await apiFetch(`${API_URL}/despesas`, {
             headers: {
-                Authorization: `Bearer ${token}`
             }
         });
 
         if (!resposta.ok) {
             if (resposta.status === 401) {
-                localStorage.removeItem("token");
+
                 localStorage.removeItem("usuario");
                 window.location.href = "../login.html";
                 return;
@@ -70,7 +69,7 @@ async function carregarDespesas() {
 
     } catch (erro) {
         console.error("Erro ao carregar despesas:", erro);
-        listaDespesas.innerHTML = `
+        listaDespesas.safeHTML = `
             <tr>
                 <td colspan="5" class="table-loading" style="color: #b91c1c;">
                     Não foi possível conectar ao servidor.
@@ -115,14 +114,14 @@ function renderizarDespesas(despesas) {
     if (totalDespesasContador) totalDespesasContador.textContent = despesas.length;
 
     if (despesas.length === 0) {
-        listaDespesas.innerHTML = "";
+        listaDespesas.safeHTML = "";
         if (emptyState) emptyState.style.display = "block";
         return;
     }
 
     if (emptyState) emptyState.style.display = "none";
 
-    listaDespesas.innerHTML = despesas.map(despesa => {
+    listaDespesas.safeHTML = despesas.map(despesa => {
         return `
             <tr>
                 <td>
@@ -134,7 +133,7 @@ function renderizarDespesas(despesas) {
                     <strong>${formatarMoeda(despesa.valor)}</strong>
                 </td>
                 <td>
-                    <button class="delete-button" onclick="excluirDespesa(${despesa.id})">
+                    <button class="delete-button" data-delete-expense="${despesa.id}">
                         Excluir
                     </button>
                 </td>
@@ -150,7 +149,7 @@ if (formDespesa) {
     formDespesa.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const token = localStorage.getItem("token");
+        const token = window.AUTHENTIC_SESSION;
 
         const dados = {
             descricao: document.getElementById("descricao").value.trim(),
@@ -161,11 +160,10 @@ if (formDespesa) {
         };
 
         try {
-            const resposta = await fetch(`${API_URL}/despesas`, {
+            const resposta = await apiFetch(`${API_URL}/despesas`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(dados)
             });
@@ -195,13 +193,12 @@ async function excluirDespesa(id) {
     const confirmar = confirm("Deseja realmente excluir esta despesa?");
     if (!confirmar) return;
 
-    const token = localStorage.getItem("token");
+    const token = window.AUTHENTIC_SESSION;
 
     try {
-        const resposta = await fetch(`${API_URL}/despesas/${id}`, {
+        const resposta = await apiFetch(`${API_URL}/despesas/${id}`, {
             method: "DELETE",
             headers: {
-                Authorization: `Bearer ${token}`
             }
         });
 
@@ -252,3 +249,7 @@ function formatarData(data) {
 }
 
 document.addEventListener("DOMContentLoaded", carregarDespesas);
+document.addEventListener("click", evento => {
+    const botao = evento.target.closest("[data-delete-expense]");
+    if (botao) excluirDespesa(Number(botao.dataset.deleteExpense));
+});

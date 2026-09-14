@@ -1,4 +1,4 @@
-const API_URL = window.location.hostname === "localhost" ? "http://localhost:3000" : "";
+const API_URL = window.AUTHENTIC_API_URL;
         const parametros = new URLSearchParams(window.location.search);
         const buscaInicial = parametros.get("buscar");
         const categoriaInicial = parametros.get("categoria");
@@ -34,7 +34,7 @@ const API_URL = window.location.hostname === "localhost" ? "http://localhost:300
 
         async function carregarProdutos() {
             try {
-                const resposta = await fetch(`${API_URL}/produtos`);
+                const resposta = await apiFetch(`${API_URL}/produtos`);
                 if (!resposta.ok) throw new Error("Erro ao buscar catálogo.");
                 todosOsProdutos = await resposta.json();
                 aplicarFiltros();
@@ -45,16 +45,14 @@ const API_URL = window.location.hostname === "localhost" ? "http://localhost:300
         }
 
         function renderizarProdutos(produtos) {
-            productsGrid.innerHTML = "";
+            productsGrid.replaceChildren();
             productCount.textContent = `${produtos.length} ${produtos.length === 1 ? "produto" : "produtos"}`;
 
             if (produtos.length === 0) {
-                productsGrid.innerHTML = `
-                    <div style="grid-column: 1 / -1; padding: 60px 0; text-align: center;">
-                        <strong style="display:block; margin-bottom: 8px;">Nenhum produto encontrado</strong>
-                        <p style="color: #777; font-size: 13px;">Tente ajustar os filtros ou pesquisar por outro termo.</p>
-                    </div>
-                `;
+                const vazio = document.createElement("div"); vazio.style.cssText = "grid-column:1/-1;padding:60px 0;text-align:center";
+                const titulo = document.createElement("strong"); titulo.style.cssText = "display:block;margin-bottom:8px"; titulo.textContent = "Nenhum produto encontrado";
+                const dica = document.createElement("p"); dica.style.cssText = "color:#777;font-size:13px"; dica.textContent = "Tente ajustar os filtros ou pesquisar por outro termo.";
+                vazio.append(titulo, dica); productsGrid.appendChild(vazio);
                 return;
             }
 
@@ -69,19 +67,17 @@ const API_URL = window.location.hostname === "localhost" ? "http://localhost:300
                     ? (produto.imagem.startsWith("http") ? produto.imagem : `${API_URL}/images/produtos/${produto.imagem}`)
                     : null;
 
-                card.innerHTML = `
-                    <div class="product-image">
-                        ${imagemSrc
-                        ? `<img src="${imagemSrc}" alt="${produto.nome}" onerror="this.onerror=null;this.parentElement.innerHTML='<span style=\\'color:#999;font-size:11px;\\'>SEM FOTO</span>';">`
-                        : "<span>SEM FOTO</span>"
-                    }
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">${produto.categoria || "Coleção"}</span>
-                        <h2>${produto.nome}</h2>
-                        <p>R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}</p>
-                    </div>
-                `;
+                const imagemContainer = document.createElement("div"); imagemContainer.className = "product-image";
+                const semFoto = () => { const span = document.createElement("span"); span.textContent = "SEM FOTO"; span.style.cssText = "color:#999;font-size:11px"; imagemContainer.replaceChildren(span); };
+                if (imagemSrc) {
+                    const imagem = document.createElement("img"); imagem.src = imagemSrc; imagem.alt = String(produto.nome || "Produto");
+                    imagem.addEventListener("error", semFoto, { once: true }); imagemContainer.appendChild(imagem);
+                } else semFoto();
+                const info = document.createElement("div"); info.className = "product-info";
+                const categoria = document.createElement("span"); categoria.className = "product-category"; categoria.textContent = produto.categoria || "Coleção";
+                const nome = document.createElement("h2"); nome.textContent = produto.nome;
+                const preco = document.createElement("p"); preco.textContent = `R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}`;
+                info.append(categoria, nome, preco); card.append(imagemContainer, info);
                 productsGrid.appendChild(card);
             });
         }

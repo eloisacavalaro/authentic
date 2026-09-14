@@ -1,5 +1,5 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
-const token = localStorage.getItem("token");
+const API_URL = window.AUTHENTIC_API_URL;
+const token = window.AUTHENTIC_SESSION;
 
 if (!token) {
     window.location.href = "login.html";
@@ -11,8 +11,8 @@ const formCupom = document.getElementById("formCupom");
 
 async function carregarCupons() {
     try {
-        const res = await fetch(`${API_URL}/cupons`, {
-            headers: { Authorization: `Bearer ${token}` }
+        const res = await apiFetch(`${API_URL}/cupons`, {
+            headers: {}
         });
 
         if (!res.ok) {
@@ -22,11 +22,11 @@ async function carregarCupons() {
         const cupons = await res.json();
 
         if (!cupons || cupons.length === 0) {
-            listaCupons.innerHTML = `<tr><td colspan="6" class="table-loading">Nenhum cupom ativo no momento.</td></tr>`;
+            listaCupons.safeHTML = `<tr><td colspan="6" class="table-loading">Nenhum cupom ativo no momento.</td></tr>`;
             return;
         }
 
-        listaCupons.innerHTML = cupons.map(c => `
+        listaCupons.safeHTML = cupons.map(c => `
             <tr>
                 <td><strong style="background:#f4f4f4; padding:4px 8px; border-radius:4px; font-family: monospace;">${c.codigo}</strong></td>
                 <td>${c.tipo === 'porcentagem' ? `${Number(c.valor)}%` : `R$ ${Number(c.valor).toFixed(2).replace('.', ',')}`}</td>
@@ -38,7 +38,7 @@ async function carregarCupons() {
         `).join("");
     } catch (err) {
         console.error(err);
-        listaCupons.innerHTML = `<tr><td colspan="6" class="table-loading" style="color:#b91c1c;">Erro ao carregar os cupons.</td></tr>`;
+        listaCupons.safeHTML = `<tr><td colspan="6" class="table-loading" style="color:#b91c1c;">Erro ao carregar os cupons.</td></tr>`;
     }
 }
 
@@ -56,11 +56,10 @@ if (formCupom) {
         };
 
         try {
-            const res = await fetch(`${API_URL}/cupons`, {
+            const res = await apiFetch(`${API_URL}/cupons`, {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json", 
-                    Authorization: `Bearer ${token}` 
+                headers: {
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload)
             });

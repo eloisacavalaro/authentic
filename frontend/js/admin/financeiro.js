@@ -1,4 +1,4 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 
 const faturamento = document.getElementById("faturamento");
 const totalVendas = document.getElementById("totalVendas");
@@ -72,7 +72,7 @@ function formatarData(data) {
 // CARREGAR FINANCEIRO
 // =========================================================
 async function carregarFinanceiro(periodo = "30") {
-    const token = localStorage.getItem("token");
+    const token = window.AUTHENTIC_SESSION;
 
     if (!token) {
         alert("Você precisa estar logado como administrador.");
@@ -81,20 +81,19 @@ async function carregarFinanceiro(periodo = "30") {
     }
 
     try {
-        const url = periodo 
-            ? `${API_URL}/financeiro?periodo=${encodeURIComponent(periodo)}` 
+        const url = periodo
+            ? `${API_URL}/financeiro?periodo=${encodeURIComponent(periodo)}`
             : `${API_URL}/financeiro`;
 
-        const resposta = await fetch(url, {
+        const resposta = await apiFetch(url, {
             headers: {
-                Authorization: `Bearer ${token}`
             }
         });
 
         if (!resposta.ok) {
             if (resposta.status === 401) {
                 alert("Sessão expirada. Faça login novamente.");
-                localStorage.removeItem("token");
+
                 localStorage.removeItem("usuario");
                 window.location.href = "../login.html";
                 return;
@@ -150,7 +149,7 @@ async function carregarFinanceiro(periodo = "30") {
     } catch (erro) {
         console.error("Erro ao carregar financeiro:", erro);
 
-        listaMovimentacoes.innerHTML = `
+        listaMovimentacoes.safeHTML = `
             <tr class="empty-row">
                 <td colspan="6">
                     <div class="table-empty">
@@ -169,7 +168,7 @@ async function carregarFinanceiro(periodo = "30") {
 // =========================================================
 function renderizarMovimentacoes(movimentacoes) {
     if (movimentacoes.length === 0) {
-        listaMovimentacoes.innerHTML = `
+        listaMovimentacoes.safeHTML = `
             <tr class="empty-row">
                 <td colspan="6">
                     <div class="table-empty">
@@ -183,7 +182,7 @@ function renderizarMovimentacoes(movimentacoes) {
         return;
     }
 
-    listaMovimentacoes.innerHTML = movimentacoes.map(movimentacao => {
+    listaMovimentacoes.safeHTML = movimentacoes.map(movimentacao => {
         return `
             <tr>
                 <td>#${movimentacao.id}</td>

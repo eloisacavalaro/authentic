@@ -1,5 +1,5 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
-const token = localStorage.getItem("token");
+const API_URL = window.AUTHENTIC_API_URL;
+const token = window.AUTHENTIC_SESSION;
 
 if (!token) {
     window.location.href = "login.html";
@@ -19,8 +19,8 @@ function formatarMoeda(val) {
 async function carregarDados() {
     try {
         const [resFornecedores, resProdutos] = await Promise.all([
-            fetch(`${API_URL}/fornecedores`, { headers: { Authorization: `Bearer ${token}` } }),
-            fetch(`${API_URL}/produtos`)
+            apiFetch(`${API_URL}/fornecedores`, { headers: {} }),
+            apiFetch(`${API_URL}/produtos`)
         ]);
 
         if (resFornecedores.ok) fornecedores = await resFornecedores.json();
@@ -36,13 +36,13 @@ async function carregarDados() {
 function popularSelects() {
     const selFornecedor = document.getElementById("compraFornecedor");
     if (selFornecedor) {
-        selFornecedor.innerHTML = '<option value="">Selecione...</option>' + 
+        selFornecedor.safeHTML = '<option value="">Selecione...</option>' +
             fornecedores.map(f => `<option value="${f.id}">${f.nome}</option>`).join("");
     }
 
     const selProduto = document.getElementById("compraProduto");
     if (selProduto) {
-        selProduto.innerHTML = '<option value="">Selecione o produto...</option>' + 
+        selProduto.safeHTML = '<option value="">Selecione o produto...</option>' +
             produtos.map(p => `<option value="${p.id}" data-preco="${p.preco}">${p.nome} (Venda: ${formatarMoeda(p.preco)})</option>`).join("");
     }
 }
@@ -51,7 +51,7 @@ async function carregarMetricasECompras() {
     const cardFornec = document.getElementById("cardTotalFornecedores");
     if (cardFornec) cardFornec.textContent = fornecedores.length;
 
-    listaCompras.innerHTML = `
+    listaCompras.safeHTML = `
         <tr>
             <td><strong>#LOTE-INICIAL</strong></td>
             <td>Confecção Primária</td>
@@ -96,9 +96,9 @@ if (formCompra) {
         const custo = Number(document.getElementById("compraCustoUnitario").value);
 
         try {
-            const resEstoque = await fetch(`${API_URL}/estoque`, {
+            const resEstoque = await apiFetch(`${API_URL}/estoque`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ produto_id: produtoId, tamanho, cor, quantidade: 0 })
             });
             const est = await resEstoque.json();
@@ -116,9 +116,9 @@ if (formCompra) {
                 }]
             };
 
-            const res = await fetch(`${API_URL}/compras`, {
+            const res = await apiFetch(`${API_URL}/compras`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
 
@@ -147,9 +147,9 @@ if (formFornecedor) {
         };
 
         try {
-            const res = await fetch(`${API_URL}/fornecedores`, {
+            const res = await apiFetch(`${API_URL}/fornecedores`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
             if (!res.ok) throw new Error("Erro ao salvar.");

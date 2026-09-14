@@ -16,10 +16,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pagamentoEl = document.getElementById("pagamento");
     pagamentoEl.textContent = `${nomes[ultimoPedido.forma_pagamento] || ultimoPedido.forma_pagamento} - verificando`;
     mensagem.textContent = "Seu pedido foi registrado. A preparacao comeca somente depois da confirmacao do pagamento.";
-    const token = localStorage.getItem("token");
+    const token = window.AUTHENTIC_SESSION;
     if (!token) return;
     try {
-        const resposta = await fetch(`/pedidos/${ultimoPedido.id}/pagamento`, { headers: { Authorization: `Bearer ${token}` } });
+        const resposta = await apiFetch(`/pedidos/${ultimoPedido.id}/pagamento`, { headers: {} });
         if (!resposta.ok) return;
         const { pagamento } = await resposta.json();
         const status = { pago: "Pago", pendente: "Pendente", recusado: "Recusado", cancelado: "Cancelado", estorno_pendente: "Estorno pendente", estornado: "Estornado" };

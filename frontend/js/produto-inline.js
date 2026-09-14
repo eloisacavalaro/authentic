@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-            const API_URL = window.location.hostname === "localhost" ? "http://localhost:3000" : "";
+            const API_URL = window.AUTHENTIC_API_URL;
             const parametros = new URLSearchParams(window.location.search);
             const id = parametros.get("id");
 
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             async function carregarEstoque() {
                 try {
-                    const resposta = await fetch(`${API_URL}/produtos/${id}/estoque`);
+                    const resposta = await apiFetch(`${API_URL}/produtos/${id}/estoque`);
                     if (resposta.ok) estoqueProduto = await resposta.json();
                 } catch (erro) {
                     console.warn("Estoque não carregado:", erro);
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             async function carregarProduto() {
                 try {
-                    const resposta = await fetch(`${API_URL}/produtos/${id}`);
+                    const resposta = await apiFetch(`${API_URL}/produtos/${id}`);
                     if (!resposta.ok) throw new Error("Produto não localizado.");
                     produtoAtual = await resposta.json();
 
@@ -85,11 +85,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                     document.title = `${produtoAtual.nome} — AUTHENTIC`;
 
                     const imageContainer = document.getElementById("product-image-container");
+                    imageContainer.replaceChildren();
                     if (produtoAtual.imagem) {
                         const imgUrl = produtoAtual.imagem.startsWith("http") ? produtoAtual.imagem : `${API_URL}/images/produtos/${produtoAtual.imagem}`;
-                        imageContainer.innerHTML = `<img src="${imgUrl}" alt="${produtoAtual.nome}" style="width:100%;height:100%;object-fit:cover;">`;
+                        const imagem = document.createElement("img"); imagem.src = imgUrl; imagem.alt = produtoAtual.nome; imagem.style.cssText = "width:100%;height:100%;object-fit:cover"; imageContainer.appendChild(imagem);
                     } else {
-                        imageContainer.innerHTML = `<span style="color:#888;">SEM IMAGEM</span>`;
+                        const vazio = document.createElement("span"); vazio.style.color = "#888"; vazio.textContent = "SEM IMAGEM"; imageContainer.appendChild(vazio);
                     }
                 } catch (erro) {
                     console.error(erro);

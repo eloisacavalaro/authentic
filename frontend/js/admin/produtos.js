@@ -1,8 +1,8 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 
 async function carregarProdutos() {
     try {
-        const resposta = await fetch(`${API_URL}/produtos`);
+        const resposta = await apiFetch(`${API_URL}/produtos`);
 
         if (!resposta.ok) {
             throw new Error("Erro ao carregar produtos.");
@@ -16,10 +16,10 @@ async function carregarProdutos() {
         contador.textContent =
             `${produtos.length} ${produtos.length === 1 ? "produto" : "produtos"}`;
 
-        tabela.innerHTML = "";
+        tabela.safeHTML = "";
 
         if (produtos.length === 0) {
-            tabela.innerHTML = `
+            tabela.safeHTML = `
                 <tr>
                     <td colspan="6">
                         <div class="products-empty">
@@ -52,7 +52,7 @@ async function carregarProdutos() {
 
             const linha = document.createElement("tr");
 
-            linha.innerHTML = `
+            linha.safeHTML = `
                 <td>
                     <div class="product-table-name">
 
@@ -99,7 +99,7 @@ async function carregarProdutos() {
 
                 <td>
                     <a class="action-button" href="novo-produto.html?id=${produto.id}">Editar</a>
-                    <button class="action-button" type="button" onclick="desativarProduto(${produto.id})" title="Desativar produto">
+                    <button class="action-button" type="button" data-disable-product="${produto.id}" title="Desativar produto">
                         ⋮
                     </button>
                 </td>
@@ -114,7 +114,7 @@ async function carregarProdutos() {
 
         const tabela = document.querySelector(".products-table tbody");
 
-        tabela.innerHTML = `
+        tabela.safeHTML = `
             <tr>
                 <td colspan="6">
                     <div class="products-empty">
@@ -134,10 +134,14 @@ async function carregarProdutos() {
 
 async function desativarProduto(id) {
     if (!confirm("Deseja desativar este produto?")) return;
-    const resposta = await fetch(`${API_URL}/produtos/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+    const resposta = await apiFetch(`${API_URL}/produtos/${id}`, { method: "DELETE", headers: {} });
     const dados = await resposta.json();
     if (!resposta.ok) return alert(dados.erro || "Não foi possível desativar.");
     carregarProdutos();
 }
 
 document.addEventListener("DOMContentLoaded", carregarProdutos);
+document.addEventListener("click", evento => {
+    const botao = evento.target.closest("[data-disable-product]");
+    if (botao) desativarProduto(Number(botao.dataset.disableProduct));
+});

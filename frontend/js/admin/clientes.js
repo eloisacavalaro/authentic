@@ -1,5 +1,5 @@
 
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 
 const listaClientes = document.getElementById("listaClientes");
 const buscarCliente = document.getElementById("buscarCliente");
@@ -49,7 +49,7 @@ function formatarData(data) {
 
 async function carregarClientes() {
 
-    const token = localStorage.getItem("token");
+    const token = window.AUTHENTIC_SESSION;
 
     if (!token) {
 
@@ -61,11 +61,10 @@ async function carregarClientes() {
 
     try {
 
-        const resposta = await fetch(
+        const resposta = await apiFetch(
             `${API_URL}/clientes`,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`
                 }
             }
         );
@@ -77,7 +76,7 @@ async function carregarClientes() {
 
                 alert("Sessão expirada. Faça login novamente.");
 
-                localStorage.removeItem("token");
+
                 localStorage.removeItem("usuario");
 
                 return;
@@ -109,7 +108,7 @@ async function carregarClientes() {
         console.error("Erro ao carregar clientes:", erro);
 
 
-        listaClientes.innerHTML = `
+        listaClientes.safeHTML = `
             <tr>
                 <td colspan="6" class="table-loading">
                     Não foi possível carregar os clientes.
@@ -228,7 +227,7 @@ function renderizarClientes() {
     // Nenhum resultado
     if (clientesFiltrados.length === 0) {
 
-        listaClientes.innerHTML = "";
+        listaClientes.safeHTML = "";
 
         emptyState.style.display = "block";
 
@@ -239,7 +238,7 @@ function renderizarClientes() {
     emptyState.style.display = "none";
 
 
-    listaClientes.innerHTML =
+    listaClientes.safeHTML =
         clientesFiltrados
             .map(criarLinhaCliente)
             .join("");
@@ -321,7 +320,7 @@ function criarLinhaCliente(cliente) {
 
                 <button
                     class="view-client"
-                    onclick="verCliente(${cliente.id})"
+                    data-view-client="${cliente.id}"
                 >
                     VER →
                 </button>
@@ -377,3 +376,7 @@ buscarCliente.addEventListener(
 // =========================================================
 
 carregarClientes();
+document.addEventListener("click", evento => {
+    const botao = evento.target.closest("[data-view-client]");
+    if (botao) verCliente(Number(botao.dataset.viewClient));
+});

@@ -14,6 +14,7 @@ const fs = require("fs");
 const autenticar = require("./authMiddleware");
 const apenasAdmin = require("./adminMiddleware");
 const gateway = require("./paymentGateway");
+const { decidirStatusPagamento } = require("./paymentState");
 
 // Verificação de ambiente mandatório
 if (!process.env.JWT_SECRET) {
@@ -34,6 +35,10 @@ if (process.env.NODE_ENV === "production") {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const origensPermitidas = (process.env.CORS_ORIGIN || "")
+    .split(",")
+    .map(origem => origem.trim().replace(/\/+$/, ""))
+    .filter(Boolean);
 
 
 // =========================================================
@@ -113,12 +118,11 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "https://sdk.mercadopago.com"],
-            // Temporário até a etapa de remoção dos handlers legados onclick/onerror.
-            scriptSrcAttr: ["'unsafe-inline'"],
+            scriptSrcAttr: ["'none'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             imgSrc: ["'self'", "data:", "https:"],
-            connectSrc: ["'self'", "https://viacep.com.br", "https://api.mercadopago.com", "https://*.mercadopago.com", ...(process.env.CORS_ORIGIN || "").split(",").map(v => v.trim()).filter(Boolean)],
+            connectSrc: ["'self'", "https://viacep.com.br", "https://api.mercadopago.com", "https://*.mercadopago.com", ...origensPermitidas],
             frameSrc: ["'self'", "https://*.mercadopago.com"]
         }
     }
@@ -135,25 +139,56 @@ app.use(helmet({
 // quebrar o ambiente atual) mas avisa no log — configure isso
 // em produção.
 
-const origensPermitidas = (process.env.CORS_ORIGIN || "")
-    .split(",")
-    .map(origem => origem.trim())
-    .filter(Boolean);
-
 if (origensPermitidas.length === 0) {
     console.warn(
-        "AVISO: CORS_ORIGIN não definido no .env — a API está aceitando requisições de qualquer origem. Defina CORS_ORIGIN em produção."
+        "AVISO: CORS_ORIGIN não definido. Em produção, requisições de navegador serão bloqueadas."
     );
 }
 
 app.use(cors({
     origin(origem, callback) {
-        if (!origem || origensPermitidas.includes(origem) || (process.env.NODE_ENV !== "production" && origensPermitidas.length === 0)) {
+
+        // Requisições sem Origin, como Postman/server-to-server
+        if (!origem) {
             return callback(null, true);
         }
-        callback(new Error("Origem nao permitida por CORS."));
-    }
+
+        const origemNormalizada = origem
+            .trim()
+            .replace(/\/+$/, "");
+
+        if (origensPermitidas.includes(origemNormalizada)) {
+            return callback(null, true);
+        }
+
+        // Apenas desenvolvimento sem CORS_ORIGIN configurado
+        if (
+            process.env.NODE_ENV !== "production" &&
+            origensPermitidas.length === 0
+        ) {
+            return callback(null, true);
+        }
+
+        console.warn("CORS BLOQUEADO:", {
+            origemRecebida: origem,
+            origemNormalizada,
+            origensPermitidas
+        });
+
+        return callback(
+            new Error("Origem nao permitida por CORS.")
+        );
+    },
+
+    credentials: true
 }));
+
+app.use((req, res, next) => {
+    if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return next();
+    const origem = String(req.get("origin") || "").replace(/\/$/, "");
+    if (!origem || origensPermitidas.includes(origem) || process.env.NODE_ENV !== "production") return next();
+    return res.status(403).json({ erro: "Origem nao permitida." });
+});
 
 
 // =========================================================
@@ -204,10 +239,12 @@ async function sincronizarPagamentoMercadoPago(recurso, req = null) {
         const atual = atualRes.rows[0];
         if (Math.abs(Number(atual.valor) - Number(recurso.transaction_amount)) > 0.009) throw new Error("Valor retornado pelo gateway diverge do pedido.");
 
-        let novoStatus = novoStatusGateway;
-        if (novoStatusGateway === "pago" && (atual.pedido_status === "cancelado" || atual.reserva_liberada_em)) {
-            novoStatus = "estorno_pendente";
-        }
+        const novoStatus = decidirStatusPagamento({
+            statusAtual: atual.status,
+            statusGateway: novoStatusGateway,
+            pedidoCancelado: atual.pedido_status === "cancelado",
+            reservaLiberada: Boolean(atual.reserva_liberada_em)
+        });
         const metodo = recurso.payment_method_id === "pix" ? "pix" :
             (["credit_card", "debit_card", "prepaid_card"].includes(recurso.payment_type_id) ? "cartao" : atual.metodo);
         await client.query(`UPDATE pagamentos SET provedor='mercado_pago',transacao_id=$1,metodo=$2,status=$3,
@@ -219,7 +256,7 @@ async function sincronizarPagamentoMercadoPago(recurso, req = null) {
             await client.query(`UPDATE pedidos SET status=CASE WHEN status='aguardando_pagamento' THEN 'processando' ELSE status END,
                 reserva_expira_em=NULL,atualizado_em=NOW() WHERE id=$1`, [pedidoId]);
         }
-        if (novoStatus === "estornado" && atual.status === "pago" && atual.pedido_status !== "cancelado") {
+        if (novoStatus === "estornado" && atual.status === "pago" && atual.pedido_status !== "cancelado" && !atual.reserva_liberada_em) {
             const itens = await client.query("SELECT produto_id,tamanho,cor,quantidade FROM itens_pedido WHERE pedido_id=$1", [pedidoId]);
             for (const item of itens.rows) {
                 const saldo = await client.query("SELECT id,quantidade FROM estoque WHERE produto_id=$1 AND tamanho=$2 AND cor=$3 FOR UPDATE", [item.produto_id,item.tamanho,item.cor]);
@@ -393,6 +430,13 @@ const loginSchema = Joi.object({
     senha: Joi.string().min(1).max(100).required()
 });
 
+const COOKIE_SESSAO = "authentic_session";
+const quatroHorasMs = 4 * 60 * 60 * 1000;
+function opcoesCookieSessao() {
+    const producao = process.env.NODE_ENV === "production";
+    return { httpOnly: true, secure: producao, sameSite: producao ? "none" : "lax", maxAge: quatroHorasMs, path: "/" };
+}
+
 app.post("/login", authLimiter, async (req, res) => {
     try {
         const { email, senha } = req.body;
@@ -419,9 +463,10 @@ app.post("/login", authLimiter, async (req, res) => {
             { expiresIn: "4h" }
         );
 
+        res.cookie(COOKIE_SESSAO, token, opcoesCookieSessao());
+        res.set("Cache-Control", "no-store");
         res.json({
             mensagem: "Login realizado com sucesso!",
-            token,
             usuario: {
                 id: usuario.id,
                 nome: usuario.nome,
@@ -433,6 +478,13 @@ app.post("/login", authLimiter, async (req, res) => {
         console.error(erro);
         res.status(500).json({ erro: "Erro interno no processo de login." });
     }
+});
+
+app.post("/logout", (req, res) => {
+    const { maxAge, ...opcoesRemocao } = opcoesCookieSessao();
+    res.clearCookie(COOKIE_SESSAO, opcoesRemocao);
+    res.set("Cache-Control", "no-store");
+    res.sendStatus(204);
 });
 
 app.get("/perfil", autenticar, async (req, res) => {
@@ -867,8 +919,8 @@ app.post("/pedidos/:id/pagamento", autenticar, async (req, res) => {
         if (pedido.transacao_id) {
             await lock.query("COMMIT");
             const existente = await gateway.buscarPagamento(pedido.transacao_id);
-            await sincronizarPagamentoMercadoPago(existente, req);
-            return res.json({ ...respostaPagamentoSegura(existente), idempotente: true });
+            const sincronizado = await sincronizarPagamentoMercadoPago(existente, req);
+            return res.json({ ...respostaPagamentoSegura(existente), status: sincronizado.status, idempotente: true });
         }
         if (pedido.pagamento_idempotency_key && pedido.pagamento_idempotency_key !== chave) {
             await lock.query("ROLLBACK");
@@ -888,8 +940,8 @@ app.post("/pedidos/:id/pagamento", autenticar, async (req, res) => {
             },
             idempotencyKey: chave
         });
-        await sincronizarPagamentoMercadoPago(recurso, req);
-        const segura = respostaPagamentoSegura(recurso);
+        const sincronizado = await sincronizarPagamentoMercadoPago(recurso, req);
+        const segura = { ...respostaPagamentoSegura(recurso), status: sincronizado.status };
         res.status(segura.status === "recusado" ? 402 : 201).json(segura);
     } catch (erro) {
         try { await lock.query("ROLLBACK"); } catch (_) {}

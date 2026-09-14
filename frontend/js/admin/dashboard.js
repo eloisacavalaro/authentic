@@ -1,4 +1,4 @@
-const API_URL = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:3000" : location.origin;
+const API_URL = window.AUTHENTIC_API_URL;
 const moeda = valor => Number(valor || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 let requisicaoAtual = null;
 
@@ -71,15 +71,15 @@ function renderizarGrafico(pontos) {
 }
 
 async function carregarDashboard(periodo) {
-    const token = localStorage.getItem("token");
+    const token = window.AUTHENTIC_SESSION;
     if (!token) return window.location.replace("../login.html");
     if (requisicaoAtual) requisicaoAtual.abort();
     requisicaoAtual = new AbortController();
     const seletor = document.getElementById("filtroPeriodoDashboard");
     if (seletor) seletor.disabled = true;
     try {
-        const resposta = await fetch(`${API_URL}/dashboard?periodo=${encodeURIComponent(periodo)}`, {
-            headers: { Authorization: `Bearer ${token}` }, cache: "no-store", signal: requisicaoAtual.signal
+        const resposta = await apiFetch(`${API_URL}/dashboard?periodo=${encodeURIComponent(periodo)}`, {
+            headers: {}, cache: "no-store", signal: requisicaoAtual.signal
         });
         if ([401, 403].includes(resposta.status)) return window.location.replace("../login.html");
         if (!resposta.ok) throw new Error("Falha ao carregar dashboard");

@@ -1,4 +1,4 @@
-const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhost:3000" :  "https://authentic-api-h42a.onrender.com ";
+const API_BASE_URL = window.AUTHENTIC_API_URL;
 
         let cupomAtivo = null;
         let descontoCalculado = 0;
@@ -35,7 +35,7 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
             }
 
             try {
-                const res = await fetch(`${API_BASE_URL}/cupons/validar`, {
+                const res = await apiFetch(`${API_BASE_URL}/cupons/validar`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ codigo, subtotal: subtotalCalculado })
@@ -121,7 +121,7 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
             const cepNumeros = valor.replace(/\D/g, "");
             if (cepNumeros.length === 8) {
                 try {
-                    const resposta = await fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
+                    const resposta = await apiFetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
                     const dados = await resposta.json();
                     if (!dados.erro) {
                         document.getElementById("endereco").value = dados.logradouro || "";
@@ -144,7 +144,8 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
             const container = document.getElementById("checkout-items");
 
             if (carrinho.length === 0) {
-                container.innerHTML = `<p class="empty-cart">Seu carrinho está vazio.</p>`;
+                const vazio = document.createElement("p"); vazio.className = "empty-cart"; vazio.textContent = "Seu carrinho está vazio.";
+                container.replaceChildren(vazio);
                 subtotalCalculado = 0;
                 atualizarValoresTotais();
                 document.getElementById("finish-button").disabled = true;
@@ -152,7 +153,7 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
             }
 
             subtotalCalculado = 0;
-            container.innerHTML = "";
+            container.replaceChildren();
 
             carrinho.forEach(item => {
                 const quantidade = Number(item.quantidade);
@@ -162,15 +163,11 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
 
                 const div = document.createElement("div");
                 div.className = "checkout-item";
-                div.innerHTML = `
-                    <div class="item-info">
-                        <strong>${item.nome}</strong>
-                        <span class="item-details">
-                            ${item.cor || ""} • ${item.tamanho || ""} • Qtd: ${quantidade}
-                        </span>
-                    </div>
-                    <strong>${formatarPreco(valorItem)}</strong>
-                `;
+                const info = document.createElement("div"); info.className = "item-info";
+                const nome = document.createElement("strong"); nome.textContent = item.nome;
+                const detalhes = document.createElement("span"); detalhes.className = "item-details"; detalhes.textContent = `${item.cor || ""} • ${item.tamanho || ""} • Qtd: ${quantidade}`;
+                const valor = document.createElement("strong"); valor.textContent = formatarPreco(valorItem);
+                info.append(nome, detalhes); div.append(info, valor);
                 container.appendChild(div);
             });
 
@@ -186,7 +183,7 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
             carregando.hidden = false;
             etapa.scrollIntoView({ behavior: "smooth", block: "start" });
 
-            const configResposta = await fetch(`${API_BASE_URL}/api/config/payment`, { cache: "no-store" });
+            const configResposta = await apiFetch(`${API_BASE_URL}/api/config/payment`, { cache: "no-store" });
             const config = await configResposta.json();
             if (!configResposta.ok) throw new Error(config.erro || "Pagamento online não configurado.");
             if (!window.MercadoPago) throw new Error("O componente seguro do Mercado Pago não foi carregado.");
@@ -208,9 +205,9 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
                         const chavePagamento = sessionStorage.getItem(`paymentIdempotencyKey:${pedido.id}`) || crypto.randomUUID();
                         sessionStorage.setItem(`paymentIdempotencyKey:${pedido.id}`, chavePagamento);
                         try {
-                            const resposta = await fetch(`${API_BASE_URL}/pedidos/${pedido.id}/pagamento`, {
+                            const resposta = await apiFetch(`${API_BASE_URL}/pedidos/${pedido.id}/pagamento`, {
                                 method: "POST",
-                                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, "Idempotency-Key": chavePagamento },
+                                headers: { "Content-Type": "application/json", "Idempotency-Key": chavePagamento },
                                 body: JSON.stringify({ ...formData, selected_payment_method: selectedPaymentMethod })
                             });
                             const pagamento = await resposta.json();
@@ -258,7 +255,7 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
         // ==========================================
         document.getElementById("finish-button").addEventListener("click", async function () {
             const botao = document.getElementById("finish-button");
-            const token = localStorage.getItem("token");
+            const token = window.AUTHENTIC_SESSION;
 
             if (!token) {
                 alert("Você precisa fazer login para finalizar o pedido.");
@@ -324,20 +321,19 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
             botao.textContent = "PROCESSANDO...";
 
             try {
-                const sessao = await fetch(`${API_BASE_URL}/api/auth/me`, { headers: { "Authorization": `Bearer ${token}` }, cache: "no-store" });
+                const sessao = await apiFetch(`${API_BASE_URL}/api/auth/me`, { headers: {}, cache: "no-store" });
                 if (!sessao.ok) {
-                    localStorage.removeItem("token"); localStorage.removeItem("usuario");
+                     localStorage.removeItem("usuario");
                     const retorno = encodeURIComponent("checkout.html");
                     window.location.replace(`login.html?redirect=${retorno}`);
                     return;
                 }
                 const chavePedido = sessionStorage.getItem("checkoutIdempotencyKey") || crypto.randomUUID();
                 sessionStorage.setItem("checkoutIdempotencyKey", chavePedido);
-                const resposta = await fetch(`${API_BASE_URL}/pedidos`, {
+                const resposta = await apiFetch(`${API_BASE_URL}/pedidos`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
                         "Idempotency-Key": chavePedido
                     },
                     body: JSON.stringify(dadosPedido)
@@ -347,7 +343,7 @@ const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhos
 
                 if (resposta.status === 401) {
                     alert("Sua sessão expirou. Faça login novamente.");
-                    localStorage.removeItem("token");
+
                     localStorage.removeItem("usuario");
                     window.location.href = "login.html";
                     return;

@@ -2,8 +2,8 @@
 // CONFIGURAÇÃO & AUTENTICAÇÃO
 // =========================================================
 
-const API_URL = window.location.hostname === "localhost" ? "http://localhost:3000" : "";
-const token = localStorage.getItem("token");
+const API_URL = window.AUTHENTIC_API_URL;
+const token = window.AUTHENTIC_SESSION;
 const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 
 function redirecionarLogin() {
@@ -38,9 +38,8 @@ tabButtons.forEach(btn => {
 
 async function carregarPerfil() {
     try {
-        const resposta = await fetch(`${API_URL}/perfil`, {
+        const resposta = await apiFetch(`${API_URL}/perfil`, {
             headers: {
-                Authorization: `Bearer ${token}`
             }
         });
 
@@ -93,8 +92,8 @@ async function carregarPedidos() {
     if (!ordersContainer) return;
 
     try {
-        const resposta = await fetch(`${API_URL}/pedidos`, {
-            headers: { Authorization: `Bearer ${token}` }
+        const resposta = await apiFetch(`${API_URL}/pedidos`, {
+            headers: {}
         });
 
         if (resposta.status === 401) {
@@ -109,12 +108,12 @@ async function carregarPedidos() {
             return [chave, p];
         })).values()];
         const addressContainer = document.getElementById("addressContainer");
-        if (addressContainer) addressContainer.innerHTML = enderecos.length
+        if (addressContainer) addressContainer.safeHTML = enderecos.length
             ? enderecos.map(p => `<div class="account-info-box"><strong>${escaparHtml(p.endereco)}, ${escaparHtml(p.numero)}</strong><p>${escaparHtml(p.complemento || "")} ${escaparHtml(p.bairro)} — ${escaparHtml(p.cidade)}/${escaparHtml(p.estado)} — CEP ${escaparHtml(p.cep)}</p></div>`).join("")
             : `<p class="empty-notice">Nenhum endereço de entrega utilizado.</p>`;
 
         if (!Array.isArray(pedidos) || pedidos.length === 0) {
-            ordersContainer.innerHTML = `
+            ordersContainer.safeHTML = `
                 <div style="text-align:center; padding: 40px 10px;">
                     <span style="font-size: 24px; color:#bbb; display:block; margin-bottom:8px;">—</span>
                     <h3 style="font-family:'Playfair Display', serif; font-size:18px; margin-bottom:6px;">Nenhum pedido realizado</h3>
@@ -157,11 +156,11 @@ async function carregarPedidos() {
         });
 
         html += `</div>`;
-        ordersContainer.innerHTML = html;
+        ordersContainer.safeHTML = html;
 
     } catch (erro) {
         console.error("Erro ao carregar pedidos:", erro);
-        ordersContainer.innerHTML = `<p class="empty-notice">Não foi possível carregar seus pedidos no momento.</p>`;
+        ordersContainer.safeHTML = `<p class="empty-notice">Não foi possível carregar seus pedidos no momento.</p>`;
     }
 }
 
@@ -177,9 +176,9 @@ if (formDados) formDados.addEventListener("submit", async event => {
     const botao = formDados.querySelector("button");
     botao.disabled = true;
     try {
-        const resposta = await fetch(`${API_URL}/perfil`, {
+        const resposta = await apiFetch(`${API_URL}/perfil`, {
             method: "PATCH",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ nome: document.getElementById("editarNome").value.trim(), telefone: document.getElementById("editarTelefone").value.trim() })
         });
         const dados = await resposta.json();
@@ -207,11 +206,10 @@ if (formAlterarSenha) {
         btnSubmit.textContent = "ATUALIZANDO...";
 
         try {
-            const res = await fetch(`${API_URL}/alterar-senha`, {
+            const res = await apiFetch(`${API_URL}/alterar-senha`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({ senhaAtual, novaSenha })
             });
@@ -237,8 +235,8 @@ if (formAlterarSenha) {
 // LOGOUT
 // =========================================================
 
-function fazerLogout() {
-    localStorage.removeItem("token");
+async function fazerLogout() {
+    try { await apiFetch(`${API_URL}/logout`, { method: "POST" }); } catch (_) {}
     localStorage.removeItem("usuario");
     window.location.replace("login.html");
 }
@@ -249,14 +247,13 @@ if (btnLogout) {
 }
 
 async function iniciarConta() {
-    if (!token) return redirecionarLogin();
     try {
-        const resposta = await fetch(`${API_URL}/api/auth/me`, {
-            headers: { Authorization: `Bearer ${token}` },
+        const resposta = await apiFetch(`${API_URL}/api/auth/me`, {
+            headers: {},
             cache: "no-store"
         });
         if (!resposta.ok) {
-            localStorage.removeItem("token");
+
             localStorage.removeItem("usuario");
             return redirecionarLogin();
         }
@@ -265,7 +262,7 @@ async function iniciarConta() {
         document.body.classList.remove("auth-pending");
         await Promise.all([carregarPerfil(), carregarPedidos()]);
     } catch (_) {
-        localStorage.removeItem("token");
+
         localStorage.removeItem("usuario");
         redirecionarLogin();
     }

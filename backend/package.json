@@ -7,7 +7,7 @@
     "start": "node server.js",
     "migrate": "node scripts/migrate.js migrate-existing.sql",
     "create-admin": "node scripts/create-admin.js",
-    "check": "node --check server.js && node tests/static-check.js",
+    "check": "node --check server.js && node tests/static-check.js && node tests/security-static.js",
     "test": "npm run check && npm run test:auth && npm run test:payment && npm run test:dashboard && npm run test:critical",
     "test:auth": "node tests/auth-e2e.js",
     "test:payment": "node tests/payment-unit.js",
