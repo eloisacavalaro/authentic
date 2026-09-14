@@ -54,8 +54,11 @@ if (!apiJs.includes('tagContexto === "TBODY"') || !apiJs.includes('<table><tbody
 }
 const pedidosAdminJs = fs.readFileSync(path.join(frontend, "js", "admin", "pedidos.js"), "utf8");
 const linhaPedido = pedidosAdminJs.match(/function criarLinhaPedido[\s\S]*?async function confirmarPagamento/)?.[0] || "";
-if ((linhaPedido.match(/<td>/g) || []).length !== 8 || !linhaPedido.includes("<tr>")) {
-  falhas.push("Linha administrativa de pedido nao corresponde as oito colunas do cabecalho.");
+if (!linhaPedido.includes('document.createElement("tr")') || !linhaPedido.includes("linha.append(")) {
+  falhas.push("Linha administrativa de pedido nao e montada por DOM seguro.");
+}
+if (/\bescaparHtml\b/.test(pedidosAdminJs)) {
+  falhas.push("Painel administrativo de pedidos ainda depende de escaparHtml.");
 }
 for (const arquivo of arquivos(path.join(frontend, "js", "admin"))) {
   if (!arquivo.endsWith(".js")) continue;

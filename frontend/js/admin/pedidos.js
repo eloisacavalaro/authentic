@@ -55,7 +55,6 @@ function formatarMoeda(valor) {
 
 async function carregarPedidos() {
 const token = window.AUTHENTIC_SESSION;
-const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 
     if (!token) {
         alert("Você precisa estar logado como administrador.");
@@ -88,13 +87,14 @@ const escaparHtml = valor => String(valor ?? "").replace(/[&<>"']/g, c => ({"&":
 
     } catch (erro) {
         console.error("Falha ao carregar pedidos:", erro);
-        listaPedidos.safeHTML = `
-            <tr>
-                <td colspan="8" class="table-loading" style="color: #b91c1c;">
-                    ${escaparHtml(erro.message || "Não foi possível carregar os pedidos.")}
-                </td>
-            </tr>
-        `;
+        const linha = document.createElement("tr");
+        const celula = document.createElement("td");
+        celula.colSpan = 8;
+        celula.className = "table-loading";
+        celula.style.color = "#b91c1c";
+        celula.textContent = erro.message || "Não foi possível carregar os pedidos.";
+        linha.appendChild(celula);
+        listaPedidos.replaceChildren(linha);
     }
 }
 
@@ -132,13 +132,26 @@ function renderizarPedidos() {
     totalPedidos.textContent = pedidosFiltrados.length;
 
     if (pedidosFiltrados.length === 0) {
-        listaPedidos.safeHTML = "";
+        listaPedidos.replaceChildren();
         emptyState.style.display = "block";
         return;
     }
 
     emptyState.style.display = "none";
-    listaPedidos.safeHTML = pedidosFiltrados.map(criarLinhaPedido).join("");
+    listaPedidos.replaceChildren(...pedidosFiltrados.map(criarLinhaPedido));
+}
+
+function criarCelula(texto) {
+    const celula = document.createElement("td");
+    celula.textContent = String(texto ?? "");
+    return celula;
+}
+
+function criarTextoComClasse(tag, classe, texto) {
+    const elemento = document.createElement(tag);
+    elemento.className = classe;
+    elemento.textContent = String(texto ?? "");
+    return elemento;
 }
 
 function criarLinhaPedido(pedido) {
@@ -147,45 +160,69 @@ function criarLinhaPedido(pedido) {
     const hora = dataObj.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
     const valor = formatarMoeda(pedido.valor_total || pedido.total || 0);
-    const status = (pedido.status || "pendente").toLowerCase();
+    const statusInformado = String(pedido.status || "pendente").toLowerCase();
+    const status = Object.hasOwn(MAPA_STATUS, statusInformado) ? statusInformado : "pendente";
     const cliente = pedido.cliente || pedido.cliente_nome || "Cliente";
 
-    return `
-        <tr>
-            <td><span class="order-number">#${pedido.id}</span></td>
-            <td>
-                <span class="client-name">${escaparHtml(cliente)}</span>
-                <span class="client-email">${escaparHtml(pedido.email || "")}</span>
-            </td>
-            <td>
-                ${data}
-                <span class="client-email">${hora}</span>
-            </td>
-            <td><span class="order-value">${valor}</span></td>
-            <td>${formatarPagamento(pedido.forma_pagamento)}</td>
-            <td>${formatarRecebimento(pedido.forma_recebimento)}</td>
-            <td>
-                <select
-                    class="status-select status-${status}"
-                    data-id="${pedido.id}"
-                    data-status-atual="${status}"
-                >
-                    <option value="aguardando_pagamento" ${status === "aguardando_pagamento" ? "selected" : ""}>Aguardando pagamento</option>
-                    <option value="pendente" ${status === "pendente" ? "selected" : ""}>Pendente</option>
-                    <option value="processando" ${status === "processando" ? "selected" : ""}>Processando</option>
-                    <option value="enviado" ${status === "enviado" ? "selected" : ""}>Enviado</option>
-                    <option value="concluido" ${status === "concluido" ? "selected" : ""}>Concluído</option>
-                    <option value="cancelado" ${status === "cancelado" ? "selected" : ""}>Cancelado</option>
-                </select>
-            </td>
-            <td>
-                <button class="view-order" data-view-order="${pedido.id}">
-                    VER →
-                </button>
-                ${status === "aguardando_pagamento" ? `<button class="view-order" data-confirm-payment="${pedido.id}">CONFIRMAR PAGAMENTO</button>` : ""}
-            </td>
-        </tr>
-    `;
+    const linha = document.createElement("tr");
+
+    const celulaNumero = document.createElement("td");
+    celulaNumero.appendChild(criarTextoComClasse("span", "order-number", `#${pedido.id}`));
+
+    const celulaCliente = document.createElement("td");
+    celulaCliente.append(
+        criarTextoComClasse("span", "client-name", cliente),
+        criarTextoComClasse("span", "client-email", pedido.email || "")
+    );
+
+    const celulaData = criarCelula(data);
+    celulaData.appendChild(criarTextoComClasse("span", "client-email", hora));
+
+    const celulaValor = document.createElement("td");
+    celulaValor.appendChild(criarTextoComClasse("span", "order-value", valor));
+
+    const celulaStatus = document.createElement("td");
+    const seletorStatus = document.createElement("select");
+    seletorStatus.classList.add("status-select", `status-${status}`);
+    seletorStatus.dataset.id = String(pedido.id);
+    seletorStatus.dataset.statusAtual = status;
+    Object.entries(MAPA_STATUS).forEach(([valorStatus, rotulo]) => {
+        const opcao = document.createElement("option");
+        opcao.value = valorStatus;
+        opcao.textContent = rotulo;
+        opcao.selected = valorStatus === status;
+        seletorStatus.appendChild(opcao);
+    });
+    celulaStatus.appendChild(seletorStatus);
+
+    const celulaAcoes = document.createElement("td");
+    const botaoVer = document.createElement("button");
+    botaoVer.type = "button";
+    botaoVer.className = "view-order";
+    botaoVer.dataset.viewOrder = String(pedido.id);
+    botaoVer.textContent = "VER →";
+    celulaAcoes.appendChild(botaoVer);
+
+    if (status === "aguardando_pagamento") {
+        const botaoConfirmar = document.createElement("button");
+        botaoConfirmar.type = "button";
+        botaoConfirmar.className = "view-order";
+        botaoConfirmar.dataset.confirmPayment = String(pedido.id);
+        botaoConfirmar.textContent = "CONFIRMAR PAGAMENTO";
+        celulaAcoes.appendChild(botaoConfirmar);
+    }
+
+    linha.append(
+        celulaNumero,
+        celulaCliente,
+        celulaData,
+        celulaValor,
+        criarCelula(formatarPagamento(pedido.forma_pagamento)),
+        criarCelula(formatarRecebimento(pedido.forma_recebimento)),
+        celulaStatus,
+        celulaAcoes
+    );
+    return linha;
 }
 
 async function confirmarPagamento(pedidoId) {
